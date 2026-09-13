@@ -1,0 +1,1622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adhyayan — Class 10 Half-Yearly Master Practice</title>
+<style>
+:root{
+  --bg1:#0a0e1a; --bg2:#0f1526; --gold:#cda449; --gold-soft:#e8cf9a;
+  --cream:#f3efe4; --muted:#8f97ac; --glass:rgba(255,255,255,0.045);
+  --glass-border:rgba(255,255,255,0.09); --green:#5fbf8c; --amber:#e0b155; --red:#e0716a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:radial-gradient(circle at 20% 0%,#131a30 0%,var(--bg1) 55%),var(--bg1);
+  color:var(--cream); min-height:100vh;}
+.wrap{max-width:760px;margin:auto;padding:22px 16px 70px}
+.hidden{display:none !important}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:600;margin:0}
+.brand{text-align:center;margin:8px 0 26px}
+.brand .mark{font-size:12px;letter-spacing:3px;color:var(--gold);font-weight:700;margin-bottom:8px}
+.brand h1{font-size:26px;color:var(--cream)}
+.brand p{margin:8px 0 0;color:var(--muted);font-size:13.5px;letter-spacing:.5px}
+.card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;
+  padding:22px;margin:14px 0;backdrop-filter:blur(6px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+button{border:0;border-radius:12px;padding:13px 18px;font-size:15px;cursor:pointer;font-family:inherit}
+.primary{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#1a1206;width:100%;font-weight:700;letter-spacing:.2px}
+.primary:hover{filter:brightness(1.05)}
+.secondary{background:var(--glass);border:1px solid var(--glass-border);color:var(--cream);font-weight:600;width:100%}
+input[type=text]{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--glass-border);
+  border-radius:12px;padding:13px 14px;color:var(--cream);font-size:15px;margin-top:6px}
+input[type=text]::placeholder{color:#5b647a}
+label{font-size:12.5px;color:var(--muted);letter-spacing:.4px}
+.field{margin-bottom:16px}
+.option{display:block;width:100%;text-align:left;background:rgba(255,255,255,.04);
+  margin:8px 0;border:1px solid var(--glass-border);padding:13px 14px;border-radius:12px;
+  font-size:15px;color:var(--cream)}
+.option:hover{border-color:var(--gold)}
+.option.correct{background:rgba(95,191,140,.18);border-color:var(--green)}
+.option.wrong{background:rgba(224,113,106,.18);border-color:var(--red)}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:12.5px;margin-bottom:8px}
+.q{font-size:18.5px;line-height:1.5;margin:16px 0;font-weight:600;color:var(--cream)}
+.type-tag{display:inline-block;background:rgba(205,164,73,.16);color:var(--gold-soft);border:1px solid rgba(205,164,73,.35);
+  font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.6px}
+.feedback{font-weight:700;margin:12px 0;font-size:14.5px}
+.bar{height:5px;background:rgba(255,255,255,.08);border-radius:20px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold-soft),var(--gold));transition:.25s}
+.score{font-size:42px;font-weight:800;text-align:center;margin:8px;color:var(--gold-soft);font-family:Georgia,serif}
+.center{text-align:center}
+.small{font-size:13px;color:var(--muted)}
+textarea{width:100%;min-height:110px;border:1px solid var(--glass-border);border-radius:12px;
+  padding:13px;font-size:15px;font-family:inherit;resize:vertical;background:rgba(255,255,255,.04);color:var(--cream)}
+.model-answer{background:rgba(205,164,73,.08);border-left:3px solid var(--gold);padding:13px 15px;
+  border-radius:8px;margin:14px 0;font-size:14.5px;line-height:1.55;color:#e9e5d8}
+.self-check{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.self-check button{flex:1;min-width:100px;font-size:13px;font-weight:700;border:1px solid var(--glass-border)}
+.sc-correct{background:rgba(95,191,140,.12);color:var(--green)}
+.sc-partial{background:rgba(224,177,85,.12);color:var(--amber)}
+.sc-incorrect{background:rgba(224,113,106,.12);color:var(--red)}
+.sc-correct.active,.sc-partial.active,.sc-incorrect.active{outline:2px solid currentColor}
+.subject-list{display:grid;gap:12px}
+.subject-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;
+  padding:17px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.subject-card:hover{border-color:var(--gold)}
+.subject-name{font-size:16.5px;font-weight:700;color:var(--cream)}
+.subject-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.subject-progress{font-size:14px;font-weight:700;color:var(--gold-soft);text-align:right}
+.progress-mini{width:74px;height:5px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;margin-top:5px}
+.progress-mini-fill{height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
+.chapter-row{display:flex;justify-content:space-between;align-items:center;padding:13px 4px;
+  border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}
+.chapter-row:last-child{border-bottom:none}
+.chapter-row:hover .chapter-name{color:var(--gold-soft)}
+.chapter-name{font-weight:600;font-size:15px;color:var(--cream)}
+.chapter-count{font-size:12px;color:var(--muted)}
+.dash-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.dash-stat{background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:12px;padding:12px;text-align:center}
+.dash-stat b{display:block;font-size:19px;color:var(--gold-soft);font-family:Georgia,serif}
+.dash-stat span{font-size:10px;color:var(--muted);letter-spacing:.4px}
+.backlink{display:inline-block;margin-bottom:12px;color:var(--gold-soft);font-size:13px;cursor:pointer}
+.backlink:hover{text-decoration:underline}
+.credit{text-align:center;margin:24px auto 6px;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px}
+.reset-link{text-align:center;font-size:11.5px;color:#8a6060;cursor:pointer;text-decoration:underline;margin-top:8px}
+.welcome{font-size:14.5px;color:var(--muted);text-align:center;margin-bottom:2px}
+.welcome b{color:var(--gold-soft)}
+table.report{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+table.report th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.4px;
+  padding:8px 6px;border-bottom:1px solid var(--glass-border)}
+table.report td{padding:10px 6px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--cream)}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge.strong{background:rgba(95,191,140,.15);color:var(--green)}
+.badge.good{background:rgba(224,177,85,.15);color:var(--amber)}
+.badge.improve{background:rgba(224,113,106,.15);color:var(--red)}
+.badge.none{background:rgba(255,255,255,.06);color:var(--muted)}
+.chapter-analysis-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);font-size:13.5px}
+.rec-box{background:rgba(205,164,73,.06);border:1px solid rgba(205,164,73,.25);border-radius:12px;
+  padding:14px 16px;margin-top:14px;font-size:13.5px;line-height:1.7}
+.rec-box b{color:var(--gold-soft)}
+.tagline{text-align:center;font-size:12px;letter-spacing:1.2px;color:var(--gold);font-weight:700;margin:20px 0 6px}
+.report-header{text-align:center;margin-bottom:6px}
+.report-header .rname{font-size:20px;color:var(--gold-soft);font-family:Georgia,serif;margin-top:4px}
+@media print{
+  body{background:#fff !important;color:#111 !important}
+  .no-print{display:none !important}
+  .card{box-shadow:none;border:1px solid #ccc;background:#fff}
+  .type-tag,.badge{border-width:1px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="nameScreen">
+    <div class="brand">
+      <div class="mark">ADHYAYAN TUITION CENTRE</div>
+      <h1>CLASS 10</h1>
+      <p>HALF-YEARLY MASTER PRACTICE</p>
+      <p style="font-style:italic;opacity:.75">Complete Practice &middot; Smart Assessment &middot; Better Preparation</p>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>STUDENT NAME</label>
+        <input type="text" id="studentName" placeholder="Enter your full name">
+      </div>
+      <div class="field">
+        <label>CLASS / SECTION (OPTIONAL)</label>
+        <input type="text" id="studentSection" placeholder="e.g. 10-A">
+      </div>
+      <button class="primary" onclick="startSession()">START PRACTICE &rarr;</button>
+    </div>
+    <div class="credit">(c) Designed by Chandravesh Jukariya</div>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <div class="brand">
+      <div class="mark">ADHYAYAN TUITION CENTRE</div>
+      <h1>CLASS 10</h1>
+      <p>HALF-YEARLY MASTER PRACTICE</p>
+    </div>
+    <p class="welcome">Welcome, <b id="welcomeName"></b> -- Your Half-Yearly Practice Journey</p>
+    <div class="card">
+      <div id="subjectList" class="subject-list"></div>
+      <div class="dash-stats">
+        <div class="dash-stat"><b id="statTotal">0/0</b><span>TOTAL PROGRESS</span></div>
+        <div class="dash-stat"><b id="statAcc">-</b><span>ACCURACY</span></div>
+        <div class="dash-stat"><b id="statRevise">-</b><span>TO REVISE</span></div>
+      </div>
+      <button class="secondary" style="margin-top:16px" onclick="showReport()">View Full Report Card</button>
+      <button class="secondary" id="revisionBtn" style="margin-top:10px" onclick="startRevision()">Revision Mode</button>
+      <button class="secondary" style="margin-top:10px" onclick="showLeaderboard()">Class Leaderboard</button>
+      <div class="reset-link" onclick="resetProgress()">Reset all progress</div>
+      <div class="reset-link" style="color:var(--gold-soft)" onclick="switchStudent()">Not you? Switch Student</div>
+    </div>
+    <div class="credit">(c) Designed by Chandravesh Jukariya</div>
+  </div>
+
+  <div id="subjectView" class="card hidden">
+    <span class="backlink" onclick="showDashboard()">&larr; Back to Dashboard</span>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2 id="subjectTitle" style="margin:6px 0 2px"></h2>
+      <div id="langToggle" class="hidden" style="display:flex;gap:6px">
+        <button class="secondary" id="langEnBtn" style="padding:6px 12px;font-size:12px" onclick="setSstLang('en')">EN</button>
+        <button class="secondary" id="langHiBtn" style="padding:6px 12px;font-size:12px" onclick="setSstLang('hi')">हिं</button>
+      </div>
+    </div>
+    <p class="small" id="subjectSub" style="margin-top:0"></p>
+    <div id="chapterList"></div>
+  </div>
+
+  <div id="practice" class="card hidden">
+    <span class="backlink" id="practiceBackLink" onclick="backFromPractice()">&larr; Back to Chapters</span>
+    <div class="meta"><span id="pTitle"></span><span id="pCount"></span></div>
+    <div class="bar"><div id="pFill" class="fill"></div></div>
+    <div id="typeTag" class="type-tag" style="margin-top:12px"></div>
+    <div id="pQuestion" class="q"></div>
+
+    <div id="mcqArea"></div>
+
+    <div id="writeArea" class="hidden">
+      <textarea id="writeBox" placeholder="Write your answer here..."></textarea>
+      <button class="secondary" style="margin-top:10px" onclick="showModel()">Show Model Answer</button>
+      <div id="modelAnswer" class="model-answer hidden"></div>
+      <div id="selfCheck" class="self-check hidden">
+        <button class="sc-correct" onclick="selfMark('correct')">I got it right</button>
+        <button class="sc-partial" onclick="selfMark('partial')">Partially correct</button>
+        <button class="sc-incorrect" onclick="selfMark('incorrect')">Need improvement</button>
+      </div>
+    </div>
+
+    <div id="pFeedback" class="feedback"></div>
+    <button id="pNext" class="primary hidden" onclick="nextQuestion()" style="margin-top:12px">Next Question &rarr;</button>
+  </div>
+
+  <div id="result" class="card hidden center">
+    <h2>Chapter Complete</h2>
+    <div id="score" class="score"></div>
+    <p id="resultText" class="small"></p>
+    <button class="primary" id="resultBackBtn" onclick="showSubject()">Back to Chapters</button>
+  </div>
+
+  <div id="reportView" class="card hidden">
+    <span class="backlink no-print" onclick="showDashboard()">&larr; Back to Dashboard</span>
+    <div class="report-header">
+      <div class="mark" style="color:var(--gold)">STUDENT PERFORMANCE REPORT</div>
+      <div class="rname" id="repName"></div>
+      <p class="small" id="repMeta"></p>
+    </div>
+    <div class="dash-stats" style="grid-template-columns:1fr 1fr">
+      <div class="dash-stat"><b id="repScore">0%</b><span>OVERALL SCORE</span></div>
+      <div class="dash-stat"><b id="repAttempted">0/0</b><span>QUESTIONS ATTEMPTED</span></div>
+      <div class="dash-stat"><b id="repCorrect">0</b><span>CORRECT</span></div>
+      <div class="dash-stat"><b id="repIncorrect">0</b><span>INCORRECT</span></div>
+      <div class="dash-stat"><b id="repWriting">0</b><span>WRITING QUESTIONS</span></div>
+      <div class="dash-stat"><b id="repSelfChecked">0</b><span>SELF-CHECKED</span></div>
+    </div>
+
+    <h3 style="margin-top:22px;font-size:16px;color:var(--gold-soft)">Subject-wise Performance</h3>
+    <table class="report"><thead><tr><th>Subject</th><th>Attempted</th><th>Accuracy</th><th>Status</th></tr></thead>
+      <tbody id="repSubjectTable"></tbody>
+    </table>
+
+    <h3 style="margin-top:20px;font-size:16px;color:var(--gold-soft)">Chapter Analysis</h3>
+    <div id="repChapterList"></div>
+
+    <div class="rec-box" id="repRecommendation"></div>
+
+    <div class="tagline">CONCEPT CLEAR &rarr; PRACTICE REGULAR &rarr; SUCCESS SURE</div>
+    <button class="primary no-print" style="margin-top:14px" onclick="window.print()">Download / Print Report</button>
+    <button class="secondary no-print" style="margin-top:10px" onclick="shareScore()">Share My Score (for Class Leaderboard)</button>
+    <textarea id="shareText" class="hidden no-print" readonly style="margin-top:10px;min-height:150px;font-size:12.5px"></textarea>
+    <div class="credit">(c) Designed by Chandravesh Jukariya</div>
+  </div>
+
+  <div id="leaderboardView" class="card hidden">
+    <span class="backlink no-print" onclick="showDashboard()">&larr; Back to Dashboard</span>
+    <div class="report-header">
+      <div class="mark" style="color:var(--gold)">CLASS LEADERBOARD</div>
+      <p class="small">Ranked by overall score across all submitted students</p>
+    </div>
+    <div id="leaderboardStatus" class="small center" style="margin:14px 0"></div>
+    <div id="leaderboardList"></div>
+    <button class="primary" style="margin-top:16px" onclick="submitToLeaderboard()">Submit My Score to Leaderboard</button>
+    <button class="secondary" style="margin-top:10px" onclick="loadLeaderboard()">Refresh Leaderboard</button>
+    <button class="secondary" style="margin-top:10px" onclick="showVisitorLog()">View Who Has Used This App</button>
+    <div class="credit">(c) Designed by Chandravesh Jukariya</div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SST HINDI TRANSLATIONS - keyed by question id.
+   Used only when subject=sst and language toggle is set to Hindi.
+   ============================================================ */
+const SST_HI = {
+  so1: {q:"जर्मन राष्ट्र के रूपक के रूप में \"जर्मेनिया\" चित्र किसने बनाया?", options:["फ्रेडरिक सोरयू","फिलिप वेइट","ऑटो वॉन बिस्मार्क","ज्यूसेपे मेत्सिनी"]},
+  so2: {q:"वियना की संधि (1815) किसकी हार के बाद हुई थी?", options:["ऑटो वॉन बिस्मार्क","नेपोलियन","मेटरनिख","गैरीबाल्डी"]},
+  so3: {q:"\"यंग इटली\" आंदोलन की स्थापना किसने की थी?", answer:"ज्यूसेपे मेत्सिनी"},
+  so4: {q:"ऑटो वॉन बिस्मार्क के नेतृत्व में किस देश का एकीकरण हुआ?", answer:"जर्मनी"},
+  so5: {q:"ज़ॉलवेराइन (Zollverein) क्या था?", answer:"यह 1834 में प्रशा की पहल पर बना एक सीमा-शुल्क संघ था, जिसमें अधिकांश जर्मन राज्य शामिल हुए। इसने शुल्क बाधाओं को समाप्त किया, जिससे आर्थिक राष्ट्रवाद की लहर पैदा हुई।"},
+  so6: {q:"यूरोप के शिक्षित मध्यम वर्ग ने राष्ट्र के विचार की कल्पना कैसे की?", answer:"उन्होंने राष्ट्रवाद को संविधानवाद और प्रतिनिधि सरकार की मांग के साथ जोड़ा, और समानता, स्वतंत्रता और प्रेस की आज़ादी की कल्पना की।"},
+  so7: {q:"कथन: सोरयू के चित्र में विश्व लोकतांत्रिक गणराज्यों की कल्पना दिखाई गई थी। कारण: इसमें विभिन्न राष्ट्रों के लोग निरंकुश राजतंत्रों के पतन के उत्सव में मार्च करते दिखाए गए थे।",
+       options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so8: {q:"ऑटो वॉन बिस्मार्क के नेतृत्व में जर्मनी के एकीकरण की प्रक्रिया का वर्णन करें।",
+        answer:"प्रशा जर्मन एकीकरण का अग्रणी राज्य बना। बिस्मार्क ने प्रशा की सेना और नौकरशाही की सहायता से सात वर्षों में तीन युद्धों (ऑस्ट्रिया, डेनमार्क, फ्रांस) के माध्यम से इसे आगे बढ़ाया, जिसकी परिणति 1871 में विलियम प्रथम को जर्मन सम्राट घोषित करने में हुई।"},
+
+  so9: {q:"असहयोग आंदोलन किस वर्ष शुरू हुआ था?", options:["1919","1920","1922","1930"]},
+  so10: {q:"जलियांवाला बाग हत्याकांड किस वर्ष हुआ था?", options:["1919","1920","1921","1930"]},
+  so11: {q:"\"वंदे मातरम्\" की रचना किसने की थी?", answer:"बंकिम चंद्र चट्टोपाध्याय"},
+  so12: {q:"रॉलेट एक्ट (1919) क्या था?", answer:"एक ऐसा कानून जिसने सरकार को राजनीतिक बंदियों को बिना मुकदमे के दो वर्ष तक हिरासत में रखने की शक्ति दी।"},
+  so13: {q:"महात्मा गांधी ने असहयोग आंदोलन वापस क्यों लिया?", answer:"चौरी-चौरा (फरवरी 1922) की हिंसक घटना के बाद, जहाँ भीड़ ने पुलिसकर्मियों की हत्या कर दी, गांधीजी को लगा कि लोग अभी अहिंसक विरोध के लिए अनुशासित नहीं हैं।"},
+  so14: {q:"नमक मार्च (1930) का क्या महत्व था?", answer:"गांधीजी ने साबरमती से डांडी तक मार्च कर नमक कानून तोड़ा, जिससे सविनय अवज्ञा आंदोलन की शुरुआत हुई।"},
+  so15: {q:"असम के बागान मजदूरों ने स्वराज को कैसे समझा?", answer:"उनके लिए स्वतंत्रता का अर्थ था सीमित स्थान से बाहर घूमने का अधिकार और अपने गाँव से संबंध बनाए रखना।"},
+  so16: {q:"सविनय अवज्ञा आंदोलन में शामिल सामाजिक समूहों और उनके कारणों की चर्चा करें।",
+         answer:"धनी किसान उच्च राजस्व का विरोध करने आए; गरीब किसान किराए में छूट चाहते थे; व्यापारी वर्ग आयात से सुरक्षा चाहता था; महिलाओं ने विरोध व नमक बनाने में व्यापक भाग लिया।"},
+
+  so17: {q:"महामंदी किस वर्ष शुरू हुई थी?", options:["1919","1929","1939","1945"]},
+  so18: {q:"\"रेशम मार्ग\" क्या था?", answer:"व्यापार मार्ग जो एशिया को यूरोप और उत्तरी अफ्रीका से जोड़ते थे, जिनसे वस्तुओं और विचारों का आदान-प्रदान होता था।"},
+  so19: {q:"1929 में महामंदी का क्या कारण था?", answer:"कृषि उत्पादन की अधिकता, अमेरिकी ऋणों पर निर्भरता, और वॉल स्ट्रीट क्रैश ने बैंक विफलताओं का कारण बना।"},
+  so20: {q:"\"ब्रेटन वुड्स समझौता\" क्या था?", answer:"1944 का समझौता जिसने IMF और विश्व बैंक की स्थापना की।"},
+  so21: {q:"कथन: 19वीं सदी में यूरोप से बड़े पैमाने पर प्रवास हुआ। कारण: यूरोप में भूमि की कमी और नए क्षेत्रों में प्रचुरता थी।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so22: {q:"प्रथम विश्व युद्ध का विश्व अर्थव्यवस्था पर क्या प्रभाव पड़ा?", answer:"उत्पादन भारत/जापान की ओर स्थानांतरित हुआ; अमेरिका सबसे बड़ा ऋणदाता बना; अस्थिरता ने महामंदी में योगदान दिया।"},
+  so23: {q:"भारत पर महामंदी के क्या प्रभाव पड़े?", answer:"निर्यात-आयात लगभग आधे रह गए; कृषि कीमतें गिरने से किसानों को कठिनाई हुई।"},
+  so24: {q:"1914 से पहले वैश्विक विश्व में प्रौद्योगिकी की भूमिका पर चर्चा करें।", answer:"नई तकनीकों ने परिवहन लागत घटाई; रेलवे और रेफ्रिजरेटेड जहाजों ने विश्व व्यापार बढ़ाया।"},
+
+  so25: {q:"कोयला किस प्रकार का संसाधन है?", options:["नवीकरणीय","अनवीकरणीय","जैविक","मानव-निर्मित"]},
+  so26: {q:"काली मिट्टी को किस नाम से जाना जाता है?", options:["जलोढ़ मिट्टी","रेगुर मिट्टी","लैटेराइट मिट्टी","शुष्क मिट्टी"]},
+  so27: {q:"मिट्टी की ऊपरी परत के कटाव को क्या कहते हैं?", answer:"मृदा अपरदन"},
+  so28: {q:"भारत में भूमि क्षरण के मुख्य कारण क्या हैं?", answer:"वनोन्मूलन, अतिचारण, खनन, अवैज्ञानिक कृषि और औद्योगिक अपशिष्ट।"},
+  so29: {q:"नवीकरणीय और अनवीकरणीय संसाधनों में अंतर स्पष्ट करें।", answer:"नवीकरणीय पुनः प्राप्त हो सकते हैं (सौर, वन); अनवीकरणीय सीमित होते हैं (कोयला, खनिज)।"},
+  so30: {q:"\"सतत विकास\" से क्या तात्पर्य है?", answer:"वर्तमान आवश्यकताओं को पूरा करना बिना भावी पीढ़ियों की क्षमता प्रभावित किए।"},
+  so31: {q:"कथन: जलोढ़ मिट्टी भारत की सबसे उपजाऊ मिट्टी है। कारण: यह पोटाश, फॉस्फोरिक एसिड और चूने से समृद्ध है।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so32: {q:"उत्पत्ति, समाप्यता, स्वामित्व के आधार पर संसाधनों के प्रकार समझाएं।", answer:"उत्पत्ति: जैविक/अजैविक। समाप्यता: नवीकरणीय/अनवीकरणीय। स्वामित्व: व्यक्तिगत/सामुदायिक/राष्ट्रीय/अंतरराष्ट्रीय।"},
+
+  so33: {q:"\"प्रोजेक्ट टाइगर\" किस वर्ष शुरू हुआ था?", options:["1972","1973","1980","1991"]},
+  so34: {q:"भारत में किसी एक लुप्तप्राय प्रजाति का नाम बताएं।", answer:"बंगाल टाइगर (या एशियाई शेर)"},
+  so35: {q:"जैवमंडल रिज़र्व क्या हैं?", answer:"जैव विविधता के संरक्षण के लिए बनाए गए संरक्षित क्षेत्र।"},
+  so36: {q:"वनस्पति और जीव-जंतु में क्या अंतर है?", answer:"वनस्पति पौधों को, जीव-जंतु पशुओं को संदर्भित करता है।"},
+  so37: {q:"मानवीय गतिविधियाँ वन्यजीव संसाधनों के क्षरण में कैसे योगदान देती हैं?", answer:"वनोन्मूलन, अवैध शिकार और प्रदूषण के माध्यम से।"},
+  so38: {q:"स्वामित्व के आधार पर भारत में वनों की श्रेणियाँ बताएं।", answer:"आरक्षित वन, संरक्षित वन, अवर्गीकृत वन।"},
+  so39: {q:"सामुदायिक संरक्षण प्रयासों को एक उदाहरण सहित समझाएं।", answer:"राजस्थान के बिश्नोई समुदाय धार्मिक मान्यता से वन्यजीवों की रक्षा करते हैं।"},
+
+  so40: {q:"सरदार सरोवर बांध किस नदी पर बना है?", options:["गंगा","नर्मदा","कृष्णा","सतलुज"]},
+  so41: {q:"\"बहुउद्देशीय नदी घाटी परियोजना\" क्या है?", answer:"सिंचाई, बिजली, बाढ़ नियंत्रण जैसे कई उद्देश्य पूरे करने वाली परियोजना।"},
+  so42: {q:"बहुउद्देशीय परियोजनाओं के दुष्प्रभाव क्या हैं?", answer:"विस्थापन, तलछट समस्याएँ, भूकंप का खतरा।"},
+  so43: {q:"वर्षा जल संचयन क्या है? उदाहरण दें।", answer:"वर्षा जल एकत्रित करने की तकनीक; उदाहरण: कुल/गुल।"},
+  so44: {q:"कथन: नेहरू ने परियोजनाओं को \"आधुनिक भारत के मंदिर\" कहा। कारण: ये कृषि और औद्योगीकरण को एकीकृत करती हैं।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so45: {q:"भारत में पारंपरिक जल संचयन विधियों पर चर्चा करें।", answer:"पहाड़ी क्षेत्रों में कुल/गुल; राजस्थान में टांका।"},
+  so46: {q:"बहुउद्देशीय परियोजनाओं के उद्देश्य बताएं।", answer:"सिंचाई, बिजली, बाढ़ नियंत्रण; उदाहरण: भाखड़ा नांगल।"},
+
+  so106: {q:"गेहूं मुख्यतः किस मौसम की फसल है?", options:["खरीफ","रबी","जायद","बारहमासी"]},
+  so107: {q:"रबी और खरीफ फसलों में अंतर स्पष्ट करें।", answer:"रबी सर्दी में बोई जाती है (गेहूं); खरीफ मानसून में बोई जाती है (चावल)।"},
+  so108: {q:"भारत की दो प्रमुख खाद्य फसलों के नाम बताएं।", answer:"चावल और गेहूं"},
+  so109: {q:"भारतीय अर्थव्यवस्था में कृषि का महत्व समझाएं।", answer:"ग्रामीण जनसंख्या को आजीविका, कच्चा माल, खाद्य सुरक्षा और निर्यात में योगदान।"},
+  so110: {q:"जायद किन दो मौसमों के बीच की छोटी अवधि है?", options:["खरीफ और रबी","रबी और खरीफ","केवल सर्दी में","केवल मानसून में"]},
+
+  so47: {q:"बेल्जियम में भाषाई संघर्ष का समाधान किससे हुआ?", options:["अल्पसंख्यकों की उपेक्षा","सत्ता-साझेदारी","गृहयुद्ध","देश विभाजन"]},
+  so48: {q:"श्रीलंका में बहुसंख्यक समुदाय कौन है?", options:["तमिल","सिंहली","मुस्लिम","बर्गर"]},
+  so49: {q:"\"बहुसंख्यकवाद\" से क्या तात्पर्य है?", answer:"बहुसंख्यक समुदाय द्वारा अल्पसंख्यकों की अनदेखी कर मनमाना शासन करना।"},
+  so50: {q:"सत्ता की साझेदारी क्यों वांछनीय है?", answer:"संघर्ष कम करता है; लोकतंत्र की मूल भावना है।"},
+  so51: {q:"बेल्जियम की \"सामुदायिक सरकार\" समझाएं।", answer:"भाषा समुदाय द्वारा चुनी गई सरकार जिसके पास सांस्कृतिक/भाषाई शक्तियाँ होती हैं।"},
+  so52: {q:"कथन: श्रीलंका को जातीय संघर्ष झेलना पड़ा। कारण: सरकार ने सिंहली समुदाय के पक्ष में बहुसंख्यकवादी उपाय अपनाए।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so53: {q:"बेल्जियम के सत्ता-साझेदारी मॉडल का वर्णन करें।", answer:"समान डच/फ्रेंच मंत्री, राज्यों को शक्तियाँ, अलग सामुदायिक सरकार।"},
+
+  so54: {q:"संघवाद की विशेषता नहीं है:", options:["दो या अधिक स्तर","सभी के लिए समान कानून","लिखित संविधान","स्वतंत्र न्यायपालिका"]},
+  so55: {q:"शक्तियों के बंटवारे की तीन सूचियाँ बताएं।", answer:"संघ सूची, राज्य सूची, समवर्ती सूची"},
+  so56: {q:"73वां संविधान संशोधन किससे संबंधित था?", answer:"पंचायती राज संस्थाओं के नियमित चुनाव अनिवार्य बनाना।"},
+  so57: {q:"संघ निर्माण के दो मार्ग बताएं।", answer:"\"एक साथ आना\" (अमेरिका) और \"साथ बने रहना\" (भारत)।"},
+  so58: {q:"भारत की भाषा नीति संघीय सत्ता-साझेदारी का उदाहरण कैसे है?", answer:"हिंदी राजभाषा है पर अंग्रेजी जारी है; राज्यों की अपनी भाषाएँ हैं।"},
+  so59: {q:"कथन: भारत \"साथ बने रहना\" संघ है। कारण: शक्तियाँ केंद्र सरकार की ओर झुकी हैं।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so60: {q:"संघवाद की विशेषताएँ और भारत में शक्ति विभाजन समझाएं।", answer:"दो+ स्तर, संवैधानिक गारंटी; संघ सूची (रक्षा), राज्य सूची (पुलिस)।"},
+
+  so61: {q:"संविधान समानता की गारंटी देता है, परवाह किए बिना:", options:["केवल आयु","धर्म, नस्ल, जाति, लिंग","केवल शिक्षा","केवल आय"]},
+  so62: {q:"\"श्रम के लैंगिक विभाजन\" से क्या तात्पर्य है?", answer:"महिलाएँ घरेलू काम, पुरुष बाहर वेतन के लिए काम करते हैं।"},
+  so63: {q:"सांप्रदायिकता क्या है?", answer:"एक धर्म को राष्ट्र का आधार मानने का विश्वास, जिससे प्रभुत्व या हिंसा होती है।"},
+  so64: {q:"जाति भारतीय राजनीति में क्या भूमिका निभाती है?", answer:"दल जाति आधार पर उम्मीदवार चुनते हैं, पर विकास भी मायने रखता है।"},
+  so65: {q:"भारत में लैंगिक असमानता और समाधान बताएं।", answer:"कम साक्षरता, वेतन असमानता; समाधान: पंचायतों में आरक्षण।"},
+  so66: {q:"धर्म और राजनीति के स्वस्थ/अस्वस्थ रूप बताएं।", answer:"स्वस्थ: सार्वभौमिक कल्याण (गांधी); अस्वस्थ: सांप्रदायिकता।"},
+
+  so67: {q:"विश्व बैंक देशों को वर्गीकृत करता है:", options:["साक्षरता दर","प्रति व्यक्ति आय","शिशु मृत्यु दर","जीवन प्रत्याशा"]},
+  so68: {q:"मानव विकास सूचकांक (HDI) प्रकाशित करता है:", options:["विश्व बैंक","UNDP","WHO","IMF"]},
+  so69: {q:"\"प्रति व्यक्ति आय\" क्या है?", answer:"कुल आय को जनसंख्या से भाग देकर प्राप्त औसत आय।"},
+  so70: {q:"आय के अलावा एक विकास संकेतक बताएं।", answer:"साक्षरता दर (या जीवन प्रत्याशा)"},
+  so71: {q:"प्रति व्यक्ति आय अकेले विकास का संकेतक क्यों नहीं है?", answer:"यह आय वितरण नहीं दर्शाती।"},
+  so72: {q:"आर्थिक विकास और मानव विकास में अंतर बताएं।", answer:"आर्थिक विकास आय पर, मानव विकास स्वास्थ्य/शिक्षा पर भी केंद्रित है।"},
+  so73: {q:"\"सतत विकास\" संसाधनों के संदर्भ में क्या है?", answer:"भावी पीढ़ियों की क्षमता बिना प्रभावित किए वर्तमान आवश्यकताएँ पूरी करना।"},
+  so74: {q:"कथन: केरल की आय पंजाब से कम पर अन्य संकेतक बेहतर हैं। कारण: विकास स्वास्थ्य/शिक्षा व्यय पर भी निर्भर है।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so75: {q:"HDI के मानदंड और विकास की अलग धारणाओं पर चर्चा करें।", answer:"जीवन प्रत्याशा, शिक्षा, आय; लोगों की परिस्थितियाँ अलग होती हैं।"},
+
+  so76: {q:"कृषि किस क्षेत्रक से संबंधित है?", options:["प्राथमिक","द्वितीयक","तृतीयक","चतुर्थक"]},
+  so77: {q:"भारत के GDP में सबसे अधिक योगदान किसका है?", options:["प्राथमिक","द्वितीयक","तृतीयक (सेवाएँ)","इनमें से कोई नहीं"]},
+  so78: {q:"\"प्रच्छन्न बेरोजगारी\" क्या है?", answer:"आवश्यकता से अधिक लोग काम में लगे होना।"},
+  so79: {q:"\"संगठित क्षेत्रक\" को परिभाषित करें।", answer:"सरकार-पंजीकृत उद्यम जो नियमित रोजगार व लाभ देते हैं।"},
+  so80: {q:"सार्वजनिक और निजी क्षेत्रक में अंतर बताएं।", answer:"सार्वजनिक: सरकारी स्वामित्व; निजी: निजी कंपनियाँ।"},
+  so81: {q:"\"अल्प रोजगार\" क्या है?", answer:"पूरी क्षमता से काम न करना, जैसे मौसमी किसान।"},
+  so82: {q:"कथन: ग्रामीण क्षेत्रों में गैर-कृषि रोजगार चाहिए। कारण: कृषि में अतिरिक्त श्रम है।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so83: {q:"संगठित/असंगठित क्षेत्रक में अंतर और सुरक्षा उपाय बताएं।", answer:"संगठित सुरक्षित है; उपाय: न्यूनतम मजदूरी, सामाजिक सुरक्षा।"},
+  so84: {q:"आर्थिक गतिविधियों को प्राथमिक, द्वितीयक, तृतीयक में वर्गीकृत करें।", answer:"प्राथमिक-कृषि; द्वितीयक-विनिर्माण; तृतीयक-सेवाएँ।"},
+
+  so111: {q:"मुद्रा \"विनिमय का माध्यम\" कैसे है?", answer:"वस्तु-विनिमय की आवश्यकताओं के दोहरे संयोग की जरूरत को समाप्त करती है।"},
+  so112: {q:"औपचारिक और अनौपचारिक ऋण स्रोतों में अंतर बताएं।", answer:"औपचारिक: बैंक (RBI विनियमित); अनौपचारिक: साहूकार (अनियमित)।"},
+  so113: {q:"स्वयं सहायता समूह (SHG) क्या है?", answer:"15-20 सदस्यों का समूह जो बचत जमा कर आपस में ऋण देता है।"},
+  so114: {q:"भारत में औपचारिक ऋण स्रोतों की निगरानी कौन करता है?", options:["RBI","SEBI","IRDA","NITI Aayog"]},
+  so115: {q:"औपचारिक ऋण विकास के लिए क्यों महत्वपूर्ण है?", answer:"कम ब्याज दर; चुनौतियाँ: गिरवी रखने की कमी, जागरूकता की कमी।"},
+
+  so85: {q:"प्राकृतिक आपदा कौन सी है?", options:["सड़क दुर्घटना","भूकंप","औद्योगिक आग","युद्ध"]},
+  so86: {q:"NDMA का पूर्ण रूप क्या है?", options:["राष्ट्रीय आपदा प्रबंधन प्राधिकरण","राष्ट्रीय विकास एजेंसी","राष्ट्रीय रक्षा प्राधिकरण","इनमें से कोई नहीं"]},
+  so87: {q:"उत्तराखंड किस आपदा के प्रति संवेदनशील है?", options:["चक्रवात","भूस्खलन","सुनामी","सूखा"]},
+  so88: {q:"\"आपदा\" को परिभाषित करें।", answer:"अचानक विनाशकारी घटना जो व्यापक क्षति पहुँचाती है।"},
+  so89: {q:"उत्तराखंड की दो प्राकृतिक आपदाएँ बताएं।", answer:"भूकंप और भूस्खलन"},
+  so90: {q:"\"भेद्यता\" का क्या अर्थ है?", answer:"खतरे के प्रति संवेदनशीलता की सीमा।"},
+  so91: {q:"\"खतरा\" और \"आपदा\" में अंतर बताएं।", answer:"खतरा संभावित घटना है; आपदा जब यह संवेदनशील आबादी को प्रभावित करे।"},
+  so92: {q:"आपदा प्रबंधन चक्र के चरण बताएं।", answer:"शमन, तैयारी, अनुक्रिया, पुनर्वास।"},
+  so93: {q:"भूकंप के दौरान करणीय-अकरणीय बताएं।", answer:"मेज के नीचे शरण लें; लिफ्ट का उपयोग न करें।"},
+  so94: {q:"आपदा प्रबंधन में NGOs की भूमिका बताएं।", answer:"राहत वितरण, पुनर्वास, जागरूकता।"},
+  so95: {q:"\"सामुदायिक आपदा प्रबंधन\" समझाएं।", answer:"स्थानीय समुदाय जोखिम पहचान व योजना में भाग लेता है।"},
+  so96: {q:"कथन: उत्तराखंड में भूस्खलन होता है। कारण: हिमालयी भूभाग, वर्षा और वनोन्मूलन।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so97: {q:"कथन: पूर्व चेतावनी प्रणालियाँ जीवन बचाती हैं। कारण: निकासी का समय देती हैं।",
+        options:["A और R दोनों सत्य हैं, R सही व्याख्या है","A और R दोनों सत्य हैं, R सही व्याख्या नहीं है","A सत्य, R असत्य","A असत्य, R सत्य"]},
+  so98: {q:"2013 केदारनाथ आपदा के कारण, परिणाम, सीखें बताएं।", answer:"कारण: बादल फटना; परिणाम: जनहानि; सीखें: निर्माण विनियमन।"},
+  so99: {q:"मानव-निर्मित आपदाओं के प्रकार और रोकथाम बताएं।", answer:"औद्योगिक दुर्घटनाएँ; रोकथाम: सुरक्षा नियम, ऑडिट।"},
+  so100: {q:"NDMA और SDMA की भूमिकाएँ समझाएं।", answer:"NDMA राष्ट्रीय नीति; SDMA राज्य स्तर पर जिम्मेदार।"},
+
+  so101: {q:"गांधीजी ने चौरी-चौरा के बाद आंदोलन क्यों वापस लिया?", answer:"अहिंसा बनाए रखना आंदोलन की गति से अधिक महत्वपूर्ण था।"},
+  so102: {q:"पहाड़ी राज्य में भारी वर्षा फिर भी जल संकट - कारण और समाधान बताएं।", answer:"कारण: तेज़ अपवाह, वनोन्मूलन; समाधान: चेक डैम।"},
+  so103: {q:"देश X की भाषा नीति - परिणाम और विकल्प बताएं।", answer:"परिणाम: अलगाव; विकल्प: बहु-भाषी सत्ता-साझेदारी।"},
+  so104: {q:"कृषि का GDP हिस्सा घटा - समस्या और उपाय बताएं।", answer:"समस्या: प्रच्छन्न बेरोजगारी; उपाय: गैर-कृषि रोजगार।"},
+  so105: {q:"भूस्खलन - शमन और तैयारी उपाय बताएं।", answer:"शमन: भवन नियम; तैयारी: चेतावनी प्रणाली।"}
+};
+
+const DB = {
+  maths: {
+    name: "Mathematics", icon:"M",
+    note: "150 questions across all 8 chapters",
+    chapters: [
+      { name: "Real Numbers", questions: [
+        {id:"m1", type:"sa", q:"Use Euclid's division algorithm to find the HCF of 135 and 225.",
+         answer:"225 = 135x1 + 90; 135 = 90x1 + 45; 90 = 45x2 + 0. HCF = 45."},
+        {id:"m2", type:"la", q:"Prove that sqrt(5) is irrational.",
+         answer:"Assume sqrt(5) = p/q (p,q coprime, q!=0). Then p^2 = 5q^2, so 5 divides p, let p = 5m. Then 25m^2 = 5q^2 => q^2 = 5m^2, so 5 divides q too - contradicting p,q being coprime. Hence sqrt(5) is irrational."},
+        {id:"m3", type:"sa", q:"Given that HCF(306, 657) = 9, find LCM(306, 657).",
+         answer:"LCM x HCF = product of numbers. LCM = (306x657)/9 = 22,338."},
+        {id:"m29", type:"sa", q:"Find HCF and LCM of 96 and 404 by prime factorisation, and verify LCM x HCF = product of the numbers.",
+         answer:"96=2^5x3, 404=2^2x101. HCF=2^2=4. LCM=2^5x3x101=9696. Verify: 4x9696=38784=96x404 (verified)."},
+        {id:"m30", type:"la", q:"Prove that 3 + 2*sqrt(5) is irrational.",
+         answer:"Assume 3+2sqrt(5) is rational. Then 2sqrt(5) = (that number) - 3 is rational, so sqrt(5) is rational - a contradiction since sqrt(5) is irrational. Hence 3+2sqrt(5) is irrational."},
+        {id:"m31", type:"sa", q:"The HCF of two numbers is 5 and their LCM is 200. If one number is 25, find the other.",
+         answer:"Product of numbers = HCF x LCM = 5x200=1000. Other number = 1000/25 = 40."},
+        {id:"m32", type:"sa", q:"Explain why 7x11x13+13 is a composite number.",
+         answer:"7x11x13+13 = 13(7x11+1) = 13x78, which has factors other than 1 and itself, so it is composite."},
+        {id:"m33", type:"sa", q:"Explain why 12^n cannot end with the digit 0 for any natural number n.",
+         answer:"12^n = 2^(2n) x 3^n. For a number to end in 0, it must have both 2 and 5 as factors. Since 12^n has no factor of 5, it can never end in 0."},
+        {id:"m34", type:"mcq", q:"Euclid's division lemma states a = bq + r, where r satisfies:",
+         options:["0 <= r < b","0 < r < b","0 <= r <= b","r > 0"], correct:0},
+        {id:"m35", type:"sa", q:"Find the largest number which divides 615 and 963, leaving remainder 6 in each case.",
+         answer:"Subtract remainder: 615-6=609, 963-6=957. HCF(609,957) by Euclid's algorithm = 87."},
+        {id:"m86", type:"la", q:"Show that any positive odd integer is of the form 6q+1, 6q+3, or 6q+5, where q is some integer.",
+         answer:"By Euclid's division lemma, a=6q+r where 0<=r<6. Since 6q is always even, for 'a' to be odd, r must be odd: r=1,3,5. So a=6q+1, 6q+3, or 6q+5."},
+        {id:"m87", type:"sa", q:"Find the LCM and HCF of 6 and 20 by the prime factorisation method.",
+         answer:"6=2x3, 20=2^2x5. HCF=2, LCM=2^2x3x5=60."},
+        {id:"m88", type:"la", q:"Prove that root 2 is irrational.",
+         answer:"Assume root2=p/q (p,q coprime). Then p^2=2q^2, so 2 divides p, let p=2m. Then 4m^2=2q^2 => q^2=2m^2, so 2 divides q too, contradicting p,q coprime. Hence root2 is irrational."},
+        {id:"m89", type:"sa", q:"Check whether 6^n can end with the digit 0 for any natural number n.",
+         answer:"6^n = 2^n x 3^n. Since there is no factor of 5, 6^n can never end in 0."},
+        {id:"m90", type:"sa", q:"Two tankers contain 850 litres and 680 litres of petrol respectively. Find the maximum capacity of a container which can measure the petrol of both tankers an exact number of times.",
+         answer:"HCF(850,680) by Euclid's algorithm = 170 litres."},
+        {id:"m91", type:"sa", q:"State the Fundamental Theorem of Arithmetic.",
+         answer:"Every composite number can be expressed (factorised) as a product of primes, and this factorisation is unique, apart from the order in which the prime factors occur."},
+        {id:"m92", type:"mcq", q:"The product of a non-zero rational number and an irrational number is:",
+         options:["rational","irrational","zero","none of these"], correct:1},
+        {id:"m93", type:"sa", q:"Find the HCF and LCM of 26 and 91 and verify that LCM x HCF = product of the two numbers.",
+         answer:"26=2x13, 91=7x13. HCF=13, LCM=2x7x13=182. Verify: 13x182=2366=26x91 (verified)."},
+        {id:"m94", type:"mcq", q:"If two positive integers a and b are written as a=x^3y^2 and b=xy^3 (x,y are prime), then HCF(a,b) is:",
+         options:["xy^2","x^3y^3","x^2y^2","xy"], correct:0}
+      ]},
+      { name: "Polynomials", questions: [
+        {id:"m4", type:"sa", q:"Find the zeroes of x^2 - 2x - 8 and verify the relationship between zeroes and coefficients.",
+         answer:"(x-4)(x+2)=0 => zeroes 4, -2. Sum = 2 = -b/a (verified), Product = -8 = c/a (verified)."},
+        {id:"m5", type:"sa", q:"Find a quadratic polynomial whose sum and product of zeroes are 1/4 and -1 respectively.",
+         answer:"k[x^2 - (1/4)x - 1]; taking k=4: 4x^2 - x - 4."},
+        {id:"m6", type:"la", q:"Find all zeroes of 2x^4-3x^3-3x^2+6x-2, given two zeroes are sqrt(2) and -sqrt(2).",
+         answer:"(x^2-2) is a factor. Dividing gives quotient 2x^2-3x+1 = (2x-1)(x-1). All zeroes: sqrt(2), -sqrt(2), 1, 1/2."},
+        {id:"m36", type:"sa", q:"If one zero of the polynomial x^2-4x+1 is 2+sqrt(3), find the other zero.",
+         answer:"Sum of zeroes = -b/a = 4. Other zero = 4-(2+sqrt(3)) = 2-sqrt(3)."},
+        {id:"m37", type:"sa", q:"Find a quadratic polynomial whose zeroes are 3 and -1.",
+         answer:"x^2 - (sum)x + product = x^2 - 2x - 3."},
+        {id:"m38", type:"mcq", q:"The degree of the polynomial 4x^4 + 0x^5 + 0x^3 + 5x + 7 is:",
+         options:["4","5","3","7"], correct:0},
+        {id:"m39", type:"sa", q:"If alpha and beta are zeroes of x^2-5x+6, find the value of alpha^2+beta^2.",
+         answer:"alpha+beta=5, alpha.beta=6. alpha^2+beta^2 = (alpha+beta)^2 - 2(alpha.beta) = 25-12 = 13."},
+        {id:"m40", type:"la", q:"Verify that 3, -1, -1/3 are the zeroes of 3x^3-5x^2-11x-3, and verify the relationship between zeroes and coefficients.",
+         answer:"Sum = 3-1-1/3 = 5/3 = -b/a (verified). Sum of products two at a time = -3+1/3-1 = -11/3 = c/a (verified). Product = 3x-1x-1/3 = 1 = -d/a (verified)."},
+        {id:"m41", type:"sa", q:"Find the zeroes of 4x^2-4x+1 and verify the relationship between zeroes and coefficients.",
+         answer:"4x^2-4x+1=(2x-1)^2=0, so zero = 1/2 (repeated). Sum=1=-b/a (verified). Product=1/4=c/a (verified)."},
+        {id:"m42", type:"la", q:"Divide 3x^2+4x+5 by x+1 and write the quotient and remainder.",
+         answer:"3x^2+4x+5 divided by x+1: Quotient = 3x+1, Remainder = 4."},
+        {id:"m95", type:"sa", q:"Find the zeroes of the quadratic polynomial x^2+7x+10, and verify the relationship between zeroes and coefficients.",
+         answer:"(x+5)(x+2)=0. Zeroes: -5, -2. Sum=-7=-b/a (verified). Product=10=c/a (verified)."},
+        {id:"m96", type:"sa", q:"Find a quadratic polynomial, the sum and product of whose zeroes are 0 and sqrt(5) respectively.",
+         answer:"k[x^2 - 0.x + sqrt(5)] = x^2 + sqrt(5)."},
+        {id:"m97", type:"mcq", q:"A quadratic polynomial can have at most how many zeroes?",
+         options:["1","2","3","4"], correct:1},
+        {id:"m98", type:"sa", q:"If the sum of the zeroes of kx^2+2x+3k is equal to their product, find k.",
+         answer:"Sum=-2/k, Product=3k/k=3. Setting -2/k=3 gives k=-2/3."},
+        {id:"m99", type:"la", q:"On dividing x^3-3x^2+x+2 by a polynomial g(x), the quotient and remainder were (x-2) and (-2x+4) respectively. Find g(x).",
+         answer:"g(x)(x-2) = x^3-3x^2+x+2-(-2x+4) = x^3-3x^2+3x-2. Dividing this by (x-2) gives g(x) = x^2-x+1."},
+        {id:"m100", type:"mcq", q:"If one of the zeroes of the cubic polynomial x^3+ax^2+bx+c is -1, the product of the other two zeroes is:",
+         options:["b-a+1","b-a-1","a-b+1","a-b-1"], correct:0},
+        {id:"m101", type:"la", q:"Find all the zeroes of x^4+x^3-9x^2-3x+18, if two of its zeroes are sqrt(3) and -sqrt(3).",
+         answer:"(x^2-3) is a factor. Dividing gives quotient x^2+x-6=(x+3)(x-2). All zeroes: sqrt(3), -sqrt(3), -3, 2."},
+        {id:"m102", type:"sa", q:"If the zeroes of x^2+px+q are double the zeroes of 2x^2-5x-3, find p and q.",
+         answer:"Zeroes of 2x^2-5x-3 are -1/2 and 3. Doubled: -1 and 6. Sum=5=-p => p=-5. Product=-6=q."},
+        {id:"m103", type:"mcq", q:"The zeroes of the polynomial x^2-3 are:",
+         options:["+-sqrt(3)","+-3","0 and 3","1 and 3"], correct:0}
+      ]},
+      { name: "Pair of Linear Equations", questions: [
+        {id:"m7", type:"sa", q:"Solve by substitution: x + y = 14, x - y = 4.",
+         answer:"x=4+y; (4+y)+y=14 => y=5, x=9."},
+        {id:"m8", type:"la", q:"Taxi charges: for 10 km the charge is Rs.105, for 15 km it's Rs.155. Find the fixed charge and per-km rate, and the charge for 25 km.",
+         answer:"x+10y=105, x+15y=155 => 5y=50 => y=10, x=5. Charge for 25 km = 5+250 = Rs.255."},
+        {id:"m9", type:"sa", q:"Sum of digits of a two-digit number is 9. Nine times the number equals twice the number with digits reversed. Find the number.",
+         answer:"10x+y, x+y=9. 9(10x+y)=2(10y+x) => 8x=y. Solving: x=1, y=8. Number = 18."},
+        {id:"m43", type:"la", q:"For what value of k will the system kx+3y=k-3, 12x+ky=k have no solution?",
+         answer:"For no solution, a1/a2 = b1/b2 != c1/c2. This gives k/12=3/k => k^2=36 => k=+-6. Checking k=6 gives all ratios equal (infinite solutions, rejected). Checking k=-6: a/a=b/b=-1/2, c1/c2=3/2, which is different, satisfying the no-solution condition. So k=-6."},
+        {id:"m44", type:"la", q:"5 years ago, Nuri was thrice as old as Sonu. 10 years later, Nuri will be twice as old as Sonu. Find their present ages.",
+         answer:"x-5=3(y-5) => x-3y=-10. x+10=2(y+10) => x-2y=10. Solving: y=20, x=50. Nuri=50 years, Sonu=20 years."},
+        {id:"m45", type:"la", q:"Places A and B are 100 km apart. Two cars start at the same time from A and B. If they travel in the same direction, they meet in 5 hours; if towards each other, they meet in 1 hour. Find their speeds.",
+         answer:"5(x-y)=100 => x-y=20. 1(x+y)=100 => x+y=100. Solving: x=60 km/h, y=40 km/h."},
+        {id:"m46", type:"mcq", q:"Graphically, the pair of equations 6x-3y+10=0 and 2x-y+9=0 represents two lines which are:",
+         options:["Intersecting","Parallel","Coincident","Perpendicular"], correct:1},
+        {id:"m47", type:"sa", q:"A fraction becomes 1/3 when 1 is subtracted from the numerator, and becomes 1/4 when 8 is added to the denominator. Find the fraction.",
+         answer:"3x-y=3 and 4x-y=8. Subtracting: x=5, y=12. Fraction = 5/12."},
+        {id:"m48", type:"sa", q:"The sum of two numbers is 8 and the sum of their reciprocals is 8/15. Find the numbers.",
+         answer:"x+y=8, (x+y)/xy=8/15 => xy=15. Solving t^2-8t+15=0 gives t=3 or 5. Numbers are 3 and 5."},
+        {id:"m49", type:"mcq", q:"If a pair of linear equations is consistent, the lines represented by them are:",
+         options:["Always parallel","Always coincident","Intersecting or coincident","Always intersecting"], correct:2},
+        {id:"m104", type:"sa", q:"Solve: 3x+2y=11, 2x+3y=4 by the elimination method.",
+         answer:"Multiply first by 3 and second by 2, then subtract: 5x=25 => x=5. Substituting: y=-2."},
+        {id:"m105", type:"sa", q:"10 students of Class X took a Maths quiz. If the number of girls is 4 more than the number of boys, find the number of boys and girls.",
+         answer:"b+g=10, g=b+4. Solving: b=3, g=7."},
+        {id:"m106", type:"sa", q:"A father's age is three times the sum of the ages of his two children. After 5 years his age will be twice the sum of their ages. Find the father's age.",
+         answer:"x=3y and x+5=2(y+10). Solving: y=15, x=45. Father's age = 45 years."},
+        {id:"m107", type:"mcq", q:"The pair of equations x=0 and y=0 has:",
+         options:["A unique solution","No solution","Infinitely many solutions","Two solutions"], correct:0},
+        {id:"m108", type:"la", q:"The area of a rectangle gets reduced by 9 sq units if its length is reduced by 5 units and breadth increased by 3 units. If length is increased by 3 units and breadth by 2 units, area increases by 67 sq units. Find the dimensions.",
+         answer:"3l-5b=6 and 2l+3b=61. Solving: l=17 units, b=9 units."},
+        {id:"m109", type:"sa", q:"The larger of two supplementary angles exceeds the smaller by 18 degrees. Find the angles.",
+         answer:"x+y=180, x-y=18. Solving: x=99, y=81."},
+        {id:"m110", type:"mcq", q:"For which value of k do the equations kx-y=2 and 6x-2y=3 represent parallel lines?",
+         options:["3","2","1","6"], correct:0},
+        {id:"m111", type:"sa", q:"Two numbers are in ratio 5:6. If 8 is subtracted from each, the ratio becomes 4:5. Find the numbers.",
+         answer:"(5x-8)/(6x-8)=4/5. Solving: x=8. Numbers are 40 and 48."},
+        {id:"m112", type:"sa", q:"5 pencils and 7 pens together cost Rs 50, whereas 7 pencils and 5 pens together cost Rs 46. Find the cost of one pencil and one pen.",
+         answer:"5x+7y=50 and 7x+5y=46. Solving: x=3, y=5. Pencil = Rs 3, Pen = Rs 5."}
+      ]},
+      { name: "Quadratic Equations", questions: [
+        {id:"m10", type:"sa", q:"Find the roots of 6x^2 - x - 2 = 0 by factorisation.",
+         answer:"6x^2-4x+3x-2=0 => 2x(3x-2)+1(3x-2)=0 => (3x-2)(2x+1)=0 => x=2/3 or -1/2."},
+        {id:"m11", type:"la", q:"A train travels 360 km at uniform speed. If the speed had been 5 km/h more it would take 1 hour less. Find the speed.",
+         answer:"360/x - 360/(x+5) = 1 => x^2+5x-1800=0 => x=40 km/h."},
+        {id:"m12", type:"sa", q:"Find the nature of the roots of 2x^2 - 6x + 3 = 0 using the discriminant.",
+         answer:"D=b^2-4ac=36-24=12>0 => real and distinct roots: (3+-sqrt(3))/2."},
+        {id:"m50", type:"sa", q:"Find the roots of x^2-3x-10=0 by factorisation.",
+         answer:"(x-5)(x+2)=0 => x=5 or x=-2."},
+        {id:"m51", type:"sa", q:"Solve x^2-45x+324=0 using the quadratic formula.",
+         answer:"D=2025-1296=729, sqrt(729)=27. x=(45+-27)/2 => x=36 or x=9."},
+        {id:"m52", type:"la", q:"The sum of squares of two consecutive multiples of 7 is 637. Find the multiples.",
+         answer:"Let multiples be 7x and 7(x+1). 49x^2+49(x+1)^2=637 => x^2+x-6=0 => (x+3)(x-2)=0 => x=2 (positive). Multiples: 14 and 21."},
+        {id:"m53", type:"mcq", q:"Which of these equations has 2 as a root?",
+         options:["x^2 - 2x + 1 = 0","x^2 + 3x - 12 = 0","2x^2 - 7x + 6 = 0","x^2 - 9 = 0"], correct:2},
+        {id:"m54", type:"la", q:"A two-digit number is such that the product of its digits is 18. When 63 is subtracted from the number, the digits interchange places. Find the number.",
+         answer:"xy=18, 10x+y-63=10y+x => x-y=7. Solving with xy=18: x=9,y=2. Number = 92."},
+        {id:"m55", type:"sa", q:"Find two numbers whose sum is 27 and product is 182.",
+         answer:"t^2-27t+182=0. D=729-728=1. t=(27+-1)/2 = 14 or 13. Numbers are 13 and 14."},
+        {id:"m56", type:"sa", q:"Find the value of k for which the equation x^2+k(2x+k-1)+2=0 has real and equal roots.",
+         answer:"Expanding: x^2+2kx+(k^2-k+2)=0. D=4k^2-4(k^2-k+2)=4k-8=0 => k=2."},
+        {id:"m113", type:"la", q:"Find the roots of the equation 1/(x-3) - 1/(x+5) = 1/6, where x is not 3 or -5.",
+         answer:"Combining: 8/[(x-3)(x+5)]=1/6 => (x-3)(x+5)=48 => x^2+2x-63=0 => (x+9)(x-7)=0 => x=-9 or 7."},
+        {id:"m114", type:"la", q:"The sum of the areas of two squares is 468 sq m. If the difference of their perimeters is 24 m, find the sides of the two squares.",
+         answer:"x-y=6 and x^2+y^2=468. Solving: y=12, x=18. Sides are 18 m and 12 m."},
+        {id:"m115", type:"mcq", q:"The equation 2x^2-3x+1=0 has how many real roots?",
+         options:["0","1","2","Infinite"], correct:2},
+        {id:"m116", type:"sa", q:"Is it possible to design a rectangular mango grove whose length is twice its breadth, and the area is 800 sq m? If so, find its length and breadth.",
+         answer:"l=2b, so 2b^2=800 => b=20, l=40. Yes, it is possible."},
+        {id:"m117", type:"la", q:"A cottage industry produces toys in a day; the cost of production of each toy (in Rs) is 55 minus the number of toys produced that day. If the total cost of production was Rs 750, find the number of toys produced.",
+         answer:"x(55-x)=750 => x^2-55x+750=0. D=25. x=(55+-5)/2 = 30 or 25. Both are valid answers."},
+        {id:"m118", type:"mcq", q:"For the equation ax^2+bx+c=0, if a=0 but b is not 0, the equation becomes:",
+         options:["Quadratic","Linear","Cubic","Undefined"], correct:1},
+        {id:"m119", type:"sa", q:"Find two consecutive odd positive integers, the sum of whose squares is 290.",
+         answer:"x^2+(x+2)^2=290 => x^2+2x-143=0. D=576. x=(-2+24)/2=11. Integers are 11 and 13."}
+      ]},
+      { name: "Arithmetic Progressions", questions: [
+        {id:"m13", type:"mcq", q:"The 20th term of the AP 9, 13, 17, 21, ... is:",
+         options:["81","85","89","93"], correct:1},
+        {id:"m14", type:"mcq", q:"78 is which term of the AP 3, 8, 13, 18, ...?",
+         options:["14th","15th","16th","17th"], correct:2},
+        {id:"m15", type:"sa", q:"Find S22 of an AP in which d=7 and a22=149.",
+         answer:"a=a22-21d=149-147=2. S22=11x(2+149)=1661."},
+        {id:"m57", type:"sa", q:"Which term of the AP 121, 117, 113, ... is its first negative term?",
+         answer:"a=121, d=-4. a_n = 121-4(n-1) < 0 => n > 31.25 => n=32. Check: a32=-3 (negative), a31=1 (positive). So the 32nd term."},
+        {id:"m58", type:"la", q:"The sum of the 4th and 8th terms of an AP is 24, and the sum of the 6th and 10th terms is 44. Find the first three terms.",
+         answer:"a+5d=12 and a+7d=22. Solving: d=5, a=-13. First three terms: -13, -8, -3."},
+        {id:"m59", type:"mcq", q:"The common difference of the AP 1/p, (1-p)/p, (1-2p)/p, ... is:",
+         options:["1","-1","p","-1/p"], correct:1},
+        {id:"m60", type:"la", q:"How many terms of the AP -6, -11/2, -5, ... are needed to give the sum -25?",
+         answer:"a=-6, d=1/2. Solving n^2-25n+100=0 gives n=5 or n=20. Both values are valid answers."},
+        {id:"m61", type:"sa", q:"If the nth term of an AP is (2n+1), find the sum of the first n terms.",
+         answer:"a1=3, d=2. S_n = n/2[2(3)+(n-1)2] = n(n+2) = n^2+2n."},
+        {id:"m62", type:"sa", q:"Find the 11th term from the last term of the AP 10, 7, 4, ..., -62.",
+         answer:"Total terms n=25 (using l=a+(n-1)d). 11th from last = 15th term from start. a15 = 10+14(-3) = -32."},
+        {id:"m63", type:"la", q:"The sum of the first n terms of an AP is 5n^2+3n. Find the AP and the sum of the first 15 terms.",
+         answer:"a1=8, a2=18, so d=10. a_n=10n-2. S15 = 15/2[16+140] = 1170."},
+        {id:"m120", type:"sa", q:"Find the 31st term of an AP whose 11th term is 38 and 16th term is 73.",
+         answer:"d=(73-38)/5=7. a=38-70=-32. a31=-32+30(7)=178."},
+        {id:"m121", type:"sa", q:"In an AP, if the 5th and 12th terms are 30 and 65 respectively, what is the 20th term?",
+         answer:"d=(65-30)/7=5. a=30-20=10. a20=10+19(5)=105."},
+        {id:"m122", type:"mcq", q:"The sum of the first n natural numbers is given by the formula:",
+         options:["n(n+1)/2","n(n-1)/2","n^2","n(n+2)/2"], correct:0},
+        {id:"m123", type:"sa", q:"How many multiples of 4 lie between 10 and 250?",
+         answer:"First multiple=12, last=248. n=(248-12)/4+1=60."},
+        {id:"m124", type:"sa", q:"The 17th term of an AP exceeds its 10th term by 7. Find the common difference.",
+         answer:"a17-a10=7d=7 => d=1."},
+        {id:"m125", type:"la", q:"If Sn denotes the sum of the first n terms of an AP, prove that S12=3(S8-S4).",
+         answer:"S12=12a+66d. S8-S4=4a+22d. 3(S8-S4)=12a+66d=S12. Hence proved."},
+        {id:"m126", type:"la", q:"Find the sum of all 3-digit numbers which are divisible by 7.",
+         answer:"a=105, l=994, d=7, n=128. Sn=64x1099=70336."},
+        {id:"m127", type:"la", q:"The sum of the first 7 terms of an AP is 63 and the sum of the next 7 terms is 161. Find the 28th term.",
+         answer:"a+3d=9 and 2a+13d=32. Solving: d=2, a=3. a28=3+27(2)=57."}
+      ]},
+      { name: "Triangles", questions: [
+        {id:"m16", type:"la", q:"State and prove the Basic Proportionality Theorem (Thales' Theorem).",
+         answer:"If DE is parallel to BC in triangle ABC (D on AB, E on AC), then AD/DB=AE/EC. Proof: ar(ADE)/ar(DBE)=AD/DB and ar(ADE)/ar(DEC)=AE/EC; since ar(DBE)=ar(DEC) (same base DE, same parallels), AD/DB=AE/EC."},
+        {id:"m17", type:"mcq", q:"Which set of side lengths forms a right triangle?",
+         options:["7, 24, 25","5, 6, 8","9, 10, 12","6, 7, 9"], correct:0},
+        {id:"m18", type:"sa", q:"A 10 m ladder reaches a window 8 m up a wall. Find the distance of the foot of the ladder from the wall.",
+         answer:"By Pythagoras: sqrt(10^2-8^2)=sqrt(36)=6 m."},
+        {id:"m28", type:"mcq", q:"If in two triangles, corresponding sides are proportional, the triangles are similar by which criterion?",
+         options:["AAA","SAS","SSS","RHS"], correct:2},
+        {id:"m64", type:"sa", q:"In triangle ABC, DE is parallel to BC and AD/DB=3/5. If AC=8 cm, find AE.",
+         answer:"AE/EC=3/5, so AE=(3/8) x AC = (3/8)x8 = 3 cm."},
+        {id:"m65", type:"mcq", q:"In two similar triangles ABC and PQR, if AB/PQ=1/3, then ar(ABC)/ar(PQR) equals:",
+         options:["1/3","1/9","3","9"], correct:1},
+        {id:"m66", type:"sa", q:"A vertical pole of height 6 m casts a shadow 4 m long. Find the height of a tower that casts a shadow 28 m long at the same time.",
+         answer:"Using similar triangles: 6/4 = h/28 => h = 42 m."},
+        {id:"m67", type:"la", q:"Prove that in a right triangle, the square of the hypotenuse is equal to the sum of squares of the other two sides (Pythagoras Theorem).",
+         answer:"Draw altitude BD from the right angle B to hypotenuse AC. Triangle ADB ~ Triangle ABC (AA) gives AB^2=AD.AC. Triangle BDC ~ Triangle ABC gives BC^2=DC.AC. Adding: AB^2+BC^2=AC(AD+DC)=AC.AC=AC^2. Hence proved."},
+        {id:"m68", type:"la", q:"Diagonals of a trapezium ABCD with AB parallel to CD intersect each other at O. Show that AO/BO = CO/DO.",
+         answer:"In triangles AOB and COD: angle OAB = angle OCD (alternate angles), angle OBA = angle ODC (alternate angles), angle AOB = angle COD (vertically opposite). So triangle AOB ~ triangle COD (AA), giving AO/CO = BO/DO, which rearranges to AO/BO = CO/DO."},
+        {id:"m69", type:"mcq", q:"Triangle ABC ~ Triangle EDF such that AB=5cm, AC=7cm, DF=15cm, DE=12cm. Then EF equals:",
+         options:["16.8 cm","15 cm","18 cm","14 cm"], correct:0},
+        {id:"m70", type:"sa", q:"Sides of two similar triangles are in the ratio 4:9. Find the ratio of their areas.",
+         answer:"Ratio of areas = (4/9)^2 = 16/81."},
+        {id:"m128", type:"la", q:"In a figure, DE is parallel to AC and DF is parallel to AE, with D on AB and E, F on BC. Prove that BF/FE = BE/EC.",
+         answer:"In triangle ABE, DF||AE gives BF/FE=BD/DA. In triangle ABC, DE||AC gives BE/EC=BD/DA. Therefore BF/FE=BE/EC."},
+        {id:"m129", type:"sa", q:"ABC is an isosceles triangle right-angled at C. Prove that AB^2=2AC^2.",
+         answer:"Since AC=BC (isosceles), by Pythagoras: AB^2=AC^2+BC^2=AC^2+AC^2=2AC^2."},
+        {id:"m130", type:"mcq", q:"In triangle ABC, if angle A=90 degrees, then BC^2 is equal to:",
+         options:["AB^2+AC^2","AB^2-AC^2","AC^2-AB^2","AB.AC"], correct:0},
+        {id:"m131", type:"sa", q:"Two poles of height 6 m and 11 m stand vertically on a plane ground. If the distance between their feet is 12 m, find the distance between their tops.",
+         answer:"Difference in height=5m. Distance=sqrt(5^2+12^2)=sqrt(169)=13 m."},
+        {id:"m132", type:"sa", q:"D and E are points on sides AB and AC of triangle ABC such that DE||BC. If AD=4cm, DB=9cm, find the ratio ar(ADE):ar(ABC).",
+         answer:"AD/AB=4/13. Ratio of areas = (4/13)^2 = 16/169."},
+        {id:"m133", type:"la", q:"Prove that the diagonals of a rectangle are equal.",
+         answer:"In rectangle ABCD, triangles ABC and BAD have AB common, BC=AD, and angle ABC=angle BAD=90 deg. By SAS, they are congruent, so AC=BD."},
+        {id:"m134", type:"mcq", q:"If triangle ABC ~ triangle DEF, angle A=47 degrees, angle E=83 degrees, then angle C is:",
+         options:["50 degrees","47 degrees","83 degrees","60 degrees"], correct:0},
+        {id:"m135", type:"sa", q:"A ladder 15 m long just reaches the top of a wall 12 m high. Find the distance of the foot of the ladder from the base of the wall.",
+         answer:"sqrt(15^2-12^2)=sqrt(81)=9 m."}
+      ]},
+      { name: "Coordinate Geometry", questions: [
+        {id:"m19", type:"mcq", q:"Distance between the points (2,3) and (4,1) is:",
+         options:["2 root 2 units","4 units","2 units","8 units"], correct:0},
+        {id:"m20", type:"sa", q:"Find the point on the x-axis equidistant from (2,-5) and (-2,9).",
+         answer:"(x-2)^2+25=(x+2)^2+81 => -8x=56 => x=-7. Point: (-7,0)."},
+        {id:"m21", type:"sa", q:"Find the point dividing (-1,7) and (4,-3) internally in the ratio 2:3.",
+         answer:"x=(8-3)/5=1, y=(-6+21)/5=3. Point: (1,3)."},
+        {id:"m71", type:"sa", q:"Find the value of a if the distance between points (a,-1) and (3,2) is 5.",
+         answer:"(a-3)^2+9=25 => (a-3)^2=16 => a-3=+-4 => a=7 or a=-1."},
+        {id:"m72", type:"la", q:"If Q(0,1) is equidistant from P(5,-3) and R(x,6), find the values of x. Also find QR.",
+         answer:"QP^2=25+16=41. Setting QR^2=x^2+25=41 gives x^2=16, so x=+-4. QR = sqrt(41) in both cases."},
+        {id:"m73", type:"sa", q:"Find the ratio in which the point (-4,6) divides the line segment joining A(-6,10) and B(3,-8).",
+         answer:"Let ratio k:1. (3k-6)/(k+1)=-4 => 7k=2 => k=2/7. Ratio = 2:7."},
+        {id:"m74", type:"mcq", q:"The distance of the point (-6,8) from the origin is:",
+         options:["10","8","6","14"], correct:0},
+        {id:"m75", type:"sa", q:"Find the area of the triangle formed by the points A(5,2), B(4,7), C(7,-4).",
+         answer:"Area = (1/2)|5(11)+4(-6)+7(-5)| = (1/2)|55-24-35| = (1/2)(4) = 2 square units."},
+        {id:"m76", type:"sa", q:"If the points A(1,2), B(0,0) and C(a,b) are collinear, find the relation between a and b.",
+         answer:"Area=0: 1(0-b)+0(b-2)+a(2-0)=0 => -b+2a=0 => b=2a."},
+        {id:"m77", type:"la", q:"Find the centre of a circle passing through points (6,-6), (3,-7) and (3,3).",
+         answer:"Equating distances from centre (x,y) to all three points gives 3x+y=7 and x-3y=9. Solving: x=3, y=-2. Centre = (3,-2)."},
+        {id:"m136", type:"la", q:"Name the type of triangle formed by the points A(-5,6), B(-4,-2), C(7,5).",
+         answer:"AB=sqrt(65), BC=sqrt(170), CA=sqrt(145). All sides are different lengths and no combination satisfies Pythagoras, so it is a scalene triangle."},
+        {id:"m137", type:"sa", q:"Find the point on the y-axis which is equidistant from the points A(6,5) and B(-4,3).",
+         answer:"Setting distances equal: 61-10y=25-6y => y=9. Point = (0,9)."},
+        {id:"m138", type:"mcq", q:"The midpoint of the line segment joining (2,-3) and (-6,7) is:",
+         options:["(-2,2)","(2,-2)","(4,4)","(-4,-4)"], correct:0},
+        {id:"m139", type:"la", q:"If point P(x,y) is equidistant from Q(a+b,b-a) and R(a-b,a+b), prove that bx=ay.",
+         answer:"Setting PQ^2=PR^2 and expanding/simplifying both sides using the difference of squares leads directly to the result ay=bx, i.e. bx=ay."},
+        {id:"m140", type:"la", q:"Find the area of a rhombus whose vertices are (3,0), (4,5), (-1,4) and (-2,-1), taken in order.",
+         answer:"Diagonal 1 = sqrt(32) = 4root2. Diagonal 2 = sqrt(72) = 6root2. Area = (1/2)(d1)(d2) = 24 square units."},
+        {id:"m141", type:"mcq", q:"AOBC is a rectangle whose three vertices are A(0,3), O(0,0), B(5,0). The length of its diagonal is:",
+         options:["sqrt(34)","5","3","8"], correct:0},
+        {id:"m142", type:"sa", q:"Find the values of y for which the distance between the points P(2,-3) and Q(10,y) is 10 units.",
+         answer:"64+(y+3)^2=100 => (y+3)^2=36 => y=3 or y=-9."},
+        {id:"m143", type:"sa", q:"Points A(4,3) and B(x,5) lie on a circle with centre O(2,3). Find the value of x.",
+         answer:"Since OA=OB (radii), (x-2)^2+4=4 => (x-2)^2=0 => x=2."},
+        {id:"m144", type:"sa", q:"Determine if the points (1,-1), (5,2) and (9,5) are collinear.",
+         answer:"Slope of AB = 3/4, slope of BC = 3/4. Since the slopes are equal and B is common, the points are collinear."}
+      ]},
+      { name: "Introduction to Trigonometry", questions: [
+        {id:"m22", type:"mcq", q:"2 tan^2(45) + cos^2(30) - sin^2(60) =",
+         options:["0","1","2","3"], correct:2},
+        {id:"m23", type:"la", q:"Prove that sec A (1 - sin A)(sec A + tan A) = 1.",
+         answer:"secA(1-sinA)(1+sinA)/cosA = secA(1-sin^2A)/cosA = secA.cos^2A/cosA = secA.cosA = 1."},
+        {id:"m24", type:"sa", q:"In a right triangle at B, tan A = 1/root3. Find sinA cosC + cosA sinC.",
+         answer:"A=30 deg, so C=60 deg. sinAcosC+cosAsinC = sin(A+C)=sin90deg=1."},
+        {id:"m78", type:"la", q:"Prove that (sinA+cosecA)^2+(cosA+secA)^2 = 7+tan^2A+cot^2A.",
+         answer:"LHS = sin^2A+2+cosec^2A+cos^2A+2+sec^2A = (sin^2A+cos^2A)+4+cosec^2A+sec^2A = 1+4+(1+cot^2A)+(1+tan^2A) = 7+tan^2A+cot^2A. Hence proved."},
+        {id:"m79", type:"sa", q:"If tan(theta)+cot(theta)=5, find the value of tan^2(theta)+cot^2(theta).",
+         answer:"(tan+cot)^2 = tan^2+cot^2+2 = 25, so tan^2+cot^2 = 23."},
+        {id:"m80", type:"mcq", q:"The value of (sin45 + cos45) is:",
+         options:["1","sqrt(2)","2","1/sqrt(2)"], correct:1},
+        {id:"m81", type:"sa", q:"If sec(theta)+tan(theta)=p, find the value of sec(theta)-tan(theta).",
+         answer:"Since sec^2-tan^2=1=(sec-tan)(sec+tan), sec(theta)-tan(theta) = 1/p."},
+        {id:"m82", type:"la", q:"Prove that (1-sin(theta))/(1+sin(theta)) = (sec(theta)-tan(theta))^2.",
+         answer:"RHS = ((1-sin)/cos)^2 = (1-sin)^2/cos^2 = (1-sin)^2/(1-sin^2) = (1-sin)^2/[(1-sin)(1+sin)] = (1-sin)/(1+sin) = LHS. Hence proved."},
+        {id:"m83", type:"sa", q:"Evaluate: sin30.cos60 + cos30.sin60.",
+         answer:"This equals sin(30+60) = sin90 = 1."},
+        {id:"m84", type:"mcq", q:"If cosA=4/5, then the value of tanA is:",
+         options:["3/4","4/3","4/5","5/4"], correct:0},
+        {id:"m85", type:"sa", q:"If sin(theta)=cos(theta), find the value of 2tan^2(theta)+sin^2(theta)-1.",
+         answer:"theta=45deg. tan45=1, sin45=root2/2, sin^2(45)=1/2. Value = 2(1)+1/2-1 = 3/2."},
+        {id:"m145", type:"sa", q:"If sinA=3/4, calculate cosA and tanA.",
+         answer:"cosA=sqrt(1-9/16)=sqrt(7)/4. tanA=3/sqrt(7)."},
+        {id:"m146", type:"sa", q:"Given 15cotA=8, find sinA and secA.",
+         answer:"cotA=8/15, hyp=17. sinA=15/17, secA=17/8."},
+        {id:"m147", type:"mcq", q:"The value of tan1.tan2.tan3...tan89 degrees is:",
+         options:["0","1","undefined","90"], correct:1},
+        {id:"m148", type:"sa", q:"If cosec(theta)-cot(theta)=1/3, find the value of cosec(theta)+cot(theta).",
+         answer:"Since (cosec-cot)(cosec+cot)=1, cosec(theta)+cot(theta) = 1/(1/3) = 3."},
+        {id:"m149", type:"la", q:"Prove that (sin(theta)-cos(theta)+1)/(sin(theta)+cos(theta)-1) = 1/(sec(theta)-tan(theta)).",
+         answer:"Dividing numerator and denominator by cos(theta) and using the identity sec^2(theta)-tan^2(theta)=1, i.e. (sec-tan)(sec+tan)=1, the expression simplifies to the required RHS."},
+        {id:"m150", type:"mcq", q:"sec^2(theta) - 1 is equal to:",
+         options:["tan^2(theta)","cot^2(theta)","sin^2(theta)","cos^2(theta)"], correct:0},
+        {id:"m151", type:"sa", q:"Evaluate: (sin^2 25 + sin^2 65) + (tan1.tan10.tan80.tan89).",
+         answer:"sin65=cos25, so sin^2 25+cos^2 25=1. tan1.tan89=1 and tan10.tan80=1 (complementary angle pairs). Total = 1+1 = 2."},
+        {id:"m152", type:"sa", q:"If tanA=cotB, prove that A+B=90 degrees.",
+         answer:"tanA=cotB=tan(90-B), so A=90-B, giving A+B=90 degrees."},
+        {id:"m153", type:"sa", q:"Express cosA, tanA, and secA in terms of sinA.",
+         answer:"cosA=sqrt(1-sin^2A). tanA=sinA/sqrt(1-sin^2A). secA=1/sqrt(1-sin^2A)."}
+      ]}
+    ]
+  },
+
+  science: {
+    name: "Science", icon:"S",
+    note: "104 questions across all 8 chapters",
+    chapters: [
+      { name: "Chemical Reactions and Equations", questions: [
+        {id:"s1", type:"mcq", q:"Which of the following is a physical change?", options:["Rusting of iron","Burning of magnesium ribbon","Melting of wax","Digestion of food"], correct:2},
+        {id:"s3", type:"mcq", q:"Fe2O3 + 2Al -> Al2O3 + 2Fe is an example of:", options:["Combination","Decomposition","Double displacement","Displacement"], correct:3},
+        {id:"s3b", type:"mcq", q:"Zn + CuSO4 -> ZnSO4 + Cu is an example of:", options:["Combination","Decomposition","Displacement","Double displacement"], correct:2},
+        {id:"s25", type:"sa", q:"Differentiate oxidation and reduction with an example.", answer:"Oxidation = gain of oxygen/loss of hydrogen; Reduction = loss of oxygen/gain of hydrogen. E.g. CuO+H2->Cu+H2O: CuO is reduced, H2 is oxidised."},
+        {id:"sc1", type:"mcq", q:"The balanced form of the equation Fe + H2O -> Fe3O4 + H2 is:", options:["3Fe+4H2O -> Fe3O4+4H2","Fe+H2O -> Fe3O4+H2","2Fe+3H2O -> Fe3O4+3H2","3Fe+3H2O -> Fe3O4+3H2"], correct:0},
+        {id:"sc2", type:"sa", q:"Write the balanced chemical equation for the decomposition of calcium carbonate on heating.", answer:"CaCO3 (heat) -> CaO + CO2"},
+        {id:"sc3", type:"mcq", q:"In the reaction AgNO3+NaCl -> AgCl+NaNO3, the white precipitate formed is:", options:["AgCl","NaCl","AgNO3","NaNO3"], correct:0},
+        {id:"sc4", type:"sa", q:"What is a combination reaction? Give one example.", answer:"Two or more substances combine to form a new single product. Example: CaO+H2O -> Ca(OH)2."},
+        {id:"sc5", type:"sa", q:"What is a decomposition reaction? Give one example.", answer:"One compound breaks down into two or more simpler substances. Example: 2H2O -> 2H2+O2 (by electrolysis)."},
+        {id:"sc6", type:"mcq", q:"Which type of reaction occurs when zinc displaces copper from CuSO4 solution?", options:["Combination","Decomposition","Displacement","Double displacement"], correct:2},
+        {id:"sc7", type:"sa", q:"Why should a magnesium ribbon be cleaned before burning in air?", answer:"To remove the layer of magnesium oxide formed on its surface due to reaction with atmospheric oxygen, which otherwise prevents it from burning properly."},
+        {id:"sc8", type:"sa", q:"What are exothermic and endothermic reactions? Give an example of each.", answer:"Exothermic reactions release heat (e.g. burning of fuel); endothermic reactions absorb heat (e.g. decomposition of calcium carbonate on heating)."},
+        {id:"sc9", type:"mcq", q:"The equation 2H2+O2 -> 2H2O represents a:", options:["Displacement reaction","Combination reaction","Decomposition reaction","Double displacement reaction"], correct:1}
+      ]},
+      { name: "Acids, Bases and Salts", questions: [
+        {id:"s4", type:"mcq", q:"Which indicator turns pink in a basic solution?", options:["Methyl orange","Phenolphthalein","Litmus","None of these"], correct:1},
+        {id:"s5", type:"mcq", q:"The pH of a neutral solution is:", options:["0","7","14","Less than 7"], correct:1},
+        {id:"s2", type:"mcq", q:"The chemical formula of slaked lime is:", options:["CaO","Ca(OH)2","CaCO3","CaSO4"], correct:1},
+        {id:"s22", type:"sa", q:"What is a neutralisation reaction? Give an example.", answer:"Acid + Base -> Salt + Water. Example: NaOH + HCl -> NaCl + H2O."},
+        {id:"ab1", type:"sa", q:"Why does an aqueous solution of an acid conduct electricity?", answer:"Acids dissociate in water to produce ions (including H+ ions), which conduct electricity."},
+        {id:"ab2", type:"mcq", q:"Which gas is evolved when a metal reacts with a dilute acid?", options:["Oxygen","Hydrogen","Carbon dioxide","Nitrogen"], correct:1},
+        {id:"ab3", type:"sa", q:"What happens when carbon dioxide is passed through lime water?", answer:"Lime water turns milky due to formation of insoluble calcium carbonate; on passing excess CO2, it turns clear again due to formation of soluble calcium bicarbonate."},
+        {id:"ab4", type:"mcq", q:"Common salt is chemically known as:", options:["Sodium hydroxide","Sodium chloride","Sodium carbonate","Sodium bicarbonate"], correct:1},
+        {id:"ab5", type:"sa", q:"What is the common name and chemical formula of baking soda?", answer:"Sodium hydrogencarbonate, NaHCO3."},
+        {id:"ab6", type:"sa", q:"What is the chemical name and formula of bleaching powder?", answer:"Calcium oxychloride, CaOCl2."},
+        {id:"ab7", type:"mcq", q:"Plaster of Paris is obtained by heating gypsum at:", options:["100 degrees C","373 K","Room temperature","0 degrees C"], correct:1},
+        {id:"ab8", type:"sa", q:"Why should curd and sour substances not be kept in brass and copper vessels?", answer:"The acid present in curd/sour substances reacts with the metal to form harmful compounds that can contaminate the food."},
+        {id:"ab9", type:"sa", q:"How is washing soda prepared from baking soda?", answer:"Baking soda (NaHCO3) is heated to form sodium carbonate, which is then recrystallised to obtain washing soda (Na2CO3.10H2O)."}
+      ]},
+      { name: "Metals and Non-metals", questions: [
+        {id:"s6", type:"mcq", q:"Which metal exists in a free state in nature?", options:["Sodium","Gold","Iron","Zinc"], correct:1},
+        {id:"s7", type:"mcq", q:"The main ore of aluminium is:", options:["Haematite","Bauxite","Cinnabar","Galena"], correct:1},
+        {id:"s26", type:"sa", q:"Why are sodium and potassium stored in kerosene?", answer:"They are highly reactive and catch fire or react violently on contact with air/water; kerosene prevents this contact."},
+        {id:"s27", type:"sa", q:"State the thermite reaction and one use.", answer:"Fe2O3 + 2Al -> Al2O3 + 2Fe + Heat. Used to weld railway tracks."},
+        {id:"s23", type:"sa", q:"Why do ionic compounds have high melting points?", answer:"Strong electrostatic forces of attraction between oppositely charged ions require a large amount of energy to break."},
+        {id:"mn1", type:"mcq", q:"Which of the following metals can displace hydrogen from dilute acids?", options:["Copper","Silver","Zinc","Gold"], correct:2},
+        {id:"mn2", type:"sa", q:"Why is sodium kept immersed in kerosene oil?", answer:"It is highly reactive and reacts vigorously with air and moisture; kerosene prevents this contact and keeps it safe."},
+        {id:"mn3", type:"sa", q:"What are amphoteric oxides? Give two examples.", answer:"Oxides that react with both acids and bases to form salt and water. Examples: Al2O3, ZnO."},
+        {id:"mn4", type:"mcq", q:"The most malleable metal is:", options:["Iron","Gold","Copper","Zinc"], correct:1},
+        {id:"mn5", type:"sa", q:"Define corrosion. Give one example.", answer:"Slow destruction of metals due to reaction with substances in the environment, e.g. rusting of iron."},
+        {id:"mn6", type:"sa", q:"How can rusting of iron be prevented? Name two methods.", answer:"Galvanisation (coating with zinc) and painting/oiling to prevent contact with air and moisture."},
+        {id:"mn7", type:"mcq", q:"Which of these is NOT a property of metals?", options:["Malleable","Ductile","Brittle","Sonorous"], correct:2},
+        {id:"mn8", type:"sa", q:"What is the difference between roasting and calcination?", answer:"Roasting is heating an ore in the presence of excess air (used for sulphide ores); calcination is heating an ore in the absence or limited supply of air (used for carbonate ores)."},
+        {id:"mn9", type:"sa", q:"Why do ionic compounds conduct electricity in the molten state but not in the solid state?", answer:"In the solid state, ions are held in fixed positions by strong electrostatic forces, so they cannot move; in the molten state, ions become free to move and can carry electric current."}
+      ]},
+      { name: "Carbon and its Compounds", questions: [
+        {id:"c1", type:"mcq", q:"Carbon forms strong bonds with other atoms mainly by sharing electrons, called a:", options:["Ionic bond","Covalent bond","Metallic bond","Hydrogen bond"], correct:1},
+        {id:"c2", type:"sa", q:"What is a homologous series? Give one example.", answer:"A series of compounds with the same general formula and similar chemical properties, differing by a CH2 unit each time; e.g. alkanes: CH4, C2H6, C3H8..."},
+        {id:"c3", type:"sa", q:"Why is carbon called 'versatile' in forming compounds?", answer:"Due to catenation (bonding with other carbon atoms) and tetravalency, carbon forms a huge number of compounds."},
+        {id:"cc10", type:"mcq", q:"The general formula of alkanes is:", options:["CnH2n","CnH2n+2","CnH2n-2","CnHn"], correct:1},
+        {id:"cc11", type:"sa", q:"What is catenation? Why is carbon known for this property?", answer:"The property of an element to form bonds with atoms of itself, creating long chains or rings. Carbon shows this exceptionally well due to the strength of carbon-carbon bonds."},
+        {id:"cc12", type:"mcq", q:"The functional group -OH represents:", options:["Aldehyde","Alcohol","Ketone","Carboxylic acid"], correct:1},
+        {id:"cc13", type:"sa", q:"Differentiate between saturated and unsaturated hydrocarbons.", answer:"Saturated hydrocarbons have only single bonds between carbon atoms (alkanes); unsaturated hydrocarbons have at least one double or triple bond (alkenes, alkynes)."},
+        {id:"cc14", type:"sa", q:"What is esterification?", answer:"The reaction between an alcohol and a carboxylic acid to form an ester and water, usually with an acid catalyst."},
+        {id:"cc15", type:"mcq", q:"Which functional group is present in ethanoic acid?", options:["-OH","-CHO","-COOH","-CO-"], correct:2},
+        {id:"cc16", type:"sa", q:"What happens when ethanol reacts with sodium metal?", answer:"It produces sodium ethoxide and hydrogen gas."},
+        {id:"cc17", type:"sa", q:"Why does carbon form covalent bonds instead of ionic bonds?", answer:"Carbon has 4 valence electrons; gaining or losing 4 electrons would require too much energy, so it shares electrons instead, forming covalent bonds."},
+        {id:"cc18", type:"mcq", q:"Soaps are basically:", options:["Sodium or potassium salts of long-chain carboxylic acids","Esters","Alcohols","Aldehydes"], correct:0}
+      ]},
+      { name: "Life Processes", questions: [
+        {id:"s15", type:"mcq", q:"Gaseous exchange in plants mainly occurs through:", options:["Root hair","Stomata","Xylem","Phloem"], correct:1},
+        {id:"s16", type:"mcq", q:"End product of anaerobic respiration in yeast:", options:["Lactic acid","Ethanol + CO2","Glucose","Pyruvate only"], correct:1},
+        {id:"s17", type:"mcq", q:"Functional unit of the kidney:", options:["Neuron","Nephron","Alveoli","Villi"], correct:1},
+        {id:"s28", type:"la", q:"Explain the process of transportation of water and minerals in plants.", answer:"Water and minerals absorbed by root hairs move up through the xylem, driven by transpiration pull from loss of water vapour through stomata."},
+        {id:"s29", type:"sa", q:"What is the role of bile juice in digestion?", answer:"Alkaline bile emulsifies fats into smaller droplets (more surface area for lipase) and neutralises acidic food from the stomach."},
+        {id:"s30b", type:"sa", q:"What is double circulation? Why is it useful?", answer:"Blood passes through the heart twice in one complete cycle, keeping oxygenated and deoxygenated blood separate for efficient oxygen delivery."},
+        {id:"lp1", type:"mcq", q:"Breakdown of glucose without oxygen inside our muscles produces:", options:["CO2 and H2O","Ethanol and CO2","Lactic acid","Pyruvate only"], correct:2},
+        {id:"lp2", type:"sa", q:"What is the role of the diaphragm in human respiration?", answer:"The diaphragm contracts and moves down during inhalation, increasing the volume of the chest cavity and helping air to be drawn into the lungs."},
+        {id:"lp3", type:"sa", q:"Why is the small intestine the site of complete digestion of food?", answer:"It receives secretions from the liver (bile), pancreas (pancreatic juice), and intestinal glands, containing enzymes that fully digest carbohydrates, proteins and fats."},
+        {id:"lp4", type:"mcq", q:"The green pigment in leaves that helps trap light energy is:", options:["Xylem","Chlorophyll","Stomata","Cuticle"], correct:1},
+        {id:"lp5", type:"sa", q:"What are the raw materials required for photosynthesis?", answer:"Carbon dioxide, water, and sunlight (with chlorophyll)."},
+        {id:"lp6", type:"sa", q:"How does the structure of alveoli help in gas exchange?", answer:"Alveoli have thin walls and a large surface area with a rich blood supply, maximising the efficiency of gas exchange between air and blood."},
+        {id:"lp7", type:"mcq", q:"In human beings, exchange of gases takes place in the:", options:["Trachea","Bronchi","Alveoli","Larynx"], correct:2},
+        {id:"lp8", type:"sa", q:"What is the function of the nephron in the kidney?", answer:"It filters blood to remove nitrogenous wastes (like urea) and helps form urine through filtration, reabsorption, and secretion."},
+        {id:"lp9", type:"sa", q:"Why is transportation necessary in multicellular organisms?", answer:"In complex organisms, diffusion alone cannot supply all cells with nutrients and oxygen or remove wastes efficiently, so a transport system is required."}
+      ]},
+      { name: "Control and Coordination", questions: [
+        {id:"s18", type:"mcq", q:"The gap between two adjacent neurons is called:", options:["Axon","Synapse","Dendrite","Nucleus"], correct:1},
+        {id:"s19", type:"mcq", q:"Hormone responsible for the fight-or-flight response:", options:["Insulin","Adrenaline","Thyroxine","Auxin"], correct:1},
+        {id:"cc1", type:"sa", q:"What is a reflex action? Give an example.", answer:"A quick, automatic response to a stimulus controlled by the spinal cord, without conscious brain thought; e.g. withdrawing a hand from a hot object."},
+        {id:"cc2", type:"mcq", q:"Which plant hormone promotes cell elongation and growth towards light (phototropism)?", options:["Auxin","Cytokinin","Gibberellin","Abscisic acid"], correct:0},
+        {id:"cn1", type:"mcq", q:"Chemical coordination in the human body is mainly carried out by the:", options:["Nervous system","Endocrine system","Skeletal system","Muscular system"], correct:1},
+        {id:"cn2", type:"sa", q:"What is the function of insulin, and where is it secreted from?", answer:"Insulin regulates blood sugar levels by promoting glucose uptake into cells; it is secreted by the pancreas."},
+        {id:"cn3", type:"sa", q:"What happens if the pancreas does not secrete enough insulin?", answer:"It leads to diabetes, a condition where blood glucose levels remain too high."},
+        {id:"cn4", type:"mcq", q:"The gap between the axon of one neuron and the dendrite of the next is called the:", options:["Node","Synapse","Node of Ranvier","Ganglion"], correct:1},
+        {id:"cn5", type:"sa", q:"What is the role of the brain in a reflex action?", answer:"In most reflex actions, the immediate response is controlled by the spinal cord, not the brain directly, though the brain may become aware of the action afterward."},
+        {id:"cn6", type:"sa", q:"Name the three main parts of the human brain and their main function.", answer:"Forebrain (thinking, sensory/motor control), midbrain (relay and reflexes involving eye/ear), hindbrain (involuntary actions like breathing, heart rate, balance)."},
+        {id:"cn7", type:"mcq", q:"Which hormone is responsible for the growth of long bones in humans?", options:["Insulin","Growth hormone","Adrenaline","Thyroxine"], correct:1},
+        {id:"cn8", type:"sa", q:"What is the difference between a tropic movement and a nastic movement in plants?", answer:"Tropic movements are directional responses to a stimulus (e.g. growth towards light); nastic movements are non-directional responses (e.g. touch-me-not leaves closing on touch)."},
+        {id:"cn9", type:"sa", q:"What is thigmotropism? Give an example.", answer:"A directional growth response to touch; e.g. tendrils of climbing plants coiling around a support."}
+      ]},
+      { name: "Light - Reflection and Refraction", questions: [
+        {id:"s8", type:"mcq", q:"The image formed by a plane mirror is:", options:["Real, inverted","Virtual, erect","Real, erect","Virtual, inverted"], correct:1},
+        {id:"s9", type:"mcq", q:"A concave mirror forms a virtual image when the object is placed:", options:["Beyond C","At C","Between F and P","At F"], correct:2},
+        {id:"s10", type:"mcq", q:"Refractive index of a medium depends on:", options:["Angle of incidence","Nature of medium and wavelength of light","Size of object","None of these"], correct:1},
+        {id:"l1", type:"sa", q:"State the mirror formula and define magnification for spherical mirrors.", answer:"Mirror formula: 1/v + 1/u = 1/f. Magnification m = -v/u = height of image / height of object."},
+        {id:"lt2", type:"mcq", q:"The power of a lens is measured in:", options:["Metre","Dioptre","Candela","Watt"], correct:1},
+        {id:"lt3", type:"sa", q:"Define the focal length of a spherical mirror.", answer:"The distance between the pole of the mirror and its principal focus."},
+        {id:"lt4", type:"mcq", q:"A convex lens forms a real image when the object is placed:", options:["Within focal length","At focus","Beyond focal length","At infinity only"], correct:2},
+        {id:"lt5", type:"sa", q:"State the laws of reflection of light.", answer:"(i) The angle of incidence equals the angle of reflection. (ii) The incident ray, reflected ray, and normal all lie in the same plane."},
+        {id:"lt6", type:"sa", q:"What is the difference between a real image and a virtual image?", answer:"A real image is formed when light rays actually converge and can be captured on a screen; a virtual image forms when rays appear to diverge from a point and cannot be captured on a screen."},
+        {id:"lt7", type:"mcq", q:"The refractive index of a medium is the ratio of:", options:["Speed of light in vacuum to speed in the medium","Speed in medium to speed in vacuum","Wavelength ratio","Frequency ratio"], correct:0},
+        {id:"lt8", type:"sa", q:"Why does a pencil appear bent when partly immersed in water?", answer:"Due to refraction of light as it passes from water (denser medium) to air (rarer medium), bending away from the normal and creating an apparent bend."},
+        {id:"lt9", type:"mcq", q:"The power of a concave lens is:", options:["Positive","Negative","Zero","Undefined"], correct:1}
+      ]},
+      { name: "Human Eye and Colourful World", questions: [
+        {id:"s11", type:"mcq", q:"The defect where a person can't see distant objects clearly is:", options:["Hypermetropia","Myopia","Presbyopia","Astigmatism"], correct:1},
+        {id:"he1", type:"sa", q:"How is myopia corrected?", answer:"By using a concave (diverging) lens of suitable power to bring the image back onto the retina."},
+        {id:"he2", type:"sa", q:"Why does the sky appear blue?", answer:"Due to scattering of shorter-wavelength (blue) light by air molecules more than other colours (Rayleigh/Tyndall scattering)."},
+        {id:"he3", type:"sa", q:"What is the function of the ciliary muscles in the human eye?", answer:"They control the curvature of the eye lens, allowing it to focus on objects at varying distances (accommodation)."},
+        {id:"he4", type:"mcq", q:"The condition in which a person cannot see nearby objects clearly is called:", options:["Myopia","Hypermetropia","Presbyopia","Astigmatism"], correct:1},
+        {id:"he5", type:"sa", q:"How is hypermetropia corrected?", answer:"By using a convex (converging) lens of suitable power."},
+        {id:"he6", type:"sa", q:"What is presbyopia and how is it usually corrected?", answer:"An age-related condition where the eye's ability to accommodate decreases, making it hard to focus on near objects; usually corrected using bifocal lenses."},
+        {id:"he7", type:"mcq", q:"The splitting of white light into its constituent colours is called:", options:["Reflection","Refraction","Dispersion","Scattering"], correct:2},
+        {id:"he8", type:"sa", q:"Why does the sun appear reddish at sunrise and sunset?", answer:"Sunlight travels through a larger thickness of atmosphere at these times, scattering away most shorter wavelengths (blue), leaving mostly longer wavelengths (red) to reach our eyes."},
+        {id:"he9", type:"sa", q:"What is the Tyndall effect? Give an example.", answer:"The scattering of light by particles in a colloidal solution or the atmosphere, making the path of light visible; e.g. a beam of sunlight through dust in a room."},
+        {id:"he10", type:"mcq", q:"Which colour of visible light has the longest wavelength?", options:["Violet","Green","Red","Blue"], correct:2},
+        {id:"he11", type:"sa", q:"Why does the sky appear dark instead of blue for astronauts in space?", answer:"There is no atmosphere in space to scatter sunlight, so there's no scattered blue light to make the sky appear blue; the sky appears black."}
+      ]}
+    ]
+  },
+
+  sst: {
+    name: "Social Science", icon:"G",
+    note: "115 questions across History, Geography, Civics, Economics and Disaster Management",
+    chapters: [
+      { name: "History: Rise of Nationalism in Europe", questions: [
+        {id:"so1", type:"mcq", q:"Who painted \"Germania\" as an allegory of the German nation?", options:["Frederic Sorrieu","Philip Veit","Otto von Bismarck","Giuseppe Mazzini"], correct:1},
+        {id:"so2", type:"mcq", q:"The Treaty of Vienna (1815) was held after the defeat of:", options:["Otto von Bismarck","Napoleon","Metternich","Garibaldi"], correct:1},
+        {id:"so3", type:"sa", q:"Who founded the \"Young Italy\" movement?", answer:"Giuseppe Mazzini"},
+        {id:"so4", type:"sa", q:"Which country was unified under Otto von Bismarck?", answer:"Germany"},
+        {id:"so5", type:"sa", q:"What was the Zollverein?", answer:"A customs union formed in 1834 at Prussia's initiative, joined by most German states, which abolished tariff barriers and reduced currencies, creating economic nationalism."},
+        {id:"so6", type:"sa", q:"How did the educated middle classes in Europe envisage the idea of a nation?", answer:"They combined nationalism with demands for constitutionalism and representative government, envisioning equality, liberty and freedom of press for all citizens."},
+        {id:"so7", type:"mcq", q:"Assertion: Sorrieu's print depicted a utopian vision of world democratic republics. Reason: It showed people of different nations marching together after the fall of absolutist monarchies.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so8", type:"la", q:"Describe the process of unification of Germany under Bismarck.", answer:"Prussia led German unification; Bismarck used the Prussian army and bureaucracy through three wars (Austria, Denmark, France) over seven years, culminating in William I being proclaimed German Emperor at Versailles in 1871."}
+      ]},
+      { name: "History: Nationalism in India", questions: [
+        {id:"so9", type:"mcq", q:"The Non-Cooperation Movement was launched in:", options:["1919","1920","1922","1930"], correct:1},
+        {id:"so10", type:"mcq", q:"The Jallianwala Bagh massacre took place in:", options:["1919","1920","1921","1930"], correct:0},
+        {id:"so11", type:"sa", q:"Who composed \"Vande Mataram\"?", answer:"Bankim Chandra Chattopadhyay"},
+        {id:"so12", type:"sa", q:"What was the Rowlatt Act (1919)?", answer:"A law giving the government power to repress political activities, detaining political prisoners without trial for up to two years."},
+        {id:"so13", type:"sa", q:"Why did Gandhi withdraw the Non-Cooperation Movement?", answer:"After the violent Chauri Chaura incident (Feb 1922) where a mob killed policemen, Gandhi felt people weren't disciplined enough for nonviolent protest."},
+        {id:"so14", type:"sa", q:"What was the significance of the Salt March (1930)?", answer:"Gandhi marched from Sabarmati to Dandi to break the salt law, mobilising nationwide participation and starting the Civil Disobedience Movement."},
+        {id:"so15", type:"sa", q:"How did plantation workers in Assam interpret Gandhi's idea of Swaraj?", answer:"Freedom meant the right to move freely and retain links with their village; many left plantations defying the law during Non-Cooperation."},
+        {id:"so16", type:"la", q:"Discuss the social groups that participated in the Civil Disobedience Movement and their reasons.", answer:"Rich peasants opposed high revenue; poor peasants wanted rent remission; business classes wanted import protection; industrial workers joined selectively; women participated widely in protests and salt-making."}
+      ]},
+      { name: "History: The Making of a Global World", questions: [
+        {id:"so17", type:"mcq", q:"The Great Depression began in:", options:["1919","1929","1939","1945"], correct:1},
+        {id:"so18", type:"sa", q:"What was the \"Silk Route\"?", answer:"Trade routes linking Asia with Europe and North Africa, used for exchange of goods like silk and spices, and spread of ideas and culture."},
+        {id:"so19", type:"sa", q:"What led to the Great Depression of 1929?", answer:"Agricultural overproduction, over-reliance on US loans, and the Wall Street Crash caused widespread bank failures and loan withdrawals."},
+        {id:"so20", type:"sa", q:"What was the Bretton Woods Agreement?", answer:"A 1944 agreement establishing the IMF and World Bank to finance post-war reconstruction and manage balance-of-payments issues."},
+        {id:"so21", type:"mcq", q:"Assertion: 19th century saw mass migration from Europe to America/Australia. Reason: Due to scarcity of land in Europe and abundance in new territories.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so22", type:"la", q:"Explain the impact of WWI on the world economy.", answer:"Shifted production to India/Japan; drained Britain's finances making the US the largest lender; unstable post-war economies contributed to the Great Depression."},
+        {id:"so23", type:"la", q:"What were the effects of the Great Depression on India?", answer:"Exports/imports nearly halved (1928-34); peasants suffered as farm prices fell while revenue demands stayed high, especially export-crop farmers like jute growers in Bengal."},
+        {id:"so24", type:"la", q:"Discuss the role of technology (steamships, railways) in the pre-1914 global world.", answer:"Reduced transport costs; refrigerated ships moved perishable food across continents; railways connected agricultural regions to ports, expanding world trade."}
+      ]},
+      { name: "Geography: Resources and Development", questions: [
+        {id:"so25", type:"mcq", q:"Which type of resource is coal?", options:["Renewable","Non-renewable","Biotic","Human-made"], correct:1},
+        {id:"so26", type:"mcq", q:"Black soil is also known as:", options:["Alluvial soil","Regur soil","Laterite soil","Arid soil"], correct:1},
+        {id:"so27", type:"sa", q:"Name the process by which the top layer of soil is eroded.", answer:"Soil erosion"},
+        {id:"so28", type:"sa", q:"What are the main causes of land degradation in India?", answer:"Deforestation, overgrazing, mining, unscientific farming, and untreated industrial/mining waste."},
+        {id:"so29", type:"sa", q:"Differentiate renewable and non-renewable resources with examples.", answer:"Renewable can be replenished (solar, forests); non-renewable have limited stock and take long to form (coal, minerals)."},
+        {id:"so30", type:"sa", q:"What is meant by \"sustainable development\"?", answer:"Development meeting present needs without compromising future generations' ability to meet their own, balancing growth with conservation."},
+        {id:"so31", type:"mcq", q:"Assertion: Alluvial soils are India's most fertile soils. Reason: Rich in potash, phosphoric acid and lime, deposited by rivers.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so32", type:"la", q:"Explain types of resources based on origin, exhaustibility, ownership, and development status.", answer:"Origin: biotic/abiotic. Exhaustibility: renewable/non-renewable. Ownership: individual/community/national/international. Development status: potential/developed/stock/reserves."}
+      ]},
+      { name: "Geography: Forest and Wildlife Resources", questions: [
+        {id:"so33", type:"mcq", q:"Project Tiger was launched in:", options:["1972","1973","1980","1991"], correct:1},
+        {id:"so34", type:"sa", q:"Name any one endangered species found in India.", answer:"Bengal tiger (or Asiatic lion / one-horned rhinoceros)"},
+        {id:"so35", type:"sa", q:"What are biosphere reserves?", answer:"Protected areas for conserving biodiversity - flora, fauna and traditional lifestyles - along with genetic diversity."},
+        {id:"so36", type:"sa", q:"Differentiate flora and fauna.", answer:"Flora = plant life of a region; Fauna = animal life of a region."},
+        {id:"so37", type:"sa", q:"How do human activities deplete forest/wildlife resources?", answer:"Deforestation for agriculture/mining/urbanisation, poaching, and pollution."},
+        {id:"so38", type:"la", q:"Describe categories of Indian forests by ownership.", answer:"Reserved forests (most valuable, more than half of forest land), Protected forests (about one-third, protected from depletion), Unclassed forests (govt/private/community owned)."},
+        {id:"so39", type:"la", q:"Explain community conservation efforts with one example.", answer:"The Bishnoi community of Rajasthan protects blackbucks and chinkara as a religious belief, showing sustainable conservation via community participation."}
+      ]},
+      { name: "Geography: Water Resources", questions: [
+        {id:"so40", type:"mcq", q:"The Sardar Sarovar Dam is built on which river?", options:["Ganga","Narmada","Krishna","Sutlej"], correct:1},
+        {id:"so41", type:"sa", q:"What is a multi-purpose river valley project?", answer:"A project serving several purposes - irrigation, electricity, flood control, water supply - via a single dam/reservoir system."},
+        {id:"so42", type:"sa", q:"What are the ill effects of multi-purpose river valley projects?", answer:"Submergence of land, displacement of communities, sedimentation issues, and reservoir-induced seismicity."},
+        {id:"so43", type:"sa", q:"What is rainwater harvesting? Give a traditional example.", answer:"Capturing/storing rainwater to recharge groundwater. Example: Guls/Kuls - diversion channels in hilly Himachal/Uttarakhand."},
+        {id:"so44", type:"mcq", q:"Assertion: Nehru called river valley projects \"temples of modern India\". Reason: They integrate agricultural/rural development with industrialisation and urban growth.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so45", type:"la", q:"Discuss traditional water harvesting methods in India.", answer:"Hilly regions: diversion channels (kuls/guls). Arid regions: rain-fed storage structures. Rajasthan: rooftop water in underground 'tankas'."},
+        {id:"so46", type:"la", q:"What are the objectives of multi-purpose river valley projects? Give an example.", answer:"Irrigation, power generation, flood control, fisheries, recreation. Example: Bhakra Nangal on the Sutlej serves Punjab, Haryana, Rajasthan."}
+      ]},
+      { name: "Geography: Agriculture", questions: [
+        {id:"so106", type:"mcq", q:"Wheat is mainly a ___ season crop in India.", options:["Kharif","Rabi","Zaid","Perennial"], correct:1},
+        {id:"so107", type:"sa", q:"Differentiate Rabi and Kharif crops with one example each.", answer:"Rabi crops are sown in winter and harvested in summer (e.g. wheat). Kharif crops are sown with the monsoon and harvested in autumn (e.g. rice)."},
+        {id:"so108", type:"sa", q:"Name two major food crops of India.", answer:"Rice and wheat"},
+        {id:"so109", type:"la", q:"Explain the significance of agriculture in the Indian economy.", answer:"Provides livelihood to a majority of the rural population, supplies raw material to agro-based industries, ensures food security, and contributes to exports."},
+        {id:"so110", type:"mcq", q:"Zaid is a short cropping season between:", options:["Kharif and Rabi","Rabi and Kharif","Only in winter","Only in monsoon"], correct:1}
+      ]},
+      { name: "Civics: Power Sharing", questions: [
+        {id:"so47", type:"mcq", q:"Belgium's linguistic conflict was resolved through:", options:["Ignoring minorities","Power sharing arrangements","Civil war","Dividing the country"], correct:1},
+        {id:"so48", type:"mcq", q:"In Sri Lanka, the majority community is the:", options:["Tamils","Sinhalese","Muslims","Burghers"], correct:1},
+        {id:"so49", type:"sa", q:"What is \"majoritarianism\"?", answer:"The belief that the majority community should rule as it wishes, disregarding minority needs."},
+        {id:"so50", type:"sa", q:"Why is power sharing desirable in a democracy? Give two reasons.", answer:"Prudential: reduces conflict possibility. Moral: it's the spirit of democracy - people have a right to be consulted."},
+        {id:"so51", type:"sa", q:"Explain Belgium's \"Community Government\".", answer:"Elected by people of one language community (Dutch/French/German) regardless of location, with powers over cultural/educational/language issues."},
+        {id:"so52", type:"mcq", q:"Assertion: Sri Lanka faced prolonged ethnic conflict. Reason: Majoritarian measures favoured Sinhala, alienating Tamils.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so53", type:"la", q:"Describe the Belgian power-sharing model.", answer:"Equal Dutch/French ministers centrally, significant regional state powers, plus a separate Community Government per language group - avoided civil strife."}
+      ]},
+      { name: "Civics: Federalism", questions: [
+        {id:"so54", type:"mcq", q:"Which is NOT a feature of federalism?", options:["Two or more levels of govt","Same laws for all units","Written constitution","Independent judiciary"], correct:1},
+        {id:"so55", type:"sa", q:"Name the three lists for power distribution in the Indian Constitution.", answer:"Union List, State List, Concurrent List"},
+        {id:"so56", type:"sa", q:"What was the 73rd Constitutional Amendment (1992) about?", answer:"Made regular elections to Panchayati Raj institutions mandatory."},
+        {id:"so57", type:"sa", q:"What are the two routes of forming federations? Give examples.", answer:"\"Coming together\" (e.g. USA) and \"Holding together\" (e.g. India)."},
+        {id:"so58", type:"sa", q:"How is India's language policy an example of federal power sharing?", answer:"Hindi is official but English continues; states have their own languages - helping national unity."},
+        {id:"so59", type:"mcq", q:"Assertion: India is a \"holding together\" federation. Reason: Powers are more tilted towards the centre compared to \"coming together\" federations.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so60", type:"la", q:"Explain key features of federalism and India's power division.", answer:"Two or more levels, same citizens governed by each tier, constitutional guarantee, independent judiciary. Union List (defence), State List (police), Concurrent List (education)."}
+      ]},
+      { name: "Civics: Gender, Religion and Caste", questions: [
+        {id:"so61", type:"mcq", q:"The Indian Constitution guarantees equality irrespective of:", options:["Age only","Religion, race, caste, gender","Education only","Income only"], correct:1},
+        {id:"so62", type:"sa", q:"What is the \"sexual division of labour\"?", answer:"A norm where women mostly do housework and men work outside for pay."},
+        {id:"so63", type:"sa", q:"What is communalism? Give an example of expression.", answer:"Belief that one religion forms the basis of a nation, expressed as prejudice, political domination, or communal violence."},
+        {id:"so64", type:"sa", q:"How does caste play a role in Indian politics today?", answer:"Parties nominate candidates by caste for support, though development and leadership also matter."},
+        {id:"so65", type:"la", q:"Explain gender inequality in India and steps to address it.", answer:"Lower literacy, wage gaps, under-representation persist. Steps: one-third reservation for women in Panchayats/Municipalities, protective laws."},
+        {id:"so66", type:"la", q:"Discuss religion and politics, healthy vs unhealthy forms.", answer:"Healthy: leaders use religious values for universal welfare (Gandhi). Unhealthy (communalism): exploiting religion for political gain, causing hostility."}
+      ]},
+      { name: "Economics: Development", questions: [
+        {id:"so67", type:"mcq", q:"World Bank classifies countries as rich/poor using:", options:["Literacy rate","Per capita income","Infant mortality rate","Life expectancy"], correct:1},
+        {id:"so68", type:"mcq", q:"The Human Development Index (HDI) is published by:", options:["World Bank","UNDP","WHO","IMF"], correct:1},
+        {id:"so69", type:"sa", q:"What is \"per capita income\"?", answer:"Average income of a person = total income divided by total population."},
+        {id:"so70", type:"sa", q:"Name one indicator (other than income) used to compare development.", answer:"Literacy rate (or life expectancy / infant mortality rate)"},
+        {id:"so71", type:"sa", q:"Why is per capita income alone not a suitable indicator of development?", answer:"It doesn't reflect income distribution - countries with the same average may have very different inequality."},
+        {id:"so72", type:"sa", q:"Differentiate economic development and human development.", answer:"Economic development focuses on income/output; human development also considers health, education, standard of living."},
+        {id:"so73", type:"sa", q:"What is \"sustainable development\" regarding future resources?", answer:"Fulfilling present needs without compromising future generations' ability to meet theirs, via judicious resource use."},
+        {id:"so74", type:"mcq", q:"Assertion: Kerala has lower per capita income than Punjab but better literacy/IMR. Reason: Development also depends on public spending on health/education.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so75", type:"la", q:"Discuss HDI's ranking criteria and why development notions differ.", answer:"HDI: life expectancy, education, per capita income. Different people value different things based on their circumstances (e.g. farm labourer vs industrialist)."}
+      ]},
+      { name: "Economics: Sectors of the Indian Economy", questions: [
+        {id:"so76", type:"mcq", q:"Agriculture belongs to which sector?", options:["Primary","Secondary","Tertiary","Quaternary"], correct:0},
+        {id:"so77", type:"mcq", q:"Which sector contributes the highest share to India's GDP currently?", options:["Primary","Secondary","Tertiary (services)","None of these"], correct:2},
+        {id:"so78", type:"sa", q:"What is \"disguised unemployment\"?", answer:"More people engaged in a job than required, so removing some doesn't reduce total output."},
+        {id:"so79", type:"sa", q:"Define the \"organised sector\".", answer:"Enterprises registered with govt, following rules, offering regular employment and benefits."},
+        {id:"so80", type:"sa", q:"Differentiate public and private sector with examples.", answer:"Public: govt owns assets (Indian Railways). Private: individuals/companies own assets (Reliance/TISCO)."},
+        {id:"so81", type:"sa", q:"What is \"underemployment\"? Give an example.", answer:"Working below full potential/desired hours. E.g. farmers idle outside the growing season."},
+        {id:"so82", type:"mcq", q:"Assertion: Non-farm jobs are needed in rural areas. Reason: Agriculture has surplus labour it cannot productively absorb.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so83", type:"la", q:"Differentiate organised/unorganised sectors and suggest protective measures.", answer:"Organised: regulated, secure. Unorganised: unregistered, low pay. Measures: minimum wage enforcement, social security, cooperatives, skill development."},
+        {id:"so84", type:"la", q:"Classify economic activities into primary, secondary, tertiary with examples.", answer:"Primary: agriculture, mining. Secondary: manufacturing (steel, sugar). Tertiary: transport, banking. Helps understand economic structure and plan policy."}
+      ]},
+      { name: "Economics: Money and Credit", questions: [
+        {id:"so111", type:"sa", q:"What is money as a \"medium of exchange\"?", answer:"It removes the need for a double coincidence of wants (as in barter), since money is widely accepted as payment for goods and services."},
+        {id:"so112", type:"sa", q:"Differentiate formal and informal sources of credit.", answer:"Formal: banks and cooperatives, regulated by RBI, lower interest. Informal: moneylenders, traders, relatives - unregulated, often high interest."},
+        {id:"so113", type:"sa", q:"What is a Self-Help Group (SHG)?", answer:"A group of 15-20 members (mainly women) who pool their savings and lend to members from this pool, reducing dependence on informal credit."},
+        {id:"so114", type:"mcq", q:"Formal sources of credit in India are supervised by:", options:["RBI","SEBI","IRDA","NITI Aayog"], correct:0},
+        {id:"so115", type:"la", q:"Explain why formal credit is important for development, and challenges rural households face in accessing it.", answer:"Formal credit has lower interest and doesn't require heavy collateral compared to moneylenders. Challenges: lack of collateral/documentation, limited rural bank presence, and low awareness among poor and small farmers."}
+      ]},
+      { name: "Disaster Management", questions: [
+        {id:"so85", type:"mcq", q:"Which is a natural disaster?", options:["Road accident","Earthquake","Industrial fire","War"], correct:1},
+        {id:"so86", type:"mcq", q:"Full form of NDMA:", options:["National Disaster Management Authority","National Development and Management Agency","National Defence and Military Authority","None of these"], correct:0},
+        {id:"so87", type:"mcq", q:"Uttarakhand is highly prone to which disaster due to hilly terrain?", options:["Cyclones","Landslides","Tsunamis","Droughts (mainly)"], correct:1},
+        {id:"so88", type:"sa", q:"Define \"disaster\".", answer:"A sudden calamitous event disrupting a community, causing widespread human/material/economic/environmental loss."},
+        {id:"so89", type:"sa", q:"Name two natural disasters common in Uttarakhand.", answer:"Earthquakes and landslides (also flash floods and cloudbursts)."},
+        {id:"so90", type:"sa", q:"What does \"vulnerability\" mean in disaster management?", answer:"The degree to which a community/system is susceptible to or unable to cope with a hazard's effects."},
+        {id:"so91", type:"sa", q:"Differentiate \"hazard\" and \"disaster\".", answer:"Hazard = potentially damaging event (e.g. quake in uninhabited area). Disaster = when it affects a vulnerable population causing harm."},
+        {id:"so92", type:"sa", q:"What are the main phases of the Disaster Management Cycle?", answer:"Prevention/Mitigation, Preparedness, Response, Recovery/Rehabilitation."},
+        {id:"so93", type:"sa", q:"List 4 dos/don'ts during an earthquake.", answer:"Dos: shelter under sturdy table, stay away from windows, stay calm, know safe spots. Don'ts: no elevators, don't stand near tall structures, don't rush out in panic, don't light matches (gas leak risk)."},
+        {id:"so94", type:"sa", q:"What role do NGOs play in disaster management?", answer:"Relief distribution, rehabilitation, awareness, medical/psychological support, coordinating with govt agencies."},
+        {id:"so95", type:"sa", q:"Explain \"community-based disaster management\".", answer:"Local community actively participates in risk identification and planning preparedness/response using local knowledge and resources."},
+        {id:"so96", type:"mcq", q:"Assertion: Uttarakhand has frequent monsoon landslides. Reason: Steep young Himalayan terrain plus heavy rainfall plus deforestation destabilise slopes.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so97", type:"mcq", q:"Assertion: Early warning systems reduce loss of life. Reason: They give advance time for evacuation/protective measures.",
+         options:["Both true, R explains A","Both true, R doesn't explain A","A true, R false","A false, R true"], correct:0},
+        {id:"so98", type:"la", q:"Explain the 2013 Uttarakhand floods (Kedarnath disaster) - causes, consequences, lessons.", answer:"Causes: cloudburst, glacial lake outburst, unregulated riverbank construction. Consequences: massive loss of life/infrastructure. Lessons: stricter construction regulation, better warning systems, improved preparedness."},
+        {id:"so99", type:"la", q:"Describe man-made disaster types and prevention measures.", answer:"Industrial accidents, fires, road/rail accidents. Prevention: safety regulation enforcement, audits/drills, awareness, urban planning."},
+        {id:"so100", type:"la", q:"Explain NDMA and SDMA's roles.", answer:"NDMA (PM-headed): national policy/plans/coordination. SDMA (CM-headed): state-level policy, coordinating with districts."}
+      ]},
+      { name: "Case-Based / Logical Reasoning", questions: [
+        {id:"so101", type:"cb", q:"After Chauri Chaura, Gandhi withdrew the Non-Cooperation Movement despite its momentum. Why was nonviolence more important to him than momentum?",
+         answer:"Gandhi believed means mattered as much as ends; violence would cost the movement its moral legitimacy and spiral out of disciplined control, so protecting nonviolence was more important than short-term momentum."},
+        {id:"so102", type:"cb", q:"A hilly state gets heavy rain but faces summer water scarcity. Give two reasons and one solution.",
+         answer:"Reasons: steep slopes cause rapid runoff; deforestation reduces water retention. Solution: check dams and traditional harvesting structures (kuls/guls)."},
+        {id:"so103", type:"cb", q:"Country X's majority declares its language the sole official one, ignoring others. Predict two consequences and suggest an alternative.",
+         answer:"Consequences: minority alienation/unrest; weakened national unity (as in Sri Lanka). Alternative: multi-language power-sharing arrangement like Belgium/India."},
+        {id:"so104", type:"cb", q:"Agriculture's GDP share has fallen but workforce dependence hasn't fallen as much. Identify the problem and one measure.",
+         answer:"Problem: disguised unemployment/underemployment in agriculture. Measure: create non-farm rural employment (agro-industries, infrastructure projects)."},
+        {id:"so105", type:"cb", q:"A hill town has repeated landslides after unplanned construction on slopes. Suggest one Mitigation and one Preparedness measure.",
+         answer:"Mitigation: strict zoning/building regulations restricting construction on unstable slopes with mandated drainage. Preparedness: risk-mapping, awareness drills, early-warning systems."}
+      ]}
+    ]
+  },
+
+  english: {
+    name: "English", icon:"E",
+    note: "100 questions - Grammar, Literature and Writing Skills",
+    chapters: [
+      { name: "Grammar", questions: [
+        {id:"e1", type:"mcq", q:"Choose the correct tense: \"She ___ to school every day.\"", options:["go","goes","going","gone"], correct:1},
+        {id:"e2", type:"mcq", q:"Choose the correct preposition: \"The book is ___ the table.\"", options:["in","on","at","under"], correct:1},
+        {id:"e3", type:"mcq", q:"Passive voice of \"She wrote a letter.\":", options:["A letter was written by her.","A letter is written by her.","A letter has written by her.","She was written a letter."], correct:0},
+        {id:"e4", type:"mcq", q:"Choose the synonym of \"Happy\":", options:["Sad","Joyful","Angry","Tired"], correct:1},
+        {id:"e5", type:"sa", q:"Change into indirect speech: She said, \"I am happy.\"", answer:"She said that she was happy."},
+        {id:"e22", type:"mcq", q:"Choose the correct modal: \"You ___ finish your homework before playing.\"", options:["might","must","would","could"], correct:1},
+        {id:"e23", type:"mcq", q:"Choose the correct form: \"Neither of the boys ___ present.\"", options:["were","was","are","have been"], correct:1},
+        {id:"e24", type:"mcq", q:"Choose the correct article: \"She is ___ honest person.\"", options:["a","an","the","no article"], correct:1},
+        {id:"e25", type:"mcq", q:"Convert into passive voice: \"They are building a bridge.\"", options:["A bridge is being built by them.","A bridge was built by them.","A bridge has been built.","A bridge is build by them."], correct:0},
+        {id:"e26", type:"mcq", q:"Choose the correct reported speech: He said, \"I will go tomorrow.\"", options:["He said that he would go the next day.","He said that he will go tomorrow.","He said he goes tomorrow.","He said that he had gone tomorrow."], correct:0},
+        {id:"e27", type:"mcq", q:"Fill in the blank with the correct tense: \"By next year, I ___ my graduation.\"", options:["will complete","will have completed","complete","completed"], correct:1},
+        {id:"e28", type:"mcq", q:"Choose the correct question tag: \"She is coming, ___?\"", options:["isn't she","doesn't she","is she","wasn't she"], correct:0},
+        {id:"e29", type:"mcq", q:"Identify the correctly punctuated sentence.", options:["Where are you going\"","Where are you going?","where are you going?","Where are you going."], correct:1},
+        {id:"e30", type:"mcq", q:"Choose the correct degree: \"This is the ___ book I have ever read.\"", options:["good","better","best","most good"], correct:2},
+        {id:"e31", type:"mcq", q:"Choose the correct conjunction: \"She was tired, ___ she continued working.\"", options:["but","so","because","although"], correct:0},
+        {id:"e32", type:"mcq", q:"Choose the correct preposition: \"He is good ___ mathematics.\"", options:["in","at","on","with"], correct:1},
+        {id:"e33", type:"mcq", q:"Change to indirect speech: She said, \"Where do you live?\"", options:["She asked where I lived.","She asked where do I live.","She said where I lived.","She asked where I live."], correct:0},
+        {id:"e34", type:"mcq", q:"Choose the correct form of the verb: \"The news ___ surprising.\"", options:["were","are","is","have been"], correct:2},
+        {id:"e35", type:"mcq", q:"Choose the correct modal: \"___ I come in, please?\"", options:["Must","May","Should","Would"], correct:1},
+        {id:"e36", type:"mcq", q:"Identify the correct passive: \"She has completed the project.\"", options:["The project has been completed by her.","The project was completed by her.","The project is completed.","The project had been completed."], correct:0},
+        {id:"e37", type:"mcq", q:"Choose the correct sentence.", options:["He don't like tea.","He doesn't likes tea.","He doesn't like tea.","He not like tea."], correct:2},
+        {id:"e38", type:"mcq", q:"Fill in the blank: \"If I ___ rich, I would travel the world.\"", options:["am","was","were","be"], correct:2},
+        {id:"e39", type:"mcq", q:"Choose the correctly joined sentence: \"This is the boy. He won the race.\"", options:["This is the boy who won the race.","This is the boy which won the race.","This is the boy he won the race.","This is boy won the race."], correct:0},
+        {id:"e40", type:"mcq", q:"Choose the correct reported command: He said to me, \"Shut the door.\"", options:["He told me to shut the door.","He said to shut the door.","He said that shut the door.","He requested shut the door."], correct:0},
+        {id:"e41", type:"mcq", q:"Choose the correct form: \"Each of the students ___ given a certificate.\"", options:["were","was","have been","are"], correct:1},
+        {id:"e42", type:"mcq", q:"Identify the correct comparative: \"Ram is ___ than Shyam.\"", options:["tall","taller","tallest","more tall"], correct:1},
+        {id:"e43", type:"mcq", q:"Choose the correct sentence in active voice: \"The cake was eaten by the children.\"", options:["The children eat the cake.","The children ate the cake.","The children have eaten the cake.","The children eats the cake."], correct:1},
+        {id:"e44", type:"mcq", q:"Fill in the blank with the correct preposition: \"The train arrived ___ time.\"", options:["in","on","at","by"], correct:1},
+        {id:"e45", type:"mcq", q:"Choose the correct indirect question: She asked, \"What is your name?\"", options:["She asked me what my name was.","She asked me what is my name.","She asked what my name is.","She asked what was my name."], correct:0},
+        {id:"e46", type:"mcq", q:"Choose the correctly formed negative sentence: \"He always comes late.\"", options:["He does not always come late.","He not always come late.","He always not come late.","He didn't always comes late."], correct:0}
+      ]},
+      { name: "Literature: First Flight (Prose)", questions: [
+        {id:"e6", type:"sa", q:"Why did Lencho write a letter to God in \"A Letter to God\"?", answer:"His crops were destroyed by hail and he desperately needed money for his family, having immense faith God would help."},
+        {id:"e7", type:"la", q:"What lesson do we learn from \"Nelson Mandela: Long Walk to Freedom\"?", answer:"About courage, freedom for all regardless of race, and the twin obligations of fighting for one's own and others' freedom."},
+        {id:"e10", type:"la", q:"Describe the character of Anne Frank as seen in her diary extract.", answer:"Anne comes across as observant, introspective, and desiring true friendship and understanding, using her diary as a confidante."},
+        {id:"e16", type:"sa", q:"What is the common theme in \"Two Stories about Flying\"?", answer:"Both stories deal with overcoming fear and facing the unknown - a young seagull learning to fly, and a pilot guided safely through a storm by a mysterious black aeroplane."},
+        {id:"e47", type:"sa", q:"How did the postal workers react to Lencho's first letter in \"A Letter to God\"?", answer:"The postman and postmaster were moved by Lencho's faith and collected money among themselves and others to send him, though less than what he asked for."},
+        {id:"e48", type:"sa", q:"Why was Lencho angry after receiving the money in \"A Letter to God\"?", answer:"The amount was less than what he had asked for, and he assumed post office employees had stolen the rest, since he never doubted God's ability to provide fully."},
+        {id:"e49", type:"sa", q:"What does \"A Letter to God\" reveal about Lencho's character?", answer:"He has complete, almost naive faith in God, and is also short-tempered and quick to blame others when things don't go exactly as expected."},
+        {id:"e50", type:"sa", q:"According to Mandela, what does it truly mean to be free?", answer:"To be free is not merely to cast off one's own chains, but to live in a way that respects and enhances the freedom of others."},
+        {id:"e51", type:"sa", q:"What are the \"twin obligations\" Mandela mentions in his writing?", answer:"Obligations to one's family and parents, and obligations to one's people, community and country."},
+        {id:"e52", type:"sa", q:"Describe the event at the beginning of \"Nelson Mandela: Long Walk to Freedom\".", answer:"It describes the inauguration of Nelson Mandela as the first democratically elected President of South Africa in 1994, attended by dignitaries from around the world."},
+        {id:"e53", type:"sa", q:"In \"His First Flight\", why was the young seagull afraid to fly?", answer:"He had never flown before and feared the long drop to the sea and the possibility of failure."},
+        {id:"e54", type:"sa", q:"How did the young seagull finally learn to fly?", answer:"Hunger drove him to dive off the ledge; instinct took over and he found himself flying and gliding successfully."},
+        {id:"e55", type:"sa", q:"What happens in the story \"Black Aeroplane\"?", answer:"A pilot flying through a storm at night is guided safely through the clouds by a mysterious black aeroplane, which later turns out to have no physical trace, suggesting it may have been a guardian presence."},
+        {id:"e56", type:"sa", q:"Why does Anne Frank give her diary the name \"Kitty\"?", answer:"She wanted a true friend to confide in and felt that writing to an imaginary friend named Kitty would help her express her innermost thoughts and feelings."},
+        {id:"e57", type:"sa", q:"What does Anne say about expressing her feelings to others compared to writing?", answer:"She feels that on paper she can express herself far more easily than in conversation, as she often feels shy and awkward speaking about her feelings directly."},
+        {id:"e58", type:"sa", q:"What does the diary extract reveal about Anne's relationship with her family?", answer:"It shows some tension and a feeling of not being fully understood, alongside her deep need for companionship and understanding."},
+        {id:"e59", type:"sa", q:"What is unique about the bread-making process described in \"A Baker from Goa\"?", answer:"The traditional Goan bread-making (pao) is still done in the same old way, with the baker (or 'pader') using traditional methods passed down through generations."},
+        {id:"e60", type:"sa", q:"How has baking as a profession changed in Goa over time, according to the author?", answer:"While some traditions remain, younger generations show less interest in continuing the profession, and practices like bread-selling on bicycles have declined with modernisation."},
+        {id:"e61", type:"sa", q:"What does \"Coorg\" tell us about the region's geography and people?", answer:"Coorg is described as a scenic hill region in Karnataka known for its coffee plantations, spices, and the Kodava people known for their martial traditions and hospitality."},
+        {id:"e62", type:"sa", q:"What legend is associated with the River Kaveri in \"Coorg\"?", answer:"According to legend, the River Kaveri is believed to have originated from the sage Kaveramma, and it is considered sacred by the local Kodava people."},
+        {id:"e63", type:"sa", q:"How did the author (Gavin Maxwell) acquire Mijbil the otter?", answer:"He acquired Mijbil in exchange for giving up his old car, intending to keep the otter as a pet after seeing one in Iraq."},
+        {id:"e64", type:"sa", q:"Describe Mijbil's behaviour on the journey back to England.", answer:"Mijbil was playful and mischievous, causing chaos in a hotel bathroom, and later on the flight, he charmed passengers by playing and being generally sociable."},
+        {id:"e65", type:"la", q:"What does \"Mijbil the Otter\" reveal about the author's growing bond with the animal?", answer:"The author becomes deeply attached to Mijbil, marvelling at the otter's intelligence, playfulness, and affectionate nature, treating him almost like a close companion."},
+        {id:"e66", type:"sa", q:"What happened when Mijbil was let loose in a river for the first time?", answer:"Mijbil took to water joyfully, swimming and diving with evident delight, showing his natural otter instincts despite having been raised away from the wild."}
+      ]},
+      { name: "Literature: First Flight (Poetry)", questions: [
+        {id:"e8", type:"sa", q:"What is the central theme of the poem \"Fire and Ice\"?", answer:"It compares desire (fire) and hatred (ice) as equally destructive forces capable of ending the world."},
+        {id:"e17", type:"sa", q:"What does \"Dust of Snow\" convey about small things bringing a change of mood?", answer:"A small act of nature - dust of snow shaken from a hemlock tree by a crow - changes the poet's mood from sorrow to joy, showing the power of small things."},
+        {id:"e18", type:"sa", q:"What is the central idea of \"A Tiger in the Zoo\"?", answer:"It contrasts the tiger's confined, caged life in a zoo with the freedom and majesty it would have in the wild, highlighting loss of liberty."},
+        {id:"e67", type:"sa", q:"What two objects are mentioned in the poem \"Dust of Snow\"?", answer:"A crow and a hemlock tree."},
+        {id:"e68", type:"sa", q:"What is the significance of the crow in \"Dust of Snow\", given it's often seen as an inauspicious bird?", answer:"Despite being commonly viewed negatively, the crow's simple action becomes the source of a positive change in the poet's mood, showing that value can come from unexpected sources."},
+        {id:"e69", type:"sa", q:"Which is metaphorically more destructive in \"Fire and Ice\" - fire or ice?", answer:"The poem suggests both desire (fire) and hatred (ice) are equally capable of destruction, with the poet suggesting ice (hatred) would also suffice for a second world-ending disaster."},
+        {id:"e70", type:"sa", q:"What do \"fire\" and \"ice\" symbolise in the poem?", answer:"Fire symbolises desire and passion, and ice symbolises hatred and coldness - both extreme, destructive human emotions."},
+        {id:"e71", type:"sa", q:"How does the poet describe the tiger's movements in the cage in \"A Tiger in the Zoo\"?", answer:"The tiger is shown pacing in a monotonous way, moving \"on pads of velvet quiet, in his quiet rage.\""},
+        {id:"e72", type:"la", q:"What contrast does \"A Tiger in the Zoo\" draw between the tiger in the wild and in the zoo?", answer:"In the wild, the tiger would be powerful and free, hiding in forest shadows and terrifying villagers, but in the zoo it is caged, watched by strangers, and stripped of its natural freedom."},
+        {id:"e73", type:"sa", q:"What is the tone of the poem \"How to Tell Wild Animals\"?", answer:"The tone is humorous and satirical, using exaggerated and often absurd 'clues' to identify wild animals."},
+        {id:"e74", type:"sa", q:"How does the poet describe identifying a tiger in \"How to Tell Wild Animals\"?", answer:"The poet humorously suggests that if a fierce creature attacks and eats you, it was probably a tiger - highlighting the poem's playful, ironic style."},
+        {id:"e75", type:"sa", q:"What is the underlying message of \"How to Tell Wild Animals\" despite its comic tone?", answer:"It playfully pokes fun at oversimplified or absurd methods of identifying dangerous animals, while indirectly conveying real facts about animals like tigers, leopards, bears, and crocodiles."},
+        {id:"e76", type:"sa", q:"What does the boy lose in \"The Ball Poem\", and what does this loss represent?", answer:"The boy loses his ball in the water; this loss represents his first encounter with grief and the inevitability of losing things in life, teaching him responsibility and coping."},
+        {id:"e77", type:"sa", q:"What does the poet suggest about how the boy should deal with his loss in \"The Ball Poem\"?", answer:"The poet suggests it's important to let the boy experience the loss and grief himself, as it's a valuable lesson in growing up and coping with impermanence."},
+        {id:"e78", type:"la", q:"What deeper philosophical idea does \"The Ball Poem\" explore?", answer:"It explores the idea that loss and its accompanying sorrow are essential and formative parts of growing up, helping one learn the value of things and relationships."},
+        {id:"e79", type:"sa", q:"What is Amanda constantly told to do by adults in the poem \"Amanda!\"?", answer:"She is constantly told to stop slouching, stand up straight, not bite her nails, tidy her room, and similar instructions."},
+        {id:"e80", type:"sa", q:"What does Amanda daydream about, and what does this reveal about her?", answer:"She daydreams about being a mermaid, an orphan, and Rapunzel locked in a tower - reflecting her desire to escape the constant control and restrictions imposed on her."},
+        {id:"e81", type:"la", q:"What central theme is common to poems like \"Amanda!\" and \"The Ball Poem\"?", answer:"Many poems explore childhood experiences - feelings of restriction, loss, and the desire for freedom or escape - portraying the emotional world of growing up."}
+      ]},
+      { name: "Literature: Footprints without Feet", questions: [
+        {id:"e19", type:"sa", q:"What was unusual about how Ausable handled the intruder in \"The Midnight Visitor\"?", answer:"Ausable, the secret agent, cleverly tricked the spy Max into believing there was a balcony intruder, outwitting him with wit rather than violence."},
+        {id:"e20", type:"sa", q:"What lesson does \"The Thief's Story\" teach?", answer:"It shows how honesty and trust can transform a person - the thief Hari Singh gives up thieving after experiencing Anil's trust in him."},
+        {id:"e21", type:"la", q:"What lesson does \"A Triumph of Surgery\" teach about pet care?", answer:"It shows that over-indulgence (overfeeding) harms pets just as it can harm humans, and that firm, disciplined care (diet and exercise) is often more effective than medicine."},
+        {id:"e82", type:"sa", q:"Who is Tricki in \"A Triumph of Surgery\" and what is his main problem?", answer:"Tricki is a pampered dog who is overfed by his indulgent owner, Mrs. Pumphrey, leading to obesity and related health issues."},
+        {id:"e83", type:"sa", q:"How does James Herriot treat Tricki's condition?", answer:"He admits Tricki to his surgery, puts him on a strict diet with no extra treats, and encourages exercise with other dogs, which improves his health significantly."},
+        {id:"e84", type:"la", q:"What made Hari Singh trust Anil, and how did this trust change him, in \"The Thief's Story\"?", answer:"Anil trusted Hari Singh completely with money and never checked on him despite knowing he was capable of theft; this unconditional trust made Hari Singh realise he valued this trust more than the money he could steal, causing him to change his ways."},
+        {id:"e85", type:"sa", q:"Why does Hari Singh return the stolen money in \"The Thief's Story\"?", answer:"He realises that stealing would mean losing Anil's trust and the opportunity to learn to read and write, which meant more to him than the money."},
+        {id:"e86", type:"sa", q:"Why does Fowler consider himself a good secret agent, and how is this belief challenged in \"The Midnight Visitor\"?", answer:"Fowler believes he is highly capable, but he is easily outsmarted by the more experienced Ausable, showing that true skill lies in wit and composure rather than dramatic bravado."},
+        {id:"e87", type:"sa", q:"How does \"The Midnight Visitor\" use humour to build its plot?", answer:"The story humorously subverts typical spy-thriller expectations, showing a mundane, cluttered room instead of a glamorous one, and Ausable's calm, witty trick rather than a dramatic chase."},
+        {id:"e88", type:"sa", q:"What was Horace Danby's secret hobby in \"A Question of Trust\", and how did it lead to trouble?", answer:"Horace Danby was a respectable, law-abiding man by day but secretly a safe-cracker who stole rare books; on one heist, he was tricked by a woman posing as the homeowner into opening the safe for her."},
+        {id:"e89", type:"sa", q:"How was Horace outsmarted in \"A Question of Trust\"?", answer:"The woman he met at the house pretended to be a fellow burglar in trouble, gained his sympathy and trust, then had him open the safe and made off with the jewels herself, leaving him to be caught."},
+        {id:"e90", type:"la", q:"What lesson does \"A Question of Trust\" convey about trust and deception?", answer:"It shows the irony of a professional thief being deceived through misplaced trust, highlighting how appearances and clever manipulation can outsmart even experienced criminals."},
+        {id:"e91", type:"sa", q:"How did Griffin, the scientist in \"Footprints without Feet\", become invisible?", answer:"He experimented on himself with a formula involving drugs and specific physical conditions that altered his body's refractive index, making him invisible."},
+        {id:"e92", type:"sa", q:"What difficulties did Griffin face after becoming invisible?", answer:"He struggled with practical issues like being unable to eat in public without exposing his invisibility, being affected by weather, and difficulty obtaining clothes and shelter without being noticed."},
+        {id:"e93", type:"la", q:"What is the overall message of \"Footprints without Feet\" about invisibility?", answer:"While invisibility seems advantageous, the story portrays it as isolating and troublesome, showing that Griffin's genius leads to loneliness and difficulty rather than pure advantage."},
+        {id:"e94", type:"sa", q:"What sparked Richard Ebright's interest in science as a child, in \"The Making of a Scientist\"?", answer:"His curiosity was sparked early through collecting butterflies and, more significantly, through a gift from his mother of a book, \"The Travels of Monarch X\", about butterfly migration."},
+        {id:"e95", type:"sa", q:"How did Richard Ebright's mother contribute to his scientific development?", answer:"She consistently encouraged his curiosity, provided him with learning resources (books, microscope, etc.) and supported his interests, playing a critical role in nurturing his path to becoming a scientist."},
+        {id:"e96", type:"la", q:"What common theme do the stories in \"Footprints without Feet\" explore about human nature?", answer:"The stories explore themes of trust, deception, wit outsmarting brute force, and unconventional paths to success or redemption, often subverting expectations about criminals, victims, and heroes."}
+      ]},
+      { name: "Writing Skills", questions: [
+        {id:"e11", type:"la", q:"Write a formal letter to the editor of a newspaper about increasing pollution in your city.", answer:"Follow format: Sender's address, date, receiver's designation and address, subject, salutation, body (3 paras: introduce issue, elaborate with examples, suggest solution), complimentary close, signature."},
+        {id:"e12b", type:"la", q:"Write an analytical paragraph (80-100 words) analysing: \"Smartphone usage among teenagers increased from 45% to 78% between 2015 and 2023.\"", answer:"Sample structure: introduce the trend, state the figures, analyse possible reasons (affordability, social media, remote learning), and conclude with an observation on impact (access vs screen-time concerns)."},
+        {id:"e13", type:"sa", q:"What is the difference between a formal and an informal letter?", answer:"Formal letters follow a strict structure for official/business purposes; informal letters are casual, written to friends/family without rigid format."},
+        {id:"e15b", type:"la", q:"Write a letter to the Municipal Commissioner complaining about irregular garbage collection in your locality.", answer:"Follow formal letter format: sender's address, date, receiver's designation, subject line, salutation, body (introduce issue, give specifics/dates, request action), complimentary close, signature."},
+        {id:"e97", type:"la", q:"Write a complaint letter to the Store Manager about a defective product you purchased recently.", answer:"Follow formal letter format: sender's address, date, receiver's designation & address, subject line, salutation, body (describe product/purchase details, the defect, and desired resolution such as replacement or refund), complimentary close, signature."},
+        {id:"e98", type:"la", q:"Draft a notice for your school notice board announcing an inter-house debate competition.", answer:"Format: school name in a box, the word NOTICE, date, a catchy title, body covering what/when/where/eligibility/contact person, and the issuing authority's name and designation, within the word limit (usually around 50 words)."},
+        {id:"e99", type:"la", q:"Write a letter placing an order for stationery items needed for your school library.", answer:"Follow formal letter format: sender's (school's) address, date, supplier's name & address, subject, salutation, body (list items, quantities, delivery instructions, payment terms), complimentary close, signature/designation."},
+        {id:"e100", type:"sa", q:"What key elements should be included in an analytical paragraph based on a graph or chart?", answer:"A topic sentence introducing the subject, key data points/trends from the graph, brief analysis of causes or implications, and a concluding observation - all within a coherent single paragraph."},
+        {id:"e101", type:"mcq", q:"Which of these best begins an analytical paragraph based on a bar graph showing rising literacy rates?", options:["Once upon a time...","The bar graph illustrates a steady rise in literacy rates from 2010 to 2020.","Dear Sir, I am writing regarding...","I think literacy is important."], correct:1},
+        {id:"e102", type:"la", q:"Write a letter to your school principal requesting a change of subject combination for the next academic year.", answer:"Follow formal letter format: sender's address (school), date, Principal's designation & address, subject line, salutation, body (state current subjects, desired change, and reason), complimentary close, signature, class/roll number."}
+      ]}
+    ]
+  }
+};
+
+const STORAGE_KEY = "adhyayan_progress_v2";
+const STUDENT_KEY = "adhyayan_student_v2";
+function loadProgress(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; } }
+function saveProgress(p){ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }
+let progress = loadProgress();
+
+function loadStudent(){ try{ return JSON.parse(localStorage.getItem(STUDENT_KEY)); }catch(e){ return null; } }
+function saveStudent(s){ localStorage.setItem(STUDENT_KEY, JSON.stringify(s)); }
+
+function allQuestionsFlat(){
+  let out=[];
+  for(const sub in DB){ DB[sub].chapters.forEach(ch=>ch.questions.forEach(q=>out.push({...q, subject:sub, chapter:ch.name}))); }
+  return out;
+}
+function subjectCount(subKey){ let t=0; DB[subKey].chapters.forEach(ch=>t+=ch.questions.length); return t; }
+function subjectAttempted(subKey){ let c=0; DB[subKey].chapters.forEach(ch=>ch.questions.forEach(q=>{ if(progress[q.id]) c++; })); return c; }
+function subjectCorrect(subKey){ let c=0; DB[subKey].chapters.forEach(ch=>ch.questions.forEach(q=>{ if(progress[q.id]==='correct') c++; })); return c; }
+
+function statusBadge(accuracyPct, attempted){
+  if(attempted===0) return '<span class="badge none">Not started</span>';
+  if(accuracyPct>=80) return '<span class="badge strong">Strong</span>';
+  if(accuracyPct>=60) return '<span class="badge good">Good</span>';
+  return '<span class="badge improve">Improve</span>';
+}
+
+function startSession(){
+  const name = document.getElementById('studentName').value.trim();
+  const section = document.getElementById('studentSection').value.trim();
+  if(!name){ alert("Please enter your name to start."); return; }
+  saveStudent({name, section});
+  logVisitor(name, section);
+  showDashboard();
+}
+
+function logVisitor(name, section){
+  if(!leaderboardConfigured()) return;
+  fetch(LEADERBOARD_URL, {
+    method: "POST",
+    body: JSON.stringify({ type: "visitor", name: name, section: section })
+  }).catch(()=>{ /* silent fail - don't block the student if offline */ });
+}
+
+function checkExistingStudent(){
+  const s = loadStudent();
+  if(s && s.name){
+    document.getElementById('nameScreen').classList.add('hidden');
+    showDashboard();
+  }
+}
+
+function renderDashboard(){
+  const s = loadStudent();
+  document.getElementById('welcomeName').textContent = s ? s.name : "Student";
+  const list = document.getElementById('subjectList');
+  list.innerHTML="";
+  for(const key in DB){
+    const total = subjectCount(key);
+    const done = subjectAttempted(key);
+    const pct = total ? Math.round(done/total*100) : 0;
+    const div = document.createElement('div');
+    div.className='subject-card';
+    div.onclick=()=>openSubject(key);
+    div.innerHTML = '<div><div class="subject-name">'+DB[key].name+'</div><div class="subject-sub">'+DB[key].note+'</div></div>'+
+      '<div><div class="subject-progress">'+done+'/'+total+'</div><div class="progress-mini"><div class="progress-mini-fill" style="width:'+pct+'%"></div></div></div>';
+    list.appendChild(div);
+  }
+  const all = allQuestionsFlat();
+  const totalQ = all.length;
+  let attempted=0, correct=0, partial=0, incorrect=0;
+  all.forEach(q=>{
+    const st = progress[q.id];
+    if(st){ attempted++; if(st==='correct')correct++; else if(st==='partial')partial++; else if(st==='incorrect')incorrect++; }
+  });
+  document.getElementById('statTotal').textContent = attempted+"/"+totalQ;
+  document.getElementById('statAcc').textContent = attempted? Math.round(correct/attempted*100)+"%" : "-";
+  document.getElementById('statRevise').textContent = (partial+incorrect) || "-";
+  const reviseCount = partial+incorrect;
+  const revBtn = document.getElementById('revisionBtn');
+  revBtn.textContent = reviseCount ? "Revision Mode (" + reviseCount + " questions)" : "Revision Mode (no weak questions yet)";
+  revBtn.disabled = reviseCount===0;
+  revBtn.style.opacity = reviseCount===0 ? 0.5 : 1;
+}
+
+function hideAllScreens(){
+  ['nameScreen','dashboard','subjectView','practice','result','reportView','leaderboardView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+}
+function showDashboard(){ hideAllScreens(); document.getElementById('dashboard').classList.remove('hidden'); renderDashboard(); }
+
+let currentSubject=null, currentChapterIdx=null, currentQuestions=[], qi=0, isRevisionMode=false, sstLang='en';
+
+function setSstLang(lang){
+  sstLang = lang;
+  document.getElementById('langEnBtn').style.outline = lang==='en' ? '2px solid var(--gold)' : 'none';
+  document.getElementById('langHiBtn').style.outline = lang==='hi' ? '2px solid var(--gold)' : 'none';
+  if(!document.getElementById('practice').classList.contains('hidden')){ renderQuestion(); }
+}
+
+function tr(q, field){
+  // Returns translated field ('q','options','answer') for SST questions if Hindi is selected and a translation exists.
+  if(currentSubject==='sst' && sstLang==='hi' && SST_HI[q.id] && SST_HI[q.id][field]!==undefined){
+    return SST_HI[q.id][field];
+  }
+  return q[field];
+}
+
+function startRevision(){
+  const weak = allQuestionsFlat().filter(q => progress[q.id]==='incorrect' || progress[q.id]==='partial');
+  if(weak.length===0){ return; }
+  isRevisionMode = true;
+  currentQuestions = weak;
+  qi=0;
+  hideAllScreens();
+  document.getElementById('practice').classList.remove('hidden');
+  document.getElementById('practiceBackLink').textContent = "\u2190 Back to Dashboard";
+  document.getElementById('pTitle').textContent = "Revision Mode";
+  renderQuestion();
+}
+function backFromPractice(){
+  if(isRevisionMode){ isRevisionMode=false; showDashboard(); }
+  else { showSubject(); }
+}
+
+function openSubject(key){
+  currentSubject = key;
+  hideAllScreens();
+  document.getElementById('subjectView').classList.remove('hidden');
+  document.getElementById('subjectTitle').textContent = DB[key].name;
+  document.getElementById('subjectSub').textContent = DB[key].note;
+  const langToggle = document.getElementById('langToggle');
+  if(key==='sst'){
+    langToggle.classList.remove('hidden');
+    langToggle.style.display='flex';
+    setSstLang(sstLang);
+  } else {
+    langToggle.classList.add('hidden');
+  }
+  const list = document.getElementById('chapterList');
+  list.innerHTML="";
+  DB[key].chapters.forEach((ch,idx)=>{
+    let done=0; ch.questions.forEach(q=>{ if(progress[q.id]) done++; });
+    const row = document.createElement('div');
+    row.className='chapter-row';
+    row.onclick=()=>startChapter(key, idx);
+    row.innerHTML = '<div><div class="chapter-name">'+ch.name+'</div><div class="chapter-count">'+done+'/'+ch.questions.length+' attempted</div></div><div style="color:var(--gold-soft)">&rarr;</div>';
+    list.appendChild(row);
+  });
+}
+function showSubject(){ openSubject(currentSubject); }
+
+function startChapter(key, idx){
+  currentSubject=key; currentChapterIdx=idx;
+  currentQuestions = DB[key].chapters[idx].questions;
+  qi=0;
+  isRevisionMode = false;
+  hideAllScreens();
+  document.getElementById('practice').classList.remove('hidden');
+  document.getElementById('practiceBackLink').textContent = "\u2190 Back to Chapters";
+  document.getElementById('pTitle').textContent = DB[key].chapters[idx].name;
+  renderQuestion();
+}
+
+const TYPE_LABELS = {mcq:"MULTIPLE CHOICE", ar:"ASSERTION-REASON", vsa:"VERY SHORT ANSWER", sa:"SHORT ANSWER", la:"LONG ANSWER", cb:"CASE-BASED"};
+
+function renderQuestion(){
+  const q = currentQuestions[qi];
+  document.getElementById('pCount').textContent = (qi+1)+" / "+currentQuestions.length;
+  document.getElementById('pFill').style.width = (qi/currentQuestions.length*100)+"%";
+  document.getElementById('typeTag').textContent = TYPE_LABELS[q.type] || q.type.toUpperCase();
+  document.getElementById('pQuestion').textContent = tr(q,'q');
+  document.getElementById('pFeedback').textContent = "";
+  document.getElementById('pNext').classList.add('hidden');
+
+  const mcqArea = document.getElementById('mcqArea');
+  const writeArea = document.getElementById('writeArea');
+
+  if(q.type==='mcq' || q.type==='ar'){
+    writeArea.classList.add('hidden');
+    mcqArea.classList.remove('hidden');
+    mcqArea.innerHTML="";
+    const opts = tr(q,'options');
+    opts.forEach((opt,n)=>{
+      const b=document.createElement('button');
+      b.className='option';
+      b.textContent = String.fromCharCode(65+n)+". "+opt;
+      b.onclick=()=>chooseOption(n);
+      mcqArea.appendChild(b);
+    });
+  } else {
+    mcqArea.classList.add('hidden');
+    mcqArea.innerHTML="";
+    writeArea.classList.remove('hidden');
+    document.getElementById('writeBox').value="";
+    document.getElementById('writeBox').disabled=false;
+    document.getElementById('modelAnswer').classList.add('hidden');
+    document.getElementById('modelAnswer').textContent="";
+    document.getElementById('selfCheck').classList.add('hidden');
+    document.querySelectorAll('.self-check button').forEach(b=>b.classList.remove('active'));
+  }
+}
+
+function chooseOption(n){
+  const q = currentQuestions[qi];
+  const buttons = [...document.querySelectorAll('#mcqArea .option')];
+  if(buttons[0].disabled) return;
+  buttons.forEach((b,k)=>{
+    if(k===q.correct) b.classList.add('correct');
+    if(k===n && n!==q.correct) b.classList.add('wrong');
+    b.disabled=true;
+  });
+  const status = (n===q.correct) ? 'correct' : 'incorrect';
+  progress[q.id]=status; saveProgress(progress);
+  const opts = tr(q,'options');
+  document.getElementById('pFeedback').textContent = (status==='correct') ? "Correct!" : "Incorrect - correct answer is "+String.fromCharCode(65+q.correct)+". "+opts[q.correct];
+  document.getElementById('pNext').classList.remove('hidden');
+}
+
+function showModel(){
+  const q = currentQuestions[qi];
+  document.getElementById('modelAnswer').textContent = "Model Answer: " + tr(q,'answer');
+  document.getElementById('modelAnswer').classList.remove('hidden');
+  document.getElementById('selfCheck').classList.remove('hidden');
+  document.getElementById('writeBox').disabled=true;
+}
+function selfMark(status){
+  const q = currentQuestions[qi];
+  progress[q.id]=status; saveProgress(progress);
+  document.querySelectorAll('.self-check button').forEach(b=>b.classList.remove('active'));
+  const map={correct:0,partial:1,incorrect:2};
+  document.querySelectorAll('.self-check button')[map[status]].classList.add('active');
+  document.getElementById('pFeedback').textContent = status==='correct' ? "Marked as correct." : status==='partial' ? "Marked as partially correct." : "Marked for revision.";
+  document.getElementById('pNext').classList.remove('hidden');
+}
+
+function nextQuestion(){
+  qi++;
+  if(qi < currentQuestions.length) renderQuestion();
+  else finishChapter();
+}
+
+function finishChapter(){
+  hideAllScreens();
+  document.getElementById('result').classList.remove('hidden');
+  let correct=0;
+  currentQuestions.forEach(q=>{ if(progress[q.id]==='correct') correct++; });
+  document.getElementById('score').textContent = correct+" / "+currentQuestions.length;
+  document.getElementById('resultText').textContent = isRevisionMode
+    ? "Revision session complete — questions you still marked wrong/partial will show up again next time."
+    : "Marked correct in this chapter (cumulative across attempts).";
+  const resultBtn = document.getElementById('resultBackBtn');
+  if(resultBtn){
+    resultBtn.textContent = isRevisionMode ? "Back to Dashboard" : "Back to Chapters";
+    resultBtn.onclick = isRevisionMode ? showDashboard : showSubject;
+  }
+}
+
+function showReport(){
+  hideAllScreens();
+  document.getElementById('reportView').classList.remove('hidden');
+  const s = loadStudent();
+  document.getElementById('repName').textContent = s ? s.name : "Student";
+  document.getElementById('repMeta').textContent = "Class 10"+(s&&s.section?" - "+s.section:"")+" - Half-Yearly Master Practice - "+new Date().toLocaleDateString();
+
+  const all = allQuestionsFlat();
+  const totalQ = all.length;
+  let attempted=0, correct=0, incorrect=0, partial=0, writingTotal=0, selfChecked=0;
+  all.forEach(q=>{
+    const isWriting = (q.type!=='mcq' && q.type!=='ar');
+    if(isWriting) writingTotal++;
+    const st = progress[q.id];
+    if(st){
+      attempted++;
+      if(st==='correct') correct++;
+      else if(st==='partial') partial++;
+      else if(st==='incorrect') incorrect++;
+      if(isWriting) selfChecked++;
+    }
+  });
+  document.getElementById('repScore').textContent = attempted? Math.round(correct/attempted*100)+"%" : "0%";
+  document.getElementById('repAttempted').textContent = attempted+"/"+totalQ;
+  document.getElementById('repCorrect').textContent = correct;
+  document.getElementById('repIncorrect').textContent = incorrect;
+  document.getElementById('repWriting').textContent = writingTotal;
+  document.getElementById('repSelfChecked').textContent = selfChecked;
+
+  const subjTable = document.getElementById('repSubjectTable');
+  subjTable.innerHTML="";
+  let subjStats=[];
+  for(const key in DB){
+    const total = subjectCount(key);
+    const att = subjectAttempted(key);
+    const corr = subjectCorrect(key);
+    const acc = att? Math.round(corr/att*100) : 0;
+    subjStats.push({key, name:DB[key].name, total, att, acc});
+    subjTable.innerHTML += '<tr><td>'+DB[key].name+'</td><td>'+att+'/'+total+'</td><td>'+(att?acc+'%':'-')+'</td><td>'+statusBadge(acc,att)+'</td></tr>';
+  }
+
+  const chapList = document.getElementById('repChapterList');
+  chapList.innerHTML="";
+  let chapStats=[];
+  for(const key in DB){
+    DB[key].chapters.forEach(ch=>{
+      let att=0, corr=0;
+      ch.questions.forEach(q=>{ const st=progress[q.id]; if(st){ att++; if(st==='correct') corr++; } });
+      if(att>0){
+        const acc = Math.round(corr/att*100);
+        chapStats.push({name:ch.name, acc, att, total:ch.questions.length});
+      }
+    });
+  }
+  chapStats.sort((a,b)=>a.acc-b.acc);
+  if(chapStats.length===0){
+    chapList.innerHTML = '<p class="small">No chapters attempted yet - start practicing to see your chapter-wise analysis here.</p>';
+  } else {
+    chapStats.forEach(c=>{
+      const label = c.acc>=80 ? 'Strong' : c.acc>=60 ? 'Good' : 'Priority';
+      chapList.innerHTML += '<div class="chapter-analysis-row"><span>'+c.name+'</span><span>'+c.acc+'% ('+label+')</span></div>';
+    });
+  }
+
+  const recBox = document.getElementById('repRecommendation');
+  const attemptedSubjects = subjStats.filter(s=>s.att>0);
+  if(attemptedSubjects.length===0){
+    recBox.innerHTML = "Start practicing any subject to unlock your personalised recommendations here.";
+  } else {
+    const strongest = attemptedSubjects.reduce((a,b)=> b.acc>a.acc? b:a);
+    const weakest = attemptedSubjects.reduce((a,b)=> b.acc<a.acc? b:a);
+    const priorityChapter = chapStats.length ? chapStats[0] : null;
+    recBox.innerHTML = '<b>Your strongest area:</b> '+strongest.name+' ('+strongest.acc+'%)<br>'+
+      '<b>Needs more practice:</b> '+weakest.name+' ('+weakest.acc+'%)<br>'+
+      (priorityChapter ? '<b>Priority revision:</b> '+priorityChapter.name+' ('+priorityChapter.acc+'%)' : '');
+  }
+}
+
+function resetProgress(){
+  if(confirm("Reset ALL progress? This cannot be undone.")){
+    progress={}; saveProgress(progress); renderDashboard();
+  }
+}
+
+function switchStudent(){
+  if(confirm("Switch to a new student? Your name/class will be cleared. Practice progress stays saved on this device unless you also reset it.")){
+    localStorage.removeItem(STUDENT_KEY);
+    hideAllScreens();
+    document.getElementById('nameScreen').classList.remove('hidden');
+    document.getElementById('studentName').value = "";
+    document.getElementById('studentSection').value = "";
+  }
+}
+
+function shareScore(){
+  const s = loadStudent();
+  const all = allQuestionsFlat();
+  let attempted=0, correct=0;
+  all.forEach(q=>{ const st=progress[q.id]; if(st){ attempted++; if(st==='correct') correct++; } });
+  const overall = attempted? Math.round(correct/attempted*100) : 0;
+  let lines = [];
+  lines.push("ADHYAYAN TUITION CENTRE - Half-Yearly Practice Score");
+  lines.push("Name: " + (s?s.name:"Student") + (s&&s.section?" ("+s.section+")":""));
+  lines.push("Overall Score: " + overall + "% (" + correct + "/" + attempted + " correct)");
+  for(const key in DB){
+    const total = subjectCount(key);
+    const att = subjectAttempted(key);
+    const corr = subjectCorrect(key);
+    const acc = att? Math.round(corr/att*100) : 0;
+    lines.push(DB[key].name + ": " + att + "/" + total + " attempted, " + (att?acc+"% accuracy":"not started"));
+  }
+  lines.push("Date: " + new Date().toLocaleDateString());
+  lines.push("(Share this in the class group so Sir can add you to the leaderboard!)");
+  const text = lines.join("\n");
+  const box = document.getElementById('shareText');
+  box.value = text;
+  box.classList.remove('hidden');
+  box.select();
+  try{ document.execCommand('copy'); alert("Score summary copied! Paste it into WhatsApp to share."); }
+  catch(e){ alert("Score summary ready below - copy it manually and share on WhatsApp."); }
+}
+
+/* ============================================================
+   LEADERBOARD (Google Sheets backend via Apps Script)
+   Replace the URL below with your own deployed Web App URL.
+   See leaderboard_apps_script.gs for setup instructions.
+   ============================================================ */
+const LEADERBOARD_URL = "https://script.google.com/macros/s/AKfycbzw8zNytFdfDD-82jVBF76SPBThQfb1cTLq0w5ayDYctY3674M64X4FQw5mEZui91IuBw/exec";
+
+function leaderboardConfigured(){
+  return LEADERBOARD_URL && LEADERBOARD_URL.indexOf("PASTE_YOUR") === -1;
+}
+
+function showVisitorLog(){
+  if(!leaderboardConfigured()){
+    alert("Not set up yet. Complete the Google Sheet setup first.");
+    return;
+  }
+  const statusEl = document.getElementById('leaderboardStatus');
+  const listEl = document.getElementById('leaderboardList');
+  statusEl.textContent = "Loading visitor log...";
+  listEl.innerHTML = "";
+  fetch(LEADERBOARD_URL + "?type=visitors")
+    .then(r => r.json())
+    .then(data => {
+      if(!data || data.length===0){
+        statusEl.textContent = "No one has opened the app yet.";
+        return;
+      }
+      statusEl.textContent = data.length + " student(s) have opened this app:";
+      let html = "";
+      data.slice().reverse().forEach(row => {
+        html += '<div class="chapter-analysis-row"><span>'+row.name+(row.section?' ('+row.section+')':'')+'</span><span class="small">'+new Date(row.date).toLocaleString()+'</span></div>';
+      });
+      listEl.innerHTML = html;
+    })
+    .catch(()=>{ statusEl.textContent = "Could not load visitor log. Check your internet connection."; });
+}
+
+function showLeaderboard(){
+  hideAllScreens();
+  document.getElementById('leaderboardView').classList.remove('hidden');
+  if(!leaderboardConfigured()){
+    document.getElementById('leaderboardStatus').innerHTML =
+      "Leaderboard is not set up yet.<br>Ask your teacher to complete the one-time Google Sheet setup (see leaderboard_apps_script.gs) and paste the Web App URL into this file.";
+    document.getElementById('leaderboardList').innerHTML = "";
+    return;
+  }
+  loadLeaderboard();
+}
+
+function loadLeaderboard(){
+  if(!leaderboardConfigured()) return;
+  const statusEl = document.getElementById('leaderboardStatus');
+  const listEl = document.getElementById('leaderboardList');
+  statusEl.textContent = "Loading leaderboard...";
+  listEl.innerHTML = "";
+  fetch(LEADERBOARD_URL)
+    .then(r => r.json())
+    .then(data => {
+      if(!data || data.length===0){
+        statusEl.textContent = "No scores submitted yet - be the first!";
+        return;
+      }
+      statusEl.textContent = "";
+      let html = "";
+      data.slice(0,50).forEach((row, i) => {
+        const medal = i===0 ? "#1 " : i===1 ? "#2 " : i===2 ? "#3 " : (i+1)+". ";
+        html += '<div class="chapter-analysis-row"><span>'+medal+row.name+(row.section?' ('+row.section+')':'')+'</span><span>'+row.overall+'% ('+row.correct+'/'+row.attempted+')</span></div>';
+      });
+      listEl.innerHTML = html;
+    })
+    .catch(err => {
+      statusEl.textContent = "Could not load leaderboard. Check your internet connection and try Refresh.";
+    });
+}
+
+function submitToLeaderboard(){
+  if(!leaderboardConfigured()){
+    alert("Leaderboard is not set up yet. Ask your teacher to complete the setup first.");
+    return;
+  }
+  const s = loadStudent();
+  const all = allQuestionsFlat();
+  let attempted=0, correct=0;
+  all.forEach(q=>{ const st=progress[q.id]; if(st){ attempted++; if(st==='correct') correct++; } });
+  if(attempted===0){ alert("Practice at least a few questions before submitting your score!"); return; }
+  const overall = Math.round(correct/attempted*100);
+  const payload = {
+    name: s ? s.name : "Unknown",
+    section: s ? s.section : "",
+    overall: overall,
+    attempted: attempted,
+    correct: correct,
+    total: all.length
+  };
+  document.getElementById('leaderboardStatus').textContent = "Submitting...";
+  fetch(LEADERBOARD_URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  }).then(()=>{
+    document.getElementById('leaderboardStatus').textContent = "Score submitted! Refreshing...";
+    setTimeout(loadLeaderboard, 800);
+  }).catch(()=>{
+    document.getElementById('leaderboardStatus').textContent = "Could not submit. Check your internet connection and try again.";
+  });
+}
+
+checkExistingStudent();
+</script>
+</body>
+</html>
