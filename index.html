@@ -1891,8 +1891,8 @@ function showVisitorLog(){
       let html = "";
       data.forEach(row => {
         const mins = row.minutes || 0;
-        const timeStr = mins < 1 ? "just now" : mins < 60 ? (mins+" min") : (Math.floor(mins/60)+"h "+(mins%60)+"m");
-        html += '<div class="chapter-analysis-row"><span>'+row.name+(row.section?' ('+row.section+')':'')+'</span><span class="small">'+new Date(row.lastSeen).toLocaleString()+' · '+timeStr+' used</span></div>';
+        const timeStr = mins < 1 ? "under 1 min" : mins < 60 ? (mins+" min") : (Math.floor(mins/60)+"h "+(mins%60)+"m");
+        html += '<div class="chapter-analysis-row"><span>'+row.name+(row.section?' ('+row.section+')':'')+'</span><span class="small">Last seen: '+new Date(row.lastSeen).toLocaleString()+' · '+timeStr+' total</span></div>';
       });
       listEl.innerHTML = html;
     })
