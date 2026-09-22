@@ -1440,9 +1440,13 @@ const DB = {
 const STORAGE_KEY = "adhyayan_progress_v2";
 const STUDENT_KEY = "adhyayan_student_v2";
 function loadProgress(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; } }
+let lastHeartbeatAt = 0;
 function saveProgress(p){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
-  if(heartbeatTimer) sendHeartbeat();
+  if(heartbeatTimer && Date.now() - lastHeartbeatAt > 5000){
+    lastHeartbeatAt = Date.now();
+    sendHeartbeat();
+  }
 }
 let progress = loadProgress();
 
