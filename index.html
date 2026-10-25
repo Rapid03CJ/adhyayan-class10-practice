@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v13">
+<meta name="app-version" content="2026-10-24-v15">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -489,6 +489,39 @@ html[data-theme=light] #pnav{background:rgba(255,255,255,.96) !important}
 #qaGrid button.hot{background:linear-gradient(135deg,#f6dc9a,#cda449) !important;color:#1a1206 !important;border:0 !important}
 #homeCta{margin-bottom:16px !important}
 .nv-soon{text-align:center;padding:28px 16px;margin-top:14px;border-radius:20px;border:1px dashed rgba(205,164,73,.45);background:rgba(205,164,73,.06)}.nv-soon b{display:block;font-size:17px;margin:6px 0;font-family:Georgia,serif;color:var(--gold-soft)}
+/* ===== V9 ===== */
+#homeCta{display:none !important}
+.cc{cursor:pointer}
+.cc.daily .ring.pulse{animation:dpulse 2s ease-in-out infinite}
+@keyframes dpulse{0%,100%{box-shadow:0 0 0 0 rgba(243,213,138,.55),0 6px 18px rgba(0,0,0,.35)}50%{box-shadow:0 0 0 9px rgba(243,213,138,0),0 6px 18px rgba(0,0,0,.35)}}
+.cc.daily .ring{background:conic-gradient(#f3d58a calc(var(--p)*1%),rgba(243,213,138,.22) 0)}
+#boardsLine{text-align:center;font-size:12.5px;color:var(--muted);margin:8px 0 12px;cursor:pointer}#boardsLine b{color:var(--gold-soft)}
+#pnav .nb{position:absolute;top:0;right:calc(50% - 22px);min-width:17px;height:17px;border-radius:9px;background:#e0716a;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.pf-top{display:flex;align-items:center;gap:14px}.pf-av{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;background:radial-gradient(circle at 30% 25%,rgba(243,213,138,.35),rgba(205,164,73,.08));border:2px solid var(--gold);box-shadow:0 0 24px rgba(205,164,73,.25)}
+.pf-xp{margin:14px 0}.pf-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pf-tiles div{text-align:center;padding:10px 2px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(205,164,73,.22)}
+.pf-tiles b{display:block;font-size:17px;font-family:Georgia,serif;color:var(--gold-soft)}.pf-tiles span{font-size:8.5px;letter-spacing:1px;color:var(--muted)}
+.pf-n{display:flex;align-items:center;gap:10px;padding:11px 12px;margin:7px 0;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.pf-n.un{border-color:rgba(205,164,73,.55);background:rgba(205,164,73,.08)}.pf-n i{font-style:normal;font-size:24px}.pf-n>div{flex:1;min-width:0}.pf-n b{font-size:14px}.pf-n a{color:var(--gold-soft);font-size:13px;font-weight:700}
+.pf-n .primary{width:auto;padding:8px 12px;font-size:12.5px;white-space:nowrap;border-radius:12px !important}
+.pf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pf-grid button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 2px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(205,164,73,.25);color:var(--cream);font-size:10.5px}.pf-grid i{font-style:normal;font-size:22px}
+/* ===== V10 ===== */
+#dashboard{position:relative}
+#homeTop{position:absolute;top:2px;left:4px;right:4px;display:flex;justify-content:space-between;z-index:6;pointer-events:none}
+#homeTop button,.pf-gear{pointer-events:auto;position:relative;width:42px;height:42px;padding:0;border-radius:50%;font-size:19px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.35);color:var(--cream)}
+#homeTop .nb,.pf-gear .nb{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;border-radius:9px;background:#e0716a;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+#profileView{position:relative}.pf-gear{position:absolute;top:14px;right:14px}
+.pf-top{padding-right:48px}
+.pf-clear{background:none;color:var(--gold-soft);font-size:12px;padding:4px 8px;border:1px solid rgba(205,164,73,.35);border-radius:20px}
+.pf-n .nx{width:auto;padding:4px 8px;background:none;color:var(--muted);font-size:14px;align-self:flex-start}
+.st-sec{margin-top:18px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(205,164,73,.2)}
+.st-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid rgba(255,255,255,.07)}.st-sec .nu-label+.st-row{border-top:0}
+.st-row b{display:block;font-size:14.5px}.st-row small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.st-r{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.st-b{width:auto;padding:8px 14px;font-size:13px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.4);color:var(--cream)}
+.st-b.wa{background:#25D366;color:#fff;border:0}.st-b.danger{border-color:#e0716a;color:#e0716a}
+.st-in{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.4);color:var(--cream);font-size:13px;max-width:140px}
 </style>
 </head>
 <body>
@@ -6421,7 +6454,7 @@ function streakN(){try{const s=calcStreak(loadActivity());return typeof s==='obj
 function xpInfo(){const s=stt(),xp=s.c*10+s.p*4+(s.t-s.c-s.p)+streakN()*15+(window.bonusXp?bonusXp():0),lv=Math.floor(Math.sqrt(xp/40))+1,lo=40*(lv-1)*(lv-1),hi=40*lv*lv;return{xp,lv,pct:Math.round((xp-lo)/(hi-lo)*100)};}
 function badges(){const s=stt(),n=streakN();let ch=false;for(const k in DB)DB[k].chapters.forEach(c=>{let d=0,r=0;c.questions.forEach(q=>{const z=progress[q.id];if(z){d++;if(z==='correct')r++;}});if(d&&d===c.questions.length&&r/d>=.8)ch=true;});
 return[['🚀','First Step',s.t>=1],['🔥','7-Day Streak',n>=7],['💯','100 Correct',s.c>=100],['🏅','500 Club',s.c>=500],['🎯','Sharp 80%+',s.t>=50&&s.c/s.t>=.8],['📚','Chapter Master',ch],['📅','10 Study Days',Object.keys(getSt()).length>=10]];}
-function lvCheck(){const x=xpInfo();if(ui.lv==null){ui.lv=x.lv;saveUi();return;}if(x.lv>ui.lv){ui.lv=x.lv;saveUi();toast('🎉 Level Up! Level '+x.lv);confetti();tone(520,.2);setTimeout(()=>tone(780,.3),180);}}
+window._badges=badges;window._xpInfo=xpInfo;window._stt=stt;window._ui=ui;window._saveUi=saveUi;window._applyUi=applyUi;function lvCheck(){const x=xpInfo();if(ui.lv==null){ui.lv=x.lv;saveUi();return;}if(x.lv>ui.lv){ui.lv=x.lv;saveUi();toast('🎉 Level Up! Level '+x.lv);confetti();tone(520,.2);setTimeout(()=>tone(780,.3),180);}}
 /* sheet */
 function sheet(t,h){closeSheet();const b=document.createElement('div');b.id='psheet';b.className='psheet';b.innerHTML='<div class="psh" role="dialog" aria-label="'+t+'"><div class="psh-h"><b>'+t+'</b><button aria-label="Close" onclick="closeSheet()">✕</button></div>'+h+'</div>';b.onclick=e=>{if(e.target===b)closeSheet();};document.body.appendChild(b);}
 window.closeSheet=()=>{const s=$('psheet');if(s)s.remove();};
@@ -6847,6 +6880,99 @@ loadLeaderboard=function(){if(!leaderboardConfigured())return;const st=$('leader
   st.innerHTML='<div class="chres">'+msg+'</div><div class="small" style="margin-top:6px">Rank = sahi sawalon ki sankhya. Jitna zyada practice, utna upar! 🚀</div>';
   ls.innerHTML=rows.slice(0,50).map((r,i)=>'<div class="chapter-analysis-row"'+(i===mi?' style="border:1px solid var(--gold);border-radius:12px;background:rgba(205,164,73,.10)"':'')+'><span>'+(['🥇','🥈','🥉'][i]||(i+1)+'.')+' '+escHtml(r.name)+(r.section?' ('+escHtml(r.section)+')':'')+'</span><span><b>'+r.c+' ✓</b> · '+r.o+'% <small style="opacity:.7">('+r.c+'/'+r.a+')</small></span></div>').join('');
  }).catch(()=>{st.textContent='Could not load leaderboard. Check your internet connection and try Refresh.';});};
+})();
+</script>
+<script>
+/* ===== V9: profile hub, daily circle, mood emoji ===== */
+(function(){
+const $=id=>document.getElementById(id),W=document.querySelector('.wrap'),D=$('dashboard');
+const sk=()=>{try{return JSON.parse(localStorage.getItem('adhyayan_stats_v1'))||{};}catch(e){return{};}};
+const dk=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),DD='adhyayan_daily_done',SM='adhyayan_seen_msgs';
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+function mood(){const o=sk()[dk(new Date())]||{c:0,t:0},t=o.t,a=t?Math.round(o.c/t*100):0;
+ if(!t)return{e:'😴',l:'SHURU KARO',a:0,m:'Aaj abhi tak practice nahi hui. Chalo shuru karte hain! 💪'};
+ if(t<5)return{e:'🌱',l:'SHURUAAT',a:a,m:'Achhi shuruaat! Thode aur sawal karo.'};
+ if(a>=85)return{e:'🤩',l:'SUPERSTAR',a:a,m:'Kamaal! Aaj aapki accuracy '+a+'% hai.'};
+ if(a>=70)return{e:'😎',l:'SHAANDAAR',a:a,m:'Bahut badhiya! Aaj accuracy '+a+'%. Aise hi!'};
+ if(a>=50)return{e:'🙂',l:'ACHHA',a:a,m:'Achha ja rahe ho (accuracy '+a+'%). Explanation padho, aur sudhroge!'};
+ return{e:'💪',l:'KEEP GOING',a:a,m:'Koi baat nahi! Galtiyon se hi seekhte hain. Explanation padho aur phir try karo.'};}
+const done=()=>localStorage.getItem(DD)===dk(new Date());
+const _fc=finishChapter;finishChapter=function(){const r=_fc.apply(this,arguments);try{if(($('pTitle').textContent||'').indexOf('Daily 10')>-1)localStorage.setItem(DD,dk(new Date()));}catch(e){}return r;};
+/* ---- home circles: date=Daily 10, 2nd=mood emoji, boards line ---- */
+function tweak(){const r=$('circRow');if(!r)return;const c=r.querySelectorAll('.cc');if(c.length<5)return;
+ const dn=done(),a=c[0];a.classList.add('daily');a.onclick=()=>P.daily();a.querySelector('.ring').style.setProperty('--p',dn?100:0);
+ a.querySelector('.ring').classList.toggle('pulse',!dn);a.querySelector('span').textContent=dn?'✅ DAILY DONE':'🎯 DAILY 10';
+ const m=mood(),b=c[1];b.onclick=()=>toast(m.e+' '+m.m);b.innerHTML='<div class="ring" style="--p:'+m.a+'"><b style="font-size:26px">'+m.e+'</b></div><span>'+m.l+'</span>';
+ let l=$('boardsLine');if(!l){l=document.createElement('div');l.id='boardsLine';r.after(l);}
+ const ex=localStorage.getItem('adhyayan_examdate_v1');let t;if(ex){const dl=Math.ceil((new Date(ex)-new Date())/864e5);t=dl>=0?'⏳ Boards mein <b>'+dl+' din</b> baaki · date badlo':'📅 Nayi board date daalo';}else t='📅 Board exam ki date set karo';l.innerHTML=t;l.onclick=()=>SETEX();}
+/* ---- notifications inbox ---- */
+let NT=null;fetch('notice.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{NT=j||{};badge();}).catch(()=>{});
+const DP='adhyayan_dis_perm',DY='adhyayan_dis_day';
+const ldA=k=>{try{return JSON.parse(localStorage.getItem(k))||[];}catch(e){return[];}};
+const dayDis=()=>{try{const o=JSON.parse(localStorage.getItem(DY));return o&&o.d===dk(new Date())?o.k:[];}catch(e){return[];}};
+const keyOf=x=>String(x.id||x.i);
+const isDis=x=>keyOf(x).charAt(0)==='m'&&x.id?ldA(DP).indexOf(keyOf(x))>-1:dayDis().indexOf(keyOf(x))>-1;
+window.NDIS=function(k,q){if(k.charAt(0)==='m'&&k.length>1&&/^m/.test(k)&&k!=='m'){const a=ldA(DP);if(a.indexOf(k)<0)a.push(k);localStorage.setItem(DP,JSON.stringify(a));}else{const a=dayDis();if(a.indexOf(k)<0)a.push(k);localStorage.setItem(DY,JSON.stringify({d:dk(new Date()),k:a}));}if(!q){renderProfile();badge();}};
+window.NCLR=function(){items().forEach(x=>NDIS(keyOf(x),1));badge();if($('profileView')&&!$('profileView').classList.contains('hidden'))renderProfile();toast('✅ Sab notifications clear');};
+function items(){const L=[];const seen=JSON.parse(localStorage.getItem(SM)||'[]');
+ let ms=[];if(NT){if(Array.isArray(NT.messages))ms=NT.messages.slice();else if(NT.show&&NT.text)ms=[{id:NT.id||'n',title:NT.title,text:NT.text,link:NT.link,linkText:NT.linkText}];}
+ ms.forEach(m=>L.push({i:'📢',t:m.title||'Teacher ka message',x:m.text,d:m.date,link:m.link,ll:m.linkText,id:'m'+m.id,unread:seen.indexOf('m'+m.id)<0}));
+ try{const c=JSON.parse(localStorage.getItem('adhyayan_chal_v1'));if(c&&c.from)L.push({i:'🤝',t:c.from+' ne challenge kiya',x:'Unka score '+c.score+'/10 — kya aap hara sakte ho?',a:'CHplay()',al:'Khelo',unread:true});}catch(e){}
+ const st=+($('trkStreak').textContent)||0,td=(sk()[dk(new Date())]||{t:0}).t;
+ if(!done())L.push({i:'🎯',t:'Aaj ka Daily 10 baaki hai',x:'Roz ke 10 naye sawal — sirf 5 minute.',a:'P.daily()',al:'Shuru karo',unread:true});
+ if(st>0&&td===0)L.push({i:'🔥',t:st+' din ki streak khatam ho sakti hai',x:'Aaj kuch sawal karo aur streak bachao.',a:'P.daily()',al:'Bachao',unread:true});
+ try{const o=JSON.parse(localStorage.getItem('adhyayan_resume_v1'));if(o)L.push({i:'▶️',t:'Continue Learning',x:(o.title||'Practice')+' · Question '+(o.qi+1)+'/'+o.ids.length,a:'RESUME()',al:'Aage badho'});}catch(e){}
+ try{if(localStorage.getItem('adhyayan_lastmock_v1'))L.push({i:'📋',t:'Mock Test Review ready',x:'Apne last test ke galat sawal dekho.',a:"MRshow('all')",al:'Dekho'});}catch(e){}
+ try{const bd=_badges().filter(b=>b[2]);if(bd.length)L.push({i:'🏅',t:bd.length+' badge jeete',x:bd.map(b=>b[0]+' '+b[1]).join(' · ')});}catch(e){}
+ return L.filter(x=>!isDis(x));}
+function badge(){try{const n=items().filter(x=>x.unread).length;['navBadge','bellBadge'].forEach(i=>{const b=$(i);if(b){b.textContent=n;b.style.display=n?'flex':'none';}});}catch(e){}}
+/* ---- profile screen ---- */
+window.showProfile=function(){let v=$('profileView');if(!v){v=document.createElement('div');v.id='profileView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');renderProfile();window.scrollTo(0,0);
+ try{const s=JSON.parse(localStorage.getItem(SM)||'[]');items().forEach(x=>{if(x.id&&s.indexOf(x.id)<0)s.push(x.id);});localStorage.setItem(SM,JSON.stringify(s));}catch(e){}setTimeout(badge,50);};
+function renderProfile(){const v=$('profileView'),s=loadStudent()||{},x=_xpInfo(),m=mood(),st=_stt(),bd=_badges(),L=items();
+ const TITLES=['Beginner','Learner','Explorer','Achiever','Scholar','Topper','Board Champion','Legend'],acc=st.t?Math.round(st.c/st.t*100):0,sd=+($('trkStreak').textContent)||0;
+ v.innerHTML='<button class="pf-gear" aria-label="Settings" onclick="showSettings()">⚙️</button><div class="pf-top"><div class="pf-av">'+m.e+'</div><div><div class="nu-label">STUDENT PROFILE</div><h2 style="margin:2px 0">'+escHtml(s.name||'Student')+'</h2><div class="small">Class 10'+(s.section?' · '+escHtml(s.section):'')+' · '+TITLES[Math.min(x.lv-1,7)]+'</div></div></div>'+
+ '<div class="pf-xp"><div class="small" style="display:flex;justify-content:space-between"><span>Level '+x.lv+'</span><span>'+x.xp+' XP</span></div><div class="bar"><div class="fill" style="width:'+x.pct+'%"></div></div></div>'+
+ '<div class="pf-tiles"><div><b>'+st.t+'</b><span>SOLVED</span></div><div><b>'+acc+'%</b><span>ACCURACY</span></div><div><b>🔥'+sd+'</b><span>STREAK</span></div><div><b>'+bd.filter(b=>b[2]).length+'/'+bd.length+'</b><span>BADGES</span></div></div>'+
+ '<div style="display:flex;justify-content:space-between;align-items:center;margin:18px 0 8px"><div class="nu-label">🔔 NOTIFICATIONS</div>'+(L.length?'<button class="pf-clear" onclick="NCLR()">Sab clear karo</button>':'')+'</div>'+
+ (L.length?L.map(n=>'<div class="pf-n'+(n.unread?' un':'')+'"><i>'+n.i+'</i><div><b>'+escHtml(n.t)+'</b><div class="small">'+escHtml(n.x||'')+(n.d?' · '+escHtml(n.d):'')+'</div>'+(n.link?'<a href="'+escHtml(n.link)+'" target="_blank" rel="noopener">'+escHtml(n.ll||'Dekho →')+'</a>':'')+'</div>'+(n.a?'<button class="primary" onclick="'+n.a+'">'+escHtml(n.al||'Go')+'</button>':'')+'<button class="nx" aria-label="Hatao" onclick="NDIS(\''+keyOf(n)+'\')">✕</button></div>').join(''):'<p class="small">Sab clear ✅ — koi naya notification nahi.</p>')+
+ '<div class="nu-label" style="margin:18px 0 8px">⚙️ TOOLS & SETTINGS</div><div class="pf-grid">'+
+ [['🎓','Certificate','openCert()'],['📓','Mistake Notebook','P.nb()'],['📲','Parent Report','WAparent()'],['🚩','Feedback','FB()'],['🧑‍🤝‍🧑','Dost Challenge','CHnew()'],['😄','Joke / Story','JK()'],window.PUSH_ON?['🔔','Notification','PUSHon()']:['⏰','Reminder','REM()'],['⚙️','Settings','showSettings()']].map(a=>'<button onclick="'+a[2]+'"><i>'+a[0]+'</i><span>'+a[1]+'</span></button>').join('')+'</div>'+
+ '<div class="reset-link" style="margin-top:16px;text-align:center;color:var(--gold-soft)" onclick="switchStudent()">Not you? Switch Student</div>';}
+const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('profileView');if(v)v.classList.add('hidden');};
+/* ---- nav: Profile replaces More ---- */
+const nav=$('pnav');if(nav){const old=nav.querySelector('button[data-t=m]');if(old){const nb=document.createElement('button');nb.dataset.t='p';nb.setAttribute('aria-label','Profile');nb.setAttribute('onclick','closeSheet();showProfile()');nb.innerHTML='<i>👤</i><span>Profile</span><b class="nb" id="navBadge" style="display:none"></b>';old.replaceWith(nb);}
+ setInterval(()=>{const pv=$('profileView');nav.querySelectorAll('button').forEach(b=>{if(b.dataset.t==='p')b.classList.toggle('on',!!pv&&!pv.classList.contains('hidden'));else if(pv&&!pv.classList.contains('hidden'))b.classList.remove('on');});},400);}
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{tweak();badge();}catch(e){}return r;};
+setInterval(badge,5000);try{tweak();badge();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V10: settings page + top bar ===== */
+(function(){
+const $=id=>document.getElementById(id),W=document.querySelector('.wrap'),D=$('dashboard');
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3000);}
+function top(){if($('homeTop')||!D)return;const t=document.createElement('div');t.id='homeTop';t.innerHTML='<button aria-label="Notifications" onclick="showProfile()">🔔<b class="nb" id="bellBadge" style="display:none"></b></button><button aria-label="Settings" onclick="showSettings()">⚙️</button>';D.prepend(t);}
+const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('settingsView');if(v)v.classList.add('hidden');};
+const sec=(t,b)=>'<div class="st-sec"><div class="nu-label">'+t+'</div>'+b+'</div>';
+const row=(a,s,r)=>'<div class="st-row"><div><b>'+a+'</b>'+(s?'<small>'+s+'</small>':'')+'</div><div class="st-r">'+r+'</div></div>';
+const btn=(t,a,c)=>'<button class="st-b'+(c?' '+c:'')+'" onclick="'+a+'">'+t+'</button>';
+window.showSettings=function(){let v=$('settingsView');if(!v){v=document.createElement('div');v.id='settingsView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');render();window.scrollTo(0,0);};
+function render(){const v=$('settingsView'),ui=_ui,s=loadStudent()||{},ex=localStorage.getItem('adhyayan_examdate_v1')||'',gl=localStorage.getItem('adhyayan_goal_v1')||'20',ver=(document.querySelector('meta[name=app-version]')||{}).content||'';
+ v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">PREFERENCES</div><h2 style="margin:2px 0 6px">⚙️ Settings</h2>'+
+ sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('Teacher View','Sirf teacher ke liye (PIN)',btn('Kholo','TVshow()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
+ sec('🎨 APPEARANCE',row('Theme','Dark ya Light',btn(ui.theme==='light'?'☀️ Light':'🌙 Dark','STtheme()'))+row('Text size','Chhota ya bada',btn('A−','STfz(-1)')+btn('A+','STfz(1)')))+
+ sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',window.PUSH_ON?'Reminder aur teacher ke messages':'Abhi available nahi',window.PUSH_ON?btn('Chalu karo','PUSHon()'):'')+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
+ sec('📚 STUDY',row('Board exam date','Countdown ke liye','<input type="date" class="st-in" value="'+ex+'" onchange="setExamDate(this.value)">')+row('Daily goal','Roz kitne sawal','<select class="st-in" onchange="setDailyGoal(this.value)">'+[10,20,30,40,50].map(n=>'<option'+(String(n)===gl?' selected':'')+'>'+n+'</option>').join('')+'</select>'))+
+ sec('💬 HELP',row('WhatsApp group','Doubt aur updates',btn('Join','WAadm()','wa'))+row('Feedback','Galat sawal ya suggestion',btn('Bhejo','FB()'))+row('Welcome guide','App kaise chalta hai',btn('Dekho','STguide()')))+
+ sec('💾 DATA',row('Backup','Progress file save karo',btn('⬇ Backup','exportBackup()'))+row('Restore','Backup file wapas lao',btn('⬆ Restore','importBackup()'))+row('Reset','Saara progress mita do',btn('Reset','resetProgress()','danger')))+
+ '<div class="small" style="text-align:center;margin-top:18px;line-height:1.6">अध्ययन Tuition Centre · UBSE Hacking by CJ<br>Designed by Chandravesh Jukariya<br><span style="opacity:.6">Version '+escHtml(ver)+'</span></div>';}
+window.STtheme=()=>{_ui.theme=_ui.theme==='light'?'dark':'light';_saveUi();_applyUi();render();};
+const Z=[.9,1,1.12,1.25];window.STfz=d=>{let i=Z.indexOf(_ui.fz);if(i<0)i=1;_ui.fz=Z[Math.max(0,Math.min(3,i+d))];_saveUi();_applyUi();};
+window.STsnd=()=>{_ui.snd=_ui.snd?0:1;_saveUi();render();};
+window.STguide=()=>{localStorage.removeItem('adhyayan_guide_v1');toast('Page refresh ho raha hai...');setTimeout(()=>location.reload(),600);};
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{top();}catch(e){}return r;};
+try{top();}catch(e){}
 })();
 </script>
 </body>
