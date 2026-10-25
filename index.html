@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v4">
+<meta name="app-version" content="2026-10-24-v6">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -411,6 +411,12 @@ html[data-theme=light]{--bg1:#f6f3ea;--bg2:#fff;--cream:#1c2233;--muted:#5b6478;
 #noticeBox{position:relative;background:linear-gradient(135deg,rgba(205,164,73,.18),rgba(90,170,255,.1));border:1px solid var(--gold);border-radius:14px;padding:12px 38px 12px 14px;margin:0 0 12px}
 #noticeBox p{margin:4px 0;font-size:14px}#noticeBox a{color:var(--gold-soft);font-weight:700;font-size:14px}
 #noticeBox button{position:absolute;top:6px;right:6px;background:none;color:var(--muted);padding:4px 8px}
+#predBox{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:12px;margin:12px 0}
+.pred-n{font-size:40px;font-weight:800;font-family:Georgia,serif;color:var(--gold-soft);line-height:1.1;margin:4px 0}
+.pred-s{font-size:13px;color:var(--muted);margin-bottom:6px}
+.chbn{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(37,211,102,.12);border:1px solid #25D366;border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:14px}
+.chbn button{padding:7px 12px;margin-left:6px}.chbn button:last-child{background:none;color:var(--muted)}
+.chres{text-align:center;font-size:16px;padding:12px;margin:10px 0;border-radius:12px;background:var(--glass);border:1px solid var(--gold)}
 </style>
 </head>
 <body>
@@ -6378,7 +6384,7 @@ P.theme=()=>{ui.theme=ui.theme==='light'?'dark':'light';saveUi();applyUi();P.mor
 P.snd=()=>{ui.snd=ui.snd?0:1;saveUi();P.more();};
 const Z=[.9,1,1.12,1.25];P.fz=d=>{let i=Z.indexOf(ui.fz);if(i<0)i=1;ui.fz=Z[Math.max(0,Math.min(3,i+d))];saveUi();applyUi();};
 P.install=()=>{if(dp){dp.prompt();dp=null;closeSheet();}};
-P.more=()=>sheet('⚙️ More','<div class="srow"><span>Theme</span><button onclick="P.theme()">'+(ui.theme==='light'?'☀️ Light':'🌙 Dark')+'</button></div><div class="srow"><span>Text size</span><span><button onclick="P.fz(-1)" aria-label="Smaller text">A−</button> <button onclick="P.fz(1)" aria-label="Larger text">A+</button></span></div><div class="srow"><span>Sound &amp; vibration</span><button onclick="P.snd()">'+(ui.snd?'🔊 On':'🔇 Off')+'</button></div>'+(dp?'<button class="primary" onclick="P.install()">📲 Install App</button>':'<p class="small">📲 iPhone: Share → Add to Home Screen · Android: Browser menu → Install app</p>')+'<button class="secondary" onclick="P.notes()">📒 Quick Notes &amp; Formulas</button><button class="secondary" onclick="closeSheet();openCert()">🎓 Report Card Certificate</button><button class="secondary" onclick="closeSheet();JK()">😄 Joke / Story share karo (+5 XP)</button><button class="secondary" onclick="closeSheet();REM()">⏰ Daily Reminder lagao</button><button class="secondary" onclick="closeSheet();FB()">🚩 Feedback / Suggestion</button><button class="secondary" onclick="closeSheet();WAparent()">📲 Parent ko Report bhejo</button><button class="secondary wa-btn" onclick="closeSheet();WAadm()">🟢 WhatsApp Group join karo</button><button class="secondary" onclick="P.nb()">📓 Mistake Notebook</button><button class="secondary" onclick="closeSheet();showLeaderboard()">🏆 Class Leaderboard</button><div class="nu-label" style="margin-top:16px">BADGES</div><div class="bdg">'+badges().map(b=>'<div class="'+(b[2]?'on':'')+'"><i>'+b[0]+'</i><small>'+b[1]+'</small></div>').join('')+'</div>');
+P.more=()=>sheet('⚙️ More','<div class="srow"><span>Theme</span><button onclick="P.theme()">'+(ui.theme==='light'?'☀️ Light':'🌙 Dark')+'</button></div><div class="srow"><span>Text size</span><span><button onclick="P.fz(-1)" aria-label="Smaller text">A−</button> <button onclick="P.fz(1)" aria-label="Larger text">A+</button></span></div><div class="srow"><span>Sound &amp; vibration</span><button onclick="P.snd()">'+(ui.snd?'🔊 On':'🔇 Off')+'</button></div>'+(dp?'<button class="primary" onclick="P.install()">📲 Install App</button>':'<p class="small">📲 iPhone: Share → Add to Home Screen · Android: Browser menu → Install app</p>')+'<button class="secondary" onclick="P.notes()">📒 Quick Notes &amp; Formulas</button><button class="secondary" onclick="closeSheet();openCert()">🎓 Report Card Certificate</button><button class="secondary wa-btn" onclick="closeSheet();CHnew()">🤝 Dost ko Challenge karo</button><button class="secondary" onclick="closeSheet();SMART()">🧠 Smart Practice (kamzor topics)</button><button class="secondary" onclick="closeSheet();SYNtoggle()">📤 Progress teacher ko dikhana: '+(localStorage.getItem('adhyayan_sync_v1')==='yes'?'ON':'OFF')+'</button><button class="secondary" onclick="closeSheet();TVshow()">👨‍🏫 Teacher View (PIN)</button><button class="secondary" onclick="closeSheet();JK()">😄 Joke / Story share karo (+5 XP)</button><button class="secondary" onclick="closeSheet();REM()">⏰ Daily Reminder lagao</button><button class="secondary" onclick="closeSheet();FB()">🚩 Feedback / Suggestion</button><button class="secondary" onclick="closeSheet();WAparent()">📲 Parent ko Report bhejo</button><button class="secondary wa-btn" onclick="closeSheet();WAadm()">🟢 WhatsApp Group join karo</button><button class="secondary" onclick="P.nb()">📓 Mistake Notebook</button><button class="secondary" onclick="closeSheet();showLeaderboard()">🏆 Class Leaderboard</button><div class="nu-label" style="margin-top:16px">BADGES</div><div class="bdg">'+badges().map(b=>'<div class="'+(b[2]?'on':'')+'"><i>'+b[0]+'</i><small>'+b[1]+'</small></div>').join('')+'</div>');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;});
 /* bottom nav */
 const nav=document.createElement('nav');nav.id='pnav';nav.setAttribute('aria-label','Main');nav.innerHTML=[['🏠','Home','P.home()'],['🎯','Daily','P.daily()'],['📝','Mock','P.mock()'],['📊','Report','closeSheet();showReport()'],['⚙️','More','P.more()']].map(a=>'<button onclick="'+a[2]+'" aria-label="'+a[1]+'"><i>'+a[0]+'</i><span>'+a[1]+'</span></button>').join('');document.body.appendChild(nav);
@@ -6534,6 +6540,73 @@ window.JK=()=>sh('😄 Joke / Story Corner','<p class="small">Koi achha, saaf-su
 window.jkGo=()=>{const t=$('jkM').value.trim();if(t.length<15){toast('Thoda aur likho 🙂');return;}const b=bn(),first=b.l!==dk();if(first){b.t+=5;b.l=dk();try{localStorage.setItem(BK,JSON.stringify(b));}catch(e){}}
  wa('😄 *Joke/Story by '+nm()+'*\n\n'+t);closeSheet();toast(first?'🎉 +5 XP mil gaye!':'Aaj ka bonus mil chuka hai — kal phir aao!');try{renderDashboard();}catch(e){}};
 loadNotice();document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadNotice();});
+try{renderDashboard();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V4: friend challenge, predicted score, smart practice, teacher sync ===== */
+(function(){
+const TEACHER_URL='https://script.google.com/macros/s/AKfycbz7UPg40jvIjfrVzfK-1ZgTU0OGoy237dCMlRAVlWyb__iReBHLF9kHr2y69g3L_6p1ng/exec';
+const $=id=>document.getElementById(id),CK='adhyayan_chal_v1',SYNK='adhyayan_sync_v1',TK='adhyayan_tsync_t';
+const tConf=()=>TEACHER_URL.indexOf('PASTE_YOUR')===-1;
+const nm=()=>{try{return(loadStudent()||{}).name||'Student';}catch(e){return'Student';}};
+const sec=()=>{try{return(loadStudent()||{}).section||'';}catch(e){return'';}};
+const wa=t=>window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+function sh(t,h){closeSheet();const b=document.createElement('div');b.id='psheet';b.className='psheet';b.innerHTML='<div class="psh" role="dialog"><div class="psh-h"><b>'+t+'</b><button aria-label="Close" onclick="closeSheet()">✕</button></div>'+h+'</div>';b.onclick=e=>{if(e.target===b)closeSheet();};document.body.appendChild(b);}
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+function startQs(qs,title){if(!qs.length)return;closeSheet();isRevisionMode=true;isSavedMode=true;qTimesLog=[];currentQuestions=qs;qi=0;hideAllScreens();$('practice').classList.remove('hidden');$('practiceBackLink').textContent='\u2190 Back to Dashboard';$('pTitle').textContent=title;renderQuestion();}
+function chaps(){const o=[];for(const k in DB)DB[k].chapters.forEach((c,i)=>{let a=0,r=0;c.questions.forEach(q=>{const z=progress[q.id];if(z){a++;if(z==='correct')r++;}});o.push({k,i,n:c.name,a,t:c.questions.length,p:a?Math.round(r/a*100):0});});return o;}
+/* ---------- Friend Challenge ---------- */
+const rnd=s=>{let a=s>>>0;return()=>{a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};};
+function pick(seed){const all=allQuestionsFlat().filter(q=>q.type==='mcq'||q.type==='ar'),r=rnd(seed);for(let i=all.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[all[i],all[j]]=[all[j],all[i]];}return all.slice(0,10);}
+let CH=null;
+try{const m=location.hash.match(/^#ch=(\d+)~([^~]*)~(\d+)/);if(m){localStorage.setItem(CK,JSON.stringify({seed:+m[1],from:decodeURIComponent(m[2]),score:+m[3]}));history.replaceState(null,'',location.pathname);}}catch(e){}
+window.CHnew=()=>{closeSheet();CH={seed:(Math.random()*1e9)|0,from:null};startQs(pick(CH.seed),'🤝 Friend Challenge');};
+window.CHplay=()=>{try{const o=JSON.parse(localStorage.getItem(CK));CH={seed:o.seed,from:o.from,fs:o.score};startQs(pick(o.seed),'🤝 '+o.from+' ka Challenge');}catch(e){}};
+window.CHskip=()=>{localStorage.removeItem(CK);try{renderDashboard();}catch(e){}};
+const link=(s,n,sc)=>location.origin+location.pathname+'#ch='+s+'~'+encodeURIComponent(n)+'~'+sc;
+window.CHshare=(t)=>wa(t);
+const _f=finishChapter;finishChapter=function(){const r=_f.apply(this,arguments);try{
+ if(CH&&currentQuestions.length===10&&$('pTitle').textContent.indexOf('🤝')===0){let c=0;currentQuestions.forEach(q=>{if(progress[q.id]==='correct')c++;});
+  let b=$('chBox');if(!b){b=document.createElement('div');b.id='chBox';$('resultBackBtn').before(b);}
+  let msg,txt;
+  if(CH.from===null){msg='Ab dost ko challenge bhejo! 👇';txt='🤝 *Challenge!* Maine 10 sawal mein *'+c+'/10* kiya. Tum kitna kar sakte ho?\n'+link(CH.seed,nm(),c);}
+  else{const w=c>CH.fs?'Tum jeet gaye! 🏆':c<CH.fs?CH.from+' jeet gaya 😅':'Barabari! 🤝';msg=CH.from+' '+CH.fs+'/10  vs  Tum '+c+'/10 — '+w;txt='🤝 *Challenge Result*\n'+CH.from+': '+CH.fs+'/10\n'+nm()+': '+c+'/10\n'+w+'\n\nAb tum khelo: '+link((Math.random()*1e9)|0,nm(),c).replace(/#ch=\d+/,'#ch='+CH.seed);localStorage.removeItem(CK);}
+  b.innerHTML='<div class="chres"><b>'+escHtml(msg)+'</b></div>';const btn=document.createElement('button');btn.className='primary wa-btn';btn.style.marginBottom='10px';btn.textContent=CH.from===null?'📲 Challenge WhatsApp par bhejo':'📲 Result share karo';btn.onclick=()=>wa(txt);b.appendChild(btn);CH=null;}
+ sync();}catch(e){}return r;};
+/* ---------- Predicted score + Smart Practice ---------- */
+function predict(){const S=[];let tot=0,n=0;for(const k in DB){const a=subjectAttempted(k),c=subjectCorrect(k);if(a>=20){const p=(c+6)/(a+10)*100;S.push({k,n:DB[k].name,p:Math.round(p)});tot+=p;n++;}}return{S,avg:n?Math.round(tot/n):null};}
+window.SMART=()=>{const cs=chaps().filter(c=>c.a>=1&&c.p<70).sort((a,b)=>a.p-b.p).slice(0,4),set=new Set(cs.map(c=>c.k+'|'+c.n)),all=allQuestionsFlat().filter(q=>set.has(q.subject+'|'+q.chapter)||false);
+ let L=all.filter(q=>progress[q.id]==='incorrect'||progress[q.id]==='partial');const rest=all.filter(q=>!progress[q.id]);L=L.concat(rest);
+ if(!L.length){toast('Pehle thode sawal practice karo 🙂');return;}const r=rnd(Date.now()&0xffff);for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]];}startQs(L.slice(0,12),'🧠 Smart Practice');};
+function addPred(){const pp=$('proPanel');if(!pp)return;['predBox','chalBanner'].forEach(i=>{const o=$(i);if(o)o.remove();});
+ try{const o=JSON.parse(localStorage.getItem(CK));if(o&&o.from){const d=document.createElement('div');d.id='chalBanner';d.className='chbn';d.innerHTML='<span>🤝 <b>'+escHtml(o.from)+'</b> ne challenge kiya ('+o.score+'/10)</span><span><button class="primary wa-btn" onclick="CHplay()">Khelo</button><button onclick="CHskip()" aria-label="Hatao">✕</button></span>';pp.prepend(d);}}catch(e){}
+ const P=predict(),d=document.createElement('div');d.id='predBox';
+ if(P.avg===null){d.innerHTML='<div class="nu-label">🔮 PREDICTED BOARD SCORE</div><div class="small">Har subject ke kam se kam 20 sawal karo, tab estimate dikhega.</div>';}
+ else{const w=chaps().filter(c=>c.a>=3&&c.p<80).sort((a,b)=>a.p-b.p).slice(0,3);let gain=0;w.forEach(c=>{const tt=DB[c.k].chapters.reduce((s,x)=>s+x.questions.length,0);gain+=(80-c.p)*c.t/tt;});gain=Math.round(gain/Math.max(P.S.length,1));
+  d.innerHTML='<div class="nu-label">🔮 PREDICTED BOARD SCORE <i style="font-style:normal;opacity:.7">(estimate)</i></div><div class="pred-n">~'+P.avg+'%</div><div class="pred-s">'+P.S.map(s=>escHtml(s.n)+' '+s.p+'%').join(' · ')+'</div>'+(w.length&&gain>0?'<div class="small" style="margin:6px 0">Kamzor chapters sudharoge toh score lagbhag <b>+'+gain+'%</b> badh sakta hai.</div>':'')+'<div class="small" style="opacity:.7">Ye practice ke hisaab se anuman hai, asli result nahi.</div>';}
+ const b=document.createElement('button');b.className='primary';b.style.marginTop='8px';b.textContent='🧠 Smart Practice (kamzor topics)';b.onclick=SMART;d.appendChild(b);pp.appendChild(d);}
+/* ---------- Teacher sync + Teacher view ---------- */
+function sync(force){try{if(!tConf()||localStorage.getItem(SYNK)!=='yes')return;const n=Date.now();if(!force&&n-(+localStorage.getItem(TK)||0)<18e5)return;localStorage.setItem(TK,n);
+ let A=0,C=0;const S={};for(const k in DB){const a=subjectAttempted(k),c=subjectCorrect(k);A+=a;C+=c;S[k]=a?Math.round(c/a*100):'';}if(!A)return;
+ let st=0;try{const x=calcStreak();st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
+ const w=chaps().filter(c=>c.a>=3&&c.p<60).sort((a,b)=>a.p-b.p).slice(0,3).map(c=>c.n+' ('+c.p+'%)').join(', ');
+ fetch(TEACHER_URL,{method:'POST',body:JSON.stringify({type:'progress',name:nm(),section:sec(),overall:Math.round(C/A*100),attempted:A,correct:C,subjects:S,streak:st,weak:w})}).catch(()=>{});}catch(e){}}
+function consent(){if(!tConf()||localStorage.getItem(SYNK)!==null)return;sh('📤 Progress teacher ko dikhana hai?','<p class="small">Teacher aapka <b>naam, class aur score</b> dekh payenge, taaki wo aapki madad kar sakein. Aur kuch nahi bheja jayega. Agar aap 18 se chhote ho toh parents se pooch lo. Baad mein More menu se badal sakte ho.</p><button class="primary wa-btn" onclick="SYNset(\'yes\')">✅ Haan, dikhao</button><button class="secondary" onclick="SYNset(\'no\')">Nahi, abhi nahi</button>');}
+window.SYNset=v=>{localStorage.setItem(SYNK,v);closeSheet();if(v==='yes'){sync(true);toast('Shukriya! 👍');}};
+window.SYNtoggle=()=>{const v=localStorage.getItem(SYNK)==='yes'?'no':'yes';localStorage.setItem(SYNK,v);closeSheet();toast(v==='yes'?'Progress teacher ko dikhega':'Progress band kiya');if(v==='yes')sync(true);};
+window.TVshow=async()=>{if(!tConf()){alert('Teacher Dashboard abhi setup nahi hua. teacher_dashboard.gs wala setup karke URL paste karo.');return;}
+ let pin=sessionStorage.getItem('adhyayan_pin')||prompt('Teacher PIN daalo:');if(!pin)return;sh('👨‍🏫 Teacher View','<p class="small">Loading...</p>');
+ try{const r=await fetch(TEACHER_URL+'?pin='+encodeURIComponent(pin)),d=await r.json();if(d.error){sessionStorage.removeItem('adhyayan_pin');sh('👨‍🏫 Teacher View','<p class="small">PIN galat hai.</p>');return;}sessionStorage.setItem('adhyayan_pin',pin);
+  const now=Date.now();d.forEach(x=>x.days=x.last?Math.floor((now-new Date(x.last))/864e5):99);d.sort((a,b)=>b.days-a.days);
+  const wk={};d.forEach(x=>String(x.weak||'').split('), ').forEach(w=>{const k=w.replace(/\s*\(\d+%\)?$/,'').trim();if(k)wk[k]=(wk[k]||0)+1;}));const top=Object.entries(wk).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const row=x=>{const f=x.days<=1?'🟢':x.days<=3?'🟡':'🔴';const msg='Namaste '+x.name+', '+(x.days>=2?x.days+' din se app nahi khola. ':'')+'Aaj Daily 10 zaroor karo! 💪 '+location.origin+location.pathname;return'<div class="sr" style="cursor:default"><b>'+f+' '+escHtml(x.name)+(x.section?' ('+escHtml(x.section)+')':'')+'</b> — '+escHtml(x.overall)+'% · 🔥'+escHtml(x.streak||0)+'<br><small>Aakhri baar: '+(x.days>=99?'-':x.days===0?'aaj':x.days+' din pehle')+(x.weak?' · Weak: '+escHtml(x.weak):'')+'</small><div style="margin-top:6px"><button class="wa-btn" style="padding:6px 12px" onclick="TVmsg(\''+encodeURIComponent(msg)+'\')">📲 Message</button></div></div>';};
+  sh('👨‍🏫 Teacher View ('+d.length+')','<div class="small">🔴 = 4+ din se gayab · 🟡 = 2-3 din · 🟢 = active</div>'+(top.length?'<div class="weakbox" style="margin-top:8px"><div class="nu-label">CLASS KE SABSE KAMZOR CHAPTER</div>'+top.map(t=>'<div class="wk"><span>'+escHtml(t[0])+'</span><b>'+t[1]+' bacche</b></div>').join('')+'</div>':'')+d.map(row).join(''));
+ }catch(e){sh('👨‍🏫 Teacher View','<p class="small">Load nahi ho paya. Internet aur URL check karo.</p>');}};
+window.TVmsg=m=>window.open('https://wa.me/?text='+m,'_blank');
+/* hooks */
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{addPred();}catch(e){}return r;};
+setTimeout(()=>{try{if(!$('dashboard').classList.contains('hidden'))consent();sync();}catch(e){}},4000);document.addEventListener('visibilitychange',()=>{if(document.hidden)sync();});
 try{renderDashboard();}catch(e){}
 })();
 </script>
