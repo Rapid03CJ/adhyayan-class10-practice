@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v9">
+<meta name="app-version" content="2026-10-24-v13">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -420,6 +420,75 @@ html[data-theme=light]{--bg1:#f6f3ea;--bg2:#fff;--cream:#1c2233;--muted:#5b6478;
 .mrf{display:flex;gap:6px;margin:8px 0}.mrf button{flex:1;padding:8px;background:var(--glass);color:var(--cream);border:1px solid var(--glass-border)}
 .mrq{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:9px 11px;margin:6px 0;font-size:13.5px}
 .mrq summary{cursor:pointer;font-weight:600}.mrq summary span{font-weight:400;color:var(--muted);font-size:13px}.mrq .ans{color:var(--green);margin-top:8px}
+/* ===== V6 clean home ===== */
+.home-hide{display:none !important}
+#dashboard .brand .logo{width:92px;height:92px;margin-bottom:8px}.hello-sub{display:none}
+#homeCta{margin:14px 0 6px}#homeCta button{width:100%;padding:15px;font-size:16px;font-weight:700}
+#qaGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+#qaGrid button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 2px;background:var(--glass);border:1px solid var(--glass-border);color:var(--cream);border-radius:16px;font-size:11.5px}
+#qaGrid i{font-style:normal;font-size:24px}
+#qaGrid button.hot{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1206;font-weight:700;border:0}
+#moreTools{margin-top:6px;border:1px solid var(--glass-border);border-radius:16px;background:var(--glass)}
+#moreTools summary{padding:14px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+#moreTools summary::-webkit-details-marker{display:none}#moreTools summary::after{content:'▾';opacity:.7}#moreTools[open] summary::after{content:'▴'}
+#mtBody{padding:0 12px 14px}
+/* ===== V7 LUXURY THEME ===== */
+html:not([data-theme=light]) body{background:radial-gradient(900px 520px at 50% -8%,rgba(205,164,73,.16),transparent 62%),radial-gradient(700px 500px at 100% 40%,rgba(60,110,230,.10),transparent 60%),linear-gradient(180deg,#0a1228 0%,#060a16 100%) !important;background-repeat:no-repeat !important;min-height:100vh}html:not([data-theme=light]){background:#060a16}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02)) !important;border:1px solid rgba(205,164,73,.20) !important;border-radius:24px !important;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+h1,h2,h3,.mark{font-family:'Playfair Display',Georgia,'Times New Roman',serif}
+#dashboard .brand h1{font-size:34px;letter-spacing:6px;background:linear-gradient(90deg,#f3d58a,#cda449 45%,#f3d58a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#dashboard .brand .logo{box-shadow:0 0 0 2px rgba(205,164,73,.65),0 0 40px rgba(205,164,73,.28),0 12px 30px rgba(0,0,0,.5)}
+.hello b{font-family:Georgia,serif;font-size:26px;background:linear-gradient(90deg,#fff,#f3d58a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nu-label,.fc-label{letter-spacing:2.2px !important;font-size:10.5px !important;color:var(--gold-soft) !important}
+/* buttons */
+.primary{background:linear-gradient(180deg,#f6dc9a,#d4a53f 55%,#b8892a) !important;color:#1a1206 !important;border:0 !important;border-radius:16px !important;box-shadow:0 10px 26px rgba(205,164,73,.30),inset 0 1px 0 rgba(255,255,255,.55) !important;letter-spacing:.3px}
+.primary:active{transform:scale(.98) !important;box-shadow:0 4px 12px rgba(205,164,73,.3) !important}
+.secondary,.btn-leaderboard,.btn-report,.btn-revision,.btn-saved{border-radius:16px !important}
+.secondary{background:rgba(255,255,255,.04) !important;border:1px solid rgba(205,164,73,.35) !important;color:var(--cream) !important;box-shadow:none !important}
+.psh .secondary{margin-top:8px}
+/* circles */
+#circRow{display:flex;justify-content:space-between;gap:6px;margin:16px 4px 6px}
+.cc{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.cc span{font-size:8.5px;letter-spacing:1.2px;color:var(--muted);text-align:center;white-space:nowrap}
+.ring{width:60px;height:60px;border-radius:50%;background:conic-gradient(#f3d58a calc(var(--p)*1%),rgba(255,255,255,.09) 0);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 18px rgba(205,164,73,.10)}
+.ring::before{content:'';position:absolute;inset:4px;border-radius:50%;background:#0b1328}
+html[data-theme=light] .ring::before{background:#fffdf5}
+.ring b{position:relative;font-size:14px;font-family:Georgia,serif;color:var(--gold-soft);letter-spacing:.2px}
+#dashboard .trk-row{display:none}
+/* resume + push cards */
+#resumeCard,#pushCard{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 4px;padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,rgba(205,164,73,.20),rgba(205,164,73,.05));border:1px solid rgba(205,164,73,.5)}
+#resumeCard b{display:block;font-size:15px;margin:2px 0}#resumeCard small{color:var(--muted)}
+#resumeCard .primary,#pushCard .primary{width:auto;padding:11px 16px;white-space:nowrap;font-size:14px}
+#homeCta button{border-radius:18px !important;padding:17px !important}
+/* subject cards */
+.subject-card{border-radius:20px !important;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015)) !important;border:1px solid rgba(205,164,73,.20) !important;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+/* quick grid */
+#qaGrid button{border:1px solid rgba(205,164,73,.28) !important;border-radius:18px !important;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015)) !important;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+#qaGrid i{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(205,164,73,.12);border:1px solid rgba(205,164,73,.35);font-size:20px}
+#qaGrid button.hot i{background:rgba(26,18,6,.15);border-color:rgba(26,18,6,.3)}
+#moreTools{border-radius:18px !important;border-color:rgba(205,164,73,.25) !important}
+/* nav */
+#pnav{background:linear-gradient(180deg,rgba(14,22,44,.92),rgba(7,11,24,.97)) !important;border-top:1px solid rgba(205,164,73,.35) !important;box-shadow:0 -10px 30px rgba(0,0,0,.45);padding-top:8px !important}
+html[data-theme=light] #pnav{background:rgba(255,255,255,.96) !important}
+#pnav button{position:relative;color:#8190ad !important;font-size:10.5px !important;letter-spacing:.4px}
+#pnav button i{font-size:20px;line-height:1}
+#pnav button.on{color:var(--gold-soft) !important}
+#pnav button.on::after{content:'';position:absolute;bottom:-2px;width:18px;height:3px;border-radius:3px;background:var(--gold)}
+#pnav button[data-t=d] i{width:50px;height:50px;margin-top:-26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:linear-gradient(135deg,#f6dc9a,#cda449);box-shadow:0 8px 22px rgba(205,164,73,.45),0 0 0 4px rgba(7,11,24,.95)}
+#pnav button[data-t=d]{color:var(--gold-soft) !important}
+/* notes view */
+.nv-all{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;margin-bottom:12px;background:linear-gradient(135deg,rgba(205,164,73,.25),rgba(205,164,73,.06));border:1px solid rgba(205,164,73,.55);color:var(--cream);text-decoration:none}
+.nv-all i{font-style:normal;font-size:26px}.nv-all span{flex:1}.nv-all b{display:block}.nv-all small{color:var(--muted)}.nv-all em{font-style:normal;color:var(--gold-soft);font-size:20px}
+.nv-chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px}.nv-chips button{white-space:nowrap;padding:8px 14px;border-radius:30px;background:rgba(255,255,255,.05);border:1px solid rgba(205,164,73,.25);color:var(--cream);font-size:13px}.nv-chips button.on{background:linear-gradient(180deg,#f6dc9a,#cda449);color:#1a1206;font-weight:700;border:0}
+.nv-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:13px 14px;margin:6px 0;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);font-size:14.5px;cursor:pointer}
+.nv-row em{font-style:normal;font-size:12px;color:var(--muted);white-space:nowrap}.nv-row.has{border-color:rgba(205,164,73,.4)}.nv-row.has em{color:var(--gold-soft);font-weight:700}
+/* practice polish */
+.option{border-radius:16px !important;border:1px solid rgba(205,164,73,.18) !important;padding:15px !important}
+.option:hover,.option:active{border-color:var(--gold) !important}
+#trkWeek{min-height:0 !important;height:auto !important;margin-top:2px}#trackerCard{padding-top:0}
+#qaGrid button.hot{background:linear-gradient(135deg,#f6dc9a,#cda449) !important;color:#1a1206 !important;border:0 !important}
+#homeCta{margin-bottom:16px !important}
+.nv-soon{text-align:center;padding:28px 16px;margin-top:14px;border-radius:20px;border:1px dashed rgba(205,164,73,.45);background:rgba(205,164,73,.06)}.nv-soon b{display:block;font-size:17px;margin:6px 0;font-family:Georgia,serif;color:var(--gold-soft)}
 </style>
 </head>
 <body>
@@ -599,7 +668,7 @@ html[data-theme=light]{--bg1:#f6f3ea;--bg2:#fff;--cream:#1c2233;--muted:#5b6478;
     <span class="backlink no-print" onclick="showDashboard()">&larr; Back to Dashboard</span>
     <div class="report-header">
       <div class="mark" style="color:var(--gold)">CLASS LEADERBOARD</div>
-      <p class="small">Ranked by overall score across all submitted students</p>
+      <p class="small">Ranked by number of correct answers - more practice, higher rank!</p>
     </div>
     <div id="leaderboardStatus" class="small center" style="margin:14px 0"></div>
     <div id="leaderboardList"></div>
@@ -6387,7 +6456,7 @@ P.theme=()=>{ui.theme=ui.theme==='light'?'dark':'light';saveUi();applyUi();P.mor
 P.snd=()=>{ui.snd=ui.snd?0:1;saveUi();P.more();};
 const Z=[.9,1,1.12,1.25];P.fz=d=>{let i=Z.indexOf(ui.fz);if(i<0)i=1;ui.fz=Z[Math.max(0,Math.min(3,i+d))];saveUi();applyUi();};
 P.install=()=>{if(dp){dp.prompt();dp=null;closeSheet();}};
-P.more=()=>sheet('⚙️ More','<div class="srow"><span>Theme</span><button onclick="P.theme()">'+(ui.theme==='light'?'☀️ Light':'🌙 Dark')+'</button></div><div class="srow"><span>Text size</span><span><button onclick="P.fz(-1)" aria-label="Smaller text">A−</button> <button onclick="P.fz(1)" aria-label="Larger text">A+</button></span></div><div class="srow"><span>Sound &amp; vibration</span><button onclick="P.snd()">'+(ui.snd?'🔊 On':'🔇 Off')+'</button></div>'+(dp?'<button class="primary" onclick="P.install()">📲 Install App</button>':'<p class="small">📲 iPhone: Share → Add to Home Screen · Android: Browser menu → Install app</p>')+'<button class="secondary" onclick="P.notes()">📒 Quick Notes &amp; Formulas</button><button class="secondary" onclick="closeSheet();openCert()">🎓 Report Card Certificate</button><button class="secondary" onclick="closeSheet();MRshow(\'all\')">📋 Last Mock Test Review</button><button class="secondary" onclick="closeSheet();NLIB()">📚 Notes Library</button><button class="secondary wa-btn" onclick="closeSheet();CHnew()">🤝 Dost ko Challenge karo</button><button class="secondary" onclick="closeSheet();SMART()">🧠 Smart Practice (kamzor topics)</button><p class="small" style="margin:10px 0">📤 Aapka naam, class aur score teacher ko dikhta hai.</p><button class="secondary" onclick="closeSheet();TVshow()">👨‍🏫 Teacher View (PIN)</button><button class="secondary" onclick="closeSheet();JK()">😄 Joke / Story share karo (+5 XP)</button><button class="secondary" onclick="closeSheet();REM()">⏰ Daily Reminder lagao</button><button class="secondary" onclick="closeSheet();FB()">🚩 Feedback / Suggestion</button><button class="secondary" onclick="closeSheet();WAparent()">📲 Parent ko Report bhejo</button><button class="secondary wa-btn" onclick="closeSheet();WAadm()">🟢 WhatsApp Group join karo</button><button class="secondary" onclick="P.nb()">📓 Mistake Notebook</button><button class="secondary" onclick="closeSheet();showLeaderboard()">🏆 Class Leaderboard</button><div class="nu-label" style="margin-top:16px">BADGES</div><div class="bdg">'+badges().map(b=>'<div class="'+(b[2]?'on':'')+'"><i>'+b[0]+'</i><small>'+b[1]+'</small></div>').join('')+'</div>');
+P.more=()=>sheet('⚙️ More','<div class="srow"><span>Theme</span><button onclick="P.theme()">'+(ui.theme==='light'?'☀️ Light':'🌙 Dark')+'</button></div><div class="srow"><span>Text size</span><span><button onclick="P.fz(-1)" aria-label="Smaller text">A−</button> <button onclick="P.fz(1)" aria-label="Larger text">A+</button></span></div><div class="srow"><span>Sound &amp; vibration</span><button onclick="P.snd()">'+(ui.snd?'🔊 On':'🔇 Off')+'</button></div>'+(dp?'<button class="primary" onclick="P.install()">📲 Install App</button>':'<p class="small">📲 iPhone: Share → Add to Home Screen · Android: Browser menu → Install app</p>')+'<button class="secondary" onclick="P.notes()">📒 Quick Notes &amp; Formulas</button><button class="secondary" onclick="closeSheet();openCert()">🎓 Report Card Certificate</button><button class="secondary" onclick="closeSheet();MRshow(\'all\')">📋 Last Mock Test Review</button><button class="secondary" onclick="closeSheet();NLIB()">📚 Notes Library</button><button class="secondary wa-btn" onclick="closeSheet();CHnew()">🤝 Dost ko Challenge karo</button><button class="secondary" onclick="closeSheet();SMART()">🧠 Smart Practice (kamzor topics)</button><p class="small" style="margin:10px 0">📤 Aapka naam, class aur score teacher ko dikhta hai.</p><button class="secondary" onclick="closeSheet();TVshow()">👨‍🏫 Teacher View (PIN)</button><button class="secondary" onclick="closeSheet();JK()">😄 Joke / Story share karo (+5 XP)</button>'+(window.PUSH_ON?'<button class="secondary wa-btn" onclick="closeSheet();PUSHon()">🔔 Notification chalu karo</button>':'')+'<button class="secondary" onclick="closeSheet();REM()">⏰ Calendar Reminder lagao</button><button class="secondary" onclick="closeSheet();FB()">🚩 Feedback / Suggestion</button><button class="secondary" onclick="closeSheet();WAparent()">📲 Parent ko Report bhejo</button><button class="secondary wa-btn" onclick="closeSheet();WAadm()">🟢 WhatsApp Group join karo</button><button class="secondary" onclick="P.nb()">📓 Mistake Notebook</button><button class="secondary" onclick="closeSheet();showLeaderboard()">🏆 Class Leaderboard</button><div class="nu-label" style="margin-top:16px">BADGES</div><div class="bdg">'+badges().map(b=>'<div class="'+(b[2]?'on':'')+'"><i>'+b[0]+'</i><small>'+b[1]+'</small></div>').join('')+'</div>');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;});
 /* bottom nav */
 const nav=document.createElement('nav');nav.id='pnav';nav.setAttribute('aria-label','Main');nav.innerHTML=[['🏠','Home','P.home()'],['🎯','Daily','P.daily()'],['📝','Mock','P.mock()'],['📊','Report','closeSheet();showReport()'],['⚙️','More','P.more()']].map(a=>'<button onclick="'+a[2]+'" aria-label="'+a[1]+'"><i>'+a[0]+'</i><span>'+a[1]+'</span></button>').join('');document.body.appendChild(nav);
@@ -6651,7 +6720,7 @@ window.MRshow=function(f){let rec;try{rec=JSON.parse(localStorage.getItem(MK));}
   (rows.length?rows.map(o=>{const q=o.q,e=typeof EXPL!=='undefined'?EXPL[q.id]:'';return'<details class="mrq"><summary>'+ic(o.x.s)+' Q'+(o.i+1)+' · '+o.x.m+'M · ⏱ '+tm(o.x.t)+'<br><span>'+escHtml(String(q.q).replace(/\s+/g,' ').slice(0,110))+'</span></summary><div class="ans">✔ '+escHtml(ans(q))+'</div>'+(e?'<div class="small" style="margin-top:6px">💡 '+escHtml(String(e).slice(0,700))+'</div>':'')+'</details>';}).join(''):'<p class="small">Is filter mein kuch nahi.</p>'));};
 /* ---- chapter notes ---- */
 let NOTES={};const nl=n=>NOTES[n]||NOTES._all||'';const idCh={};for(const k in DB)DB[k].chapters.forEach(c=>c.questions.forEach(q=>idCh[q.id]=c.name));
-const nb=document.createElement('button');nb.className='secondary hidden';nb.style.marginTop='8px';nb.textContent='📚 Is chapter ke Notes';nb.onclick=()=>{try{const u=nl(idCh[currentQuestions[qi].id]);if(u)window.open(u,'_blank');}catch(e){}};$('pExplain').after(nb);
+const nb=document.createElement('button');nb.className='secondary hidden';nb.style.marginTop='8px';nb.textContent='📚 Notes dekho';nb.onclick=()=>{try{NOTEopen(idCh[currentQuestions[qi].id]);}catch(e){}};$('pExplain').after(nb);
 const _rq2=renderQuestion;renderQuestion=function(){const r=_rq2.apply(this,arguments);try{const q=currentQuestions[qi];nb.classList.toggle('hidden',isMockMode||!(q&&nl(idCh[q.id])));}catch(e){}return r;};
 fetch('notes.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{NOTES=j||{};}).catch(()=>{});
 window.NLIB=()=>{let h='';for(const k in DB){const l=DB[k].chapters.filter(c=>NOTES[c.name]);if(l.length)h+='<div class="nu-label" style="margin-top:12px">'+escHtml(DB[k].name.toUpperCase())+'</div>'+l.map(c=>'<a class="sr" style="display:block;color:inherit;text-decoration:none" href="'+escHtml(NOTES[c.name])+'" target="_blank" rel="noopener">📄 '+escHtml(c.name)+'</a>').join('');}
@@ -6665,6 +6734,119 @@ const GS=[['📚','Practice karo','Chapter chuno, sawal solve karo, aur har sawa
 function guide(i){sh('👋 Swagat hai ('+(i+1)+'/3)','<div style="text-align:center;padding:6px 0"><div style="font-size:60px">'+GS[i][0]+'</div><h3 style="margin:8px 0">'+GS[i][1]+'</h3><p class="small">'+GS[i][2]+'</p></div><button class="primary" onclick="GD('+(i+1)+')">'+(i<2?'Aage →':'Shuru karo 🚀')+'</button>');}
 window.GD=i=>{if(i>2){closeSheet();try{CONS();}catch(e){}return;}guide(i);};
 setTimeout(()=>{try{if(!$('dashboard').classList.contains('hidden')&&!localStorage.getItem('adhyayan_guide_v1')){localStorage.setItem('adhyayan_guide_v1','1');window._gshown=true;guide(0);}}catch(e){}},2500);
+})();
+</script>
+<script>
+/* ===== V6: clean home screen ===== */
+(function(){
+const $=id=>document.getElementById(id),D=$('dashboard');if(!D)return;
+function build(){
+ if($('qaGrid'))return;const card=D.querySelector('.card'),sl=$('subjectList');if(!card||!sl)return;
+ const cta=document.createElement('div');cta.id='homeCta';cta.innerHTML='<button class="primary" onclick="P.daily()">🎯 Aaj ka Daily 10 Challenge</button>';sl.before(cta);
+ const Q=[['📚','Notes','NLIB()','hot'],['📝','Mock Test','P.mock()'],['📊','Report','showReport()'],['🔁','Revision','startRevision()'],['⭐','Saved','startSaved()'],['🏆','Leaderboard','showLeaderboard()'],['💬','Group','WAadm()'],['🎓','Certificate','openCert()']];
+ const g=document.createElement('div');g.id='qaGrid';g.innerHTML=Q.map(a=>'<button class="'+(a[3]||'')+'" onclick="'+a[2]+'"><i>'+a[0]+'</i><span>'+a[1]+'</span></button>').join('');sl.after(g);
+ ['.mock-box','button[onclick="showReport()"]','#revisionBtn','#savedBtn','button[onclick="showLeaderboard()"]'].forEach(s=>card.querySelectorAll(s).forEach(e=>{if(!e.closest('#qaGrid')&&!e.closest('#nextUp'))e.classList.add('home-hide');}));
+ const dt=document.createElement('details');dt.id='moreTools';dt.innerHTML='<summary>⚙️ Aur tools — XP, Plan, Search, Timer, Settings</summary><div id="mtBody"></div>';g.after(dt);
+ const body=dt.querySelector('#mtBody'),bk=card.querySelector('button[onclick="exportBackup()"]');
+ [$('proPanel'),$('focusCard'),card.querySelector('.trk-set'),card.querySelector('.dash-stats'),$('admBox'),bk&&bk.parentNode].concat([...card.querySelectorAll('.reset-link')]).forEach(e=>e&&body.appendChild(e));
+}
+function fix(){build();const b=$('mtBody');if(!b)return;const h=D.querySelector('.hello');
+ const p=$('proPanel');if(p&&!b.contains(p))b.prepend(p);
+ const a=$('admBox');if(a&&!b.contains(a))b.appendChild(a);
+ ['chalBanner','noticeBox'].forEach(i=>{const e=$(i);if(e&&h&&e.previousElementSibling!==h)h.after(e);});}
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{fix();}catch(e){}return r;};
+try{fix();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V7: resume, circles, notes tab, push ===== */
+(function(){
+const $=id=>document.getElementById(id),D=$('dashboard'),W=document.querySelector('.wrap');
+const ONESIGNAL_APP_ID='PASTE_YOUR_ONESIGNAL_APP_ID';
+function sh(t,h){closeSheet();const b=document.createElement('div');b.id='psheet';b.className='psheet';b.innerHTML='<div class="psh" role="dialog"><div class="psh-h"><b>'+t+'</b><button aria-label="Close" onclick="closeSheet()">✕</button></div>'+h+'</div>';b.onclick=e=>{if(e.target===b)closeSheet();};document.body.appendChild(b);}
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+/* ---------- resume where left ---------- */
+const RK='adhyayan_resume_v1';let LS=null;
+const _sc=startChapter;startChapter=function(k,i){LS={k,i};return _sc.apply(this,arguments);};
+function snap(){try{const pv=$('practice');if(!pv)return;const on=!pv.classList.contains('hidden');if(typeof isMockMode!=='undefined'&&isMockMode)return;
+ if(!on){const o=JSON.parse(localStorage.getItem(RK)||'null');if(o&&o.on){o.on=false;localStorage.setItem(RK,JSON.stringify(o));}return;}
+ if(!currentQuestions||!currentQuestions.length)return;
+ localStorage.setItem(RK,JSON.stringify({on:true,ts:Date.now(),ids:currentQuestions.map(q=>q.id),qi,title:$('pTitle').textContent,rev:!!(isRevisionMode||isSavedMode),subj:currentSubject,ls:(isRevisionMode||isSavedMode)?null:LS}));}catch(e){}}
+setInterval(snap,2000);document.addEventListener('visibilitychange',snap);addEventListener('pagehide',snap);
+const _fc=finishChapter;finishChapter=function(){const r=_fc.apply(this,arguments);try{localStorage.removeItem(RK);}catch(e){}return r;};
+window.RESUME=function(){try{const o=JSON.parse(localStorage.getItem(RK));if(!o)return;
+ if(o.ls&&!o.rev){startChapter(o.ls.k,o.ls.i);if(o.qi>=0&&o.qi<currentQuestions.length){qi=o.qi;renderQuestion();}return;}
+ const m={};allQuestionsFlat().forEach(q=>m[q.id]=q);const L=o.ids.map(i=>m[i]).filter(Boolean);if(!L.length)return;
+ isRevisionMode=true;isSavedMode=true;qTimesLog=[];currentSubject=o.subj||currentSubject;currentQuestions=L;qi=Math.min(o.qi,L.length-1);hideAllScreens();$('practice').classList.remove('hidden');$('practiceBackLink').textContent='\u2190 Back to Dashboard';$('pTitle').textContent=o.title;renderQuestion();}catch(e){}};
+function resumeCard(){let c=$('resumeCard');if(c)c.remove();let o;try{o=JSON.parse(localStorage.getItem(RK));}catch(e){}if(!o||Date.now()-o.ts>3*864e5)return;
+ c=document.createElement('div');c.id='resumeCard';c.innerHTML='<div><div class="nu-label">▶ CONTINUE LEARNING</div><b>'+escHtml(o.title||'Practice')+'</b><small>Question '+(o.qi+1)+' / '+o.ids.length+'</small></div><button class="primary" onclick="RESUME()">Aage badho →</button>';const h=$('homeCta');h&&h.before(c);}
+setTimeout(()=>{try{const o=JSON.parse(localStorage.getItem(RK));if(o&&o.on&&Date.now()-o.ts<18e5&&!D.classList.contains('hidden')&&!window._gshown&&!$('psheet')){toast('▶️ Jahan chhoda tha wahan se shuru');RESUME();}}catch(e){}},1200);
+/* ---------- circles row ---------- */
+const TITLES=['Beginner','Learner','Explorer','Achiever','Scholar','Topper','Champion','Legend'];
+function circles(){const h=D.querySelector('.hello');if(!h)return;let r=$('circRow');if(!r){r=document.createElement('div');r.id='circRow';h.after(r);}
+ let c=0,p=0,t=0;allQuestionsFlat().forEach(q=>{const z=progress[q.id];if(z){t++;if(z==='correct')c++;else if(z==='partial')p++;}});
+ const st=+($('trkStreak').textContent)||0;let bo=0;try{bo=(JSON.parse(localStorage.getItem('adhyayan_bonus_v1'))||{}).t||0;}catch(e){}
+ const xp=c*10+p*4+(t-c-p)+st*15+bo,lv=Math.floor(Math.sqrt(xp/40))+1,lo=40*(lv-1)*(lv-1),hi=40*lv*lv,xpp=Math.round((xp-lo)/(hi-lo)*100);
+ const g=($('trkToday').textContent||'0/20').split('/'),gp=Math.min(100,Math.round((+g[0]||0)/(+g[1]||20)*100));
+ const d=new Date(),mo=d.toLocaleString('en-IN',{month:'short'}).toUpperCase(),dy=d.toLocaleString('en-IN',{weekday:'short'}).toUpperCase();
+ const ex=localStorage.getItem('adhyayan_examdate_v1'),dl=ex?Math.ceil((new Date(ex)-new Date())/864e5):null,BC=(dl!==null&&dl>=0)?'<div class="cc" onclick="SETEX()"><div class="ring" style="--p:'+Math.max(4,Math.min(100,Math.round((1-dl/180)*100)))+'"><b>'+dl+'</b></div><span>BOARD · DIN</span></div>':'<div class="cc" onclick="SETEX()"><div class="ring" style="--p:0"><b>📅</b></div><span>SET DATE</span></div>';
+ const C=(p,b,s)=>'<div class="cc"><div class="ring" style="--p:'+p+'"><b>'+b+'</b></div><span>'+s+'</span></div>';
+ r.innerHTML=C(100,d.getDate(),dy+' · '+mo)+BC+C(Math.min(100,st*100/7),'🔥'+st,'STREAK')+C(xpp,'Lv'+lv,xp+' XP')+C(gp,g.join('/'),'AAJ KA GOAL');tickTime();}
+function tickTime(){const e=$('ccTime');if(!e)return;const d=new Date();let h=d.getHours();const ap=h>=12?'PM':'AM';h=h%12||12;e.textContent=h+':'+String(d.getMinutes()).padStart(2,'0');$('ccAm').textContent=ap;}
+setInterval(tickTime,15000);
+/* ---------- notes tab ---------- */
+let N={},nsub='all',nq='',NV=[];
+function links(name){const v=N[name],o=[],a=(t,u)=>{if(u&&typeof u==='string')o.push({t:t||'Notes',u});};
+ if(typeof v==='string')a('Notes',v);else if(Array.isArray(v))v.forEach(x=>typeof x==='string'?a('Notes',x):a(x&&x.t,x&&x.u));else if(v&&typeof v==='object')Object.keys(v).forEach(k=>a(k,v[k]));return o;}
+fetch('notes.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{N=j||{};if($('notesView')&&!$('notesView').classList.contains('hidden')){nHead();nList();}}).catch(()=>{});
+window.NOTEopen=function(name){const l=links(name);if(!l.length){if(N._all)window.open(N._all,'_blank');else toast('Is chapter ke notes jald aa rahe hain 🙂');return;}
+ if(l.length===1){window.open(l[0].u,'_blank');return;}sh('📚 '+escHtml(name),l.map(x=>'<a class="sr" style="display:block;color:inherit;text-decoration:none" href="'+escHtml(x.u)+'" target="_blank" rel="noopener">📄 '+escHtml(x.t)+'</a>').join(''));};
+window.NOTEi=i=>NOTEopen(NV[i]);
+window.NVs=k=>{nsub=k;nHead();nList();};window.NVq=v=>{nq=v;nList();};
+function hasAny(){for(const k in DB)for(const c of DB[k].chapters)if(links(c.name).length)return true;return false;}
+function nHead(){const v=$('notesView'),any=hasAny(),subs=[['all','Sab']].concat(Object.keys(DB).map(k=>[k,DB[k].name]));
+ v.innerHTML='<div class="nu-label">STUDY LIBRARY</div><h2 style="margin:2px 0 12px">📚 Notes</h2>'+(N._all?'<a class="nv-all" href="'+escHtml(N._all)+'" target="_blank" rel="noopener"><i>📁</i><span><b>Saare Notes</b><small>Poora Drive folder kholo</small></span><em>→</em></a>':'<p class="small">Notes jald aa rahe hain. 🙂</p>')+
+ (any?'<input type="text" id="nvQ" placeholder="🔍 Chapter dhundo" oninput="NVq(this.value)" value="'+escHtml(nq)+'"><div class="nv-chips">'+subs.map(s=>'<button class="'+(nsub===s[0]?'on':'')+'" onclick="NVs(\''+s[0]+'\')">'+escHtml(s[1])+'</button>').join('')+'</div>':'')+'<div id="nvList"></div>';}
+function nList(){const el=$('nvList');if(!el)return;NV=[];
+ if(!hasAny()){el.innerHTML='<div class="nv-soon"><div style="font-size:36px">🔜</div><b>Chapter-wise Notes</b><p class="small">Coming Soon! Tab tak "Saare Notes" folder mein se apna chapter dhundh lo.</p></div>';return;}
+ let h='';
+ for(const k in DB){if(nsub!=='all'&&nsub!==k)continue;const rows=DB[k].chapters.filter(c=>!nq||c.name.toLowerCase().includes(nq.toLowerCase()));if(!rows.length)continue;
+  h+='<div class="nu-label" style="margin:16px 0 6px">'+escHtml(DB[k].name.toUpperCase())+'</div>'+rows.map(c=>{const n=links(c.name).length,i=NV.push(c.name)-1;return'<div class="nv-row'+(n?' has':'')+'" onclick="NOTEi('+i+')"><span>'+escHtml(c.name)+'</span><em>'+(n?'📄 '+n:'Jald aa raha hai')+'</em></div>';}).join('');}
+ el.innerHTML=h||'<p class="small">Kuch nahi mila.</p>';}
+window.showNotes=function(){let v=$('notesView');if(!v){v=document.createElement('div');v.id='notesView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');nHead();nList();window.scrollTo(0,0);};
+window.NLIB=window.showNotes;
+const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('notesView');if(v)v.classList.add('hidden');};
+/* ---------- bottom nav: 5 tabs with Notes ---------- */
+const nav=$('pnav');if(nav){nav.innerHTML=[['🏠','Home','P.home()','h'],['📚','Notes','closeSheet();showNotes()','n'],['🎯','Daily','P.daily()','d'],['📊','Progress','closeSheet();showReport()','r'],['☰','More','P.more()','m']].map(a=>'<button data-t="'+a[3]+'" onclick="'+a[2]+'" aria-label="'+a[1]+'"><i>'+a[0]+'</i><span>'+a[1]+'</span></button>').join('');
+ setInterval(()=>{const vis=id=>{const e=$(id);return e&&!e.classList.contains('hidden');};const cur=vis('dashboard')?'h':vis('notesView')?'n':vis('reportView')?'r':'';nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===cur));},400);}
+/* ---------- push notifications (OneSignal) ---------- */
+const PUSH=ONESIGNAL_APP_ID.indexOf('PASTE_YOUR')===-1;
+if(PUSH){window.OneSignalDeferred=window.OneSignalDeferred||[];const s=document.createElement('script');s.src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';s.defer=true;document.head.appendChild(s);
+ OneSignalDeferred.push(async OS=>{try{await OS.init({appId:ONESIGNAL_APP_ID,serviceWorkerPath:'sw.js',serviceWorkerParam:{scope:location.pathname.replace(/[^\/]*$/,'')}});}catch(e){}});}
+window.PUSHon=function(){if(!PUSH)return;OneSignalDeferred.push(async OS=>{try{await OS.Notifications.requestPermission();toast('🔔 Notification chalu!');}catch(e){toast('Notification allow nahi hui');}});};
+window.PUSH_ON=PUSH;
+/* ---------- hooks ---------- */
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{circles();resumeCard();if(PUSH&&!$('pushCard')&&Notification&&Notification.permission==='default'){const c=document.createElement('div');c.id='pushCard';c.innerHTML='<span>🔔 Roz ka reminder chahiye?</span><button class="primary" onclick="PUSHon();this.parentNode.remove()">Chalu karo</button>';const h=$('homeCta');h&&h.before(c);}}catch(e){}return r;};
+try{circles();resumeCard();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V8: fair leaderboard + boards countdown circle ===== */
+(function(){
+const $=id=>document.getElementById(id);
+window.SETEX=function(){const d=$('moreTools');if(d)d.open=true;const e=$('examDate');if(e){e.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>{try{e.focus();if(e.showPicker)e.showPicker();}catch(x){}},500);}};
+loadLeaderboard=function(){if(!leaderboardConfigured())return;const st=$('leaderboardStatus'),ls=$('leaderboardList');st.textContent='Loading leaderboard...';ls.innerHTML='';
+ fetch(LEADERBOARD_URL).then(r=>r.json()).then(data=>{
+  if(!data||!data.length){st.textContent='No scores submitted yet - be the first!';return;}
+  const rows=data.map(r=>Object.assign({},r,{c:+r.correct||0,a:+r.attempted||0,o:+r.overall||0})).sort((x,y)=>y.c-x.c||y.o-x.o||x.a-y.a);
+  const me=loadStudent()||{},low=s=>String(s||'').trim().toLowerCase();
+  const mi=rows.findIndex(r=>low(r.name)===low(me.name)&&low(r.section)===low(me.section));let msg;
+  if(mi<0)msg='Apna naam yahan dekhne ke liye neeche <b>"Submit My Score"</b> dabao 🚀';
+  else if(mi===0)msg='🥇 Shaandaar, <b>'+escHtml(me.name)+'</b>! Aap sabse upar ho. Aise hi bane raho!';
+  else{const need=Math.max(1,rows[mi-1].c-rows[mi].c+1);msg='🌟 <b>You are doing great, '+escHtml(me.name)+'!</b><br>Abhi aap <b>#'+(mi+1)+'</b> par ho. Bas <b>'+need+' aur sahi sawal</b> karo aur <b>#'+mi+'</b> par pahunch jaoge! 💪';}
+  st.innerHTML='<div class="chres">'+msg+'</div><div class="small" style="margin-top:6px">Rank = sahi sawalon ki sankhya. Jitna zyada practice, utna upar! 🚀</div>';
+  ls.innerHTML=rows.slice(0,50).map((r,i)=>'<div class="chapter-analysis-row"'+(i===mi?' style="border:1px solid var(--gold);border-radius:12px;background:rgba(205,164,73,.10)"':'')+'><span>'+(['🥇','🥈','🥉'][i]||(i+1)+'.')+' '+escHtml(r.name)+(r.section?' ('+escHtml(r.section)+')':'')+'</span><span><b>'+r.c+' ✓</b> · '+r.o+'% <small style="opacity:.7">('+r.c+'/'+r.a+')</small></span></div>').join('');
+ }).catch(()=>{st.textContent='Could not load leaderboard. Check your internet connection and try Refresh.';});};
 })();
 </script>
 </body>

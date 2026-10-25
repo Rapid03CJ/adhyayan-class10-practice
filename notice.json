@@ -2,7 +2,10 @@
  "show": false,
  "id": "1",
  "title": "📢 Notice",
- "text": "Yahan apna notice likho, jaise: Kal Maths ka test hai, 3 baje.",
+ "text": "Yahan banner wala notice likho.",
  "link": "",
- "linkText": ""
+ "linkText": "",
+ "messages": [
+  {"id": "1", "title": "Welcome! 🎉", "text": "अध्ययन Tuition Centre ke app mein aapka swagat hai. Roz Daily 10 karo!", "date": "25 Oct"}
+ ]
 }
