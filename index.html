@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v7">
+<meta name="app-version" content="2026-10-24-v9">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -417,6 +417,9 @@ html[data-theme=light]{--bg1:#f6f3ea;--bg2:#fff;--cream:#1c2233;--muted:#5b6478;
 .chbn{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(37,211,102,.12);border:1px solid #25D366;border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:14px}
 .chbn button{padding:7px 12px;margin-left:6px}.chbn button:last-child{background:none;color:var(--muted)}
 .chres{text-align:center;font-size:16px;padding:12px;margin:10px 0;border-radius:12px;background:var(--glass);border:1px solid var(--gold)}
+.mrf{display:flex;gap:6px;margin:8px 0}.mrf button{flex:1;padding:8px;background:var(--glass);color:var(--cream);border:1px solid var(--glass-border)}
+.mrq{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:9px 11px;margin:6px 0;font-size:13.5px}
+.mrq summary{cursor:pointer;font-weight:600}.mrq summary span{font-weight:400;color:var(--muted);font-size:13px}.mrq .ans{color:var(--green);margin-top:8px}
 </style>
 </head>
 <body>
@@ -6345,7 +6348,7 @@ function toast(t){const d=document.createElement('div');d.className='ptoast';d.t
 /* XP / level / badges */
 const TITLES=['Beginner','Learner','Explorer','Achiever','Scholar','Topper','Board Champion','Legend'];
 function stt(){let c=0,p=0,t=0;allQuestionsFlat().forEach(q=>{const s=progress[q.id];if(s){t++;if(s==='correct')c++;else if(s==='partial')p++;}});return{c,p,t};}
-function streakN(){try{const s=calcStreak();return typeof s==='object'?(s.streak||s.cur||s.current||0):(s|0);}catch(e){return 0;}}
+function streakN(){try{const s=calcStreak(loadActivity());return typeof s==='object'?(s.streak||s.cur||s.current||0):(s|0);}catch(e){return 0;}}
 function xpInfo(){const s=stt(),xp=s.c*10+s.p*4+(s.t-s.c-s.p)+streakN()*15+(window.bonusXp?bonusXp():0),lv=Math.floor(Math.sqrt(xp/40))+1,lo=40*(lv-1)*(lv-1),hi=40*lv*lv;return{xp,lv,pct:Math.round((xp-lo)/(hi-lo)*100)};}
 function badges(){const s=stt(),n=streakN();let ch=false;for(const k in DB)DB[k].chapters.forEach(c=>{let d=0,r=0;c.questions.forEach(q=>{const z=progress[q.id];if(z){d++;if(z==='correct')r++;}});if(d&&d===c.questions.length&&r/d>=.8)ch=true;});
 return[['🚀','First Step',s.t>=1],['🔥','7-Day Streak',n>=7],['💯','100 Correct',s.c>=100],['🏅','500 Club',s.c>=500],['🎯','Sharp 80%+',s.t>=50&&s.c/s.t>=.8],['📚','Chapter Master',ch],['📅','10 Study Days',Object.keys(getSt()).length>=10]];}
@@ -6384,7 +6387,7 @@ P.theme=()=>{ui.theme=ui.theme==='light'?'dark':'light';saveUi();applyUi();P.mor
 P.snd=()=>{ui.snd=ui.snd?0:1;saveUi();P.more();};
 const Z=[.9,1,1.12,1.25];P.fz=d=>{let i=Z.indexOf(ui.fz);if(i<0)i=1;ui.fz=Z[Math.max(0,Math.min(3,i+d))];saveUi();applyUi();};
 P.install=()=>{if(dp){dp.prompt();dp=null;closeSheet();}};
-P.more=()=>sheet('⚙️ More','<div class="srow"><span>Theme</span><button onclick="P.theme()">'+(ui.theme==='light'?'☀️ Light':'🌙 Dark')+'</button></div><div class="srow"><span>Text size</span><span><button onclick="P.fz(-1)" aria-label="Smaller text">A−</button> <button onclick="P.fz(1)" aria-label="Larger text">A+</button></span></div><div class="srow"><span>Sound &amp; vibration</span><button onclick="P.snd()">'+(ui.snd?'🔊 On':'🔇 Off')+'</button></div>'+(dp?'<button class="primary" onclick="P.install()">📲 Install App</button>':'<p class="small">📲 iPhone: Share → Add to Home Screen · Android: Browser menu → Install app</p>')+'<button class="secondary" onclick="P.notes()">📒 Quick Notes &amp; Formulas</button><button class="secondary" onclick="closeSheet();openCert()">🎓 Report Card Certificate</button><button class="secondary wa-btn" onclick="closeSheet();CHnew()">🤝 Dost ko Challenge karo</button><button class="secondary" onclick="closeSheet();SMART()">🧠 Smart Practice (kamzor topics)</button><p class="small" style="margin:10px 0">📤 Aapka naam, class aur score teacher ko dikhta hai.</p><button class="secondary" onclick="closeSheet();TVshow()">👨‍🏫 Teacher View (PIN)</button><button class="secondary" onclick="closeSheet();JK()">😄 Joke / Story share karo (+5 XP)</button><button class="secondary" onclick="closeSheet();REM()">⏰ Daily Reminder lagao</button><button class="secondary" onclick="closeSheet();FB()">🚩 Feedback / Suggestion</button><button class="secondary" onclick="closeSheet();WAparent()">📲 Parent ko Report bhejo</button><button class="secondary wa-btn" onclick="closeSheet();WAadm()">🟢 WhatsApp Group join karo</button><button class="secondary" onclick="P.nb()">📓 Mistake Notebook</button><button class="secondary" onclick="closeSheet();showLeaderboard()">🏆 Class Leaderboard</button><div class="nu-label" style="margin-top:16px">BADGES</div><div class="bdg">'+badges().map(b=>'<div class="'+(b[2]?'on':'')+'"><i>'+b[0]+'</i><small>'+b[1]+'</small></div>').join('')+'</div>');
+P.more=()=>sheet('⚙️ More','<div class="srow"><span>Theme</span><button onclick="P.theme()">'+(ui.theme==='light'?'☀️ Light':'🌙 Dark')+'</button></div><div class="srow"><span>Text size</span><span><button onclick="P.fz(-1)" aria-label="Smaller text">A−</button> <button onclick="P.fz(1)" aria-label="Larger text">A+</button></span></div><div class="srow"><span>Sound &amp; vibration</span><button onclick="P.snd()">'+(ui.snd?'🔊 On':'🔇 Off')+'</button></div>'+(dp?'<button class="primary" onclick="P.install()">📲 Install App</button>':'<p class="small">📲 iPhone: Share → Add to Home Screen · Android: Browser menu → Install app</p>')+'<button class="secondary" onclick="P.notes()">📒 Quick Notes &amp; Formulas</button><button class="secondary" onclick="closeSheet();openCert()">🎓 Report Card Certificate</button><button class="secondary" onclick="closeSheet();MRshow(\'all\')">📋 Last Mock Test Review</button><button class="secondary" onclick="closeSheet();NLIB()">📚 Notes Library</button><button class="secondary wa-btn" onclick="closeSheet();CHnew()">🤝 Dost ko Challenge karo</button><button class="secondary" onclick="closeSheet();SMART()">🧠 Smart Practice (kamzor topics)</button><p class="small" style="margin:10px 0">📤 Aapka naam, class aur score teacher ko dikhta hai.</p><button class="secondary" onclick="closeSheet();TVshow()">👨‍🏫 Teacher View (PIN)</button><button class="secondary" onclick="closeSheet();JK()">😄 Joke / Story share karo (+5 XP)</button><button class="secondary" onclick="closeSheet();REM()">⏰ Daily Reminder lagao</button><button class="secondary" onclick="closeSheet();FB()">🚩 Feedback / Suggestion</button><button class="secondary" onclick="closeSheet();WAparent()">📲 Parent ko Report bhejo</button><button class="secondary wa-btn" onclick="closeSheet();WAadm()">🟢 WhatsApp Group join karo</button><button class="secondary" onclick="P.nb()">📓 Mistake Notebook</button><button class="secondary" onclick="closeSheet();showLeaderboard()">🏆 Class Leaderboard</button><div class="nu-label" style="margin-top:16px">BADGES</div><div class="bdg">'+badges().map(b=>'<div class="'+(b[2]?'on':'')+'"><i>'+b[0]+'</i><small>'+b[1]+'</small></div>').join('')+'</div>');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;});
 /* bottom nav */
 const nav=document.createElement('nav');nav.id='pnav';nav.setAttribute('aria-label','Main');nav.innerHTML=[['🏠','Home','P.home()'],['🎯','Daily','P.daily()'],['📝','Mock','P.mock()'],['📊','Report','closeSheet();showReport()'],['⚙️','More','P.more()']].map(a=>'<button onclick="'+a[2]+'" aria-label="'+a[1]+'"><i>'+a[0]+'</i><span>'+a[1]+'</span></button>').join('');document.body.appendChild(nav);
@@ -6412,7 +6415,7 @@ window.openCert=function(){
   }
   chs.sort((a,b)=>a.a-b.a);
   const P=TA?Math.round(TC/TA*100):0,g=TA?gr(P):['-','Practice not started'];
-  let st=0;try{const x=calcStreak();st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
+  let st=0;try{const x=calcStreak(loadActivity());st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
   const strong=chs.filter(c=>c.a>=80).length,weak=chs.filter(c=>c.a<60).slice(0,2).map(c=>escHtml(c.n)).join(', ');
   const A=document.querySelector('#nameScreen .logo'),U=document.querySelector('#dashboard .logo');
   const d=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
@@ -6444,7 +6447,7 @@ db.onclick=()=>{const q=currentQuestions[qi];if(!q)return;const t='Namaste Sir, 
 $('pExplain').after(db);
 /* 2. parent report + admission */
 window.WAparent=function(){let TA=0,TC=0,L=[];for(const k in DB){const a=subjectAttempted(k),c=subjectCorrect(k);TA+=a;TC+=c;L.push('• '+DB[k].name+': '+(a?Math.round(c/a*100)+'% ('+a+' sawal)':'abhi shuru nahi'));}
- let st=0;try{const x=calcStreak();st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
+ let st=0;try{const x=calcStreak(loadActivity());st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
  const w=chaps().filter(c=>c.a>=3&&c.p<60).sort((a,b)=>a.p-b.p).slice(0,3).map(c=>c.n).join(', ');
  go('https://wa.me/?text='+encodeURIComponent('📘 *Progress Report — '+nm()+'*\nClass 10 · अध्ययन Tuition Centre\n\n'+L.join('\n')+'\n\n✅ Overall: '+(TA?Math.round(TC/TA*100):0)+'% ('+TC+'/'+TA+' sahi)\n🔥 Streak: '+st+' din'+(w?'\n⚠️ Focus chapters: '+w:'')+'\n\n'+location.origin+location.pathname));};
 window.WAadm=function(){go(GROUP);};
@@ -6589,25 +6592,79 @@ function addPred(){const pp=$('proPanel');if(!pp)return;['predBox','chalBanner']
 /* ---------- Teacher sync + Teacher view ---------- */
 function sync(force){try{if(!tConf())return;const n=Date.now();if(!force&&n-(+localStorage.getItem(TK)||0)<18e5)return;localStorage.setItem(TK,n);
  let A=0,C=0;const S={};for(const k in DB){const a=subjectAttempted(k),c=subjectCorrect(k);A+=a;C+=c;S[k]=a?Math.round(c/a*100):'';}if(!A)return;
- let st=0;try{const x=calcStreak();st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
+ let st=0;try{const x=calcStreak(loadActivity());st=typeof x==='object'?(x.streak||x.cur||x.current||0):(x|0);}catch(e){}
  const w=chaps().filter(c=>c.a>=3&&c.p<60).sort((a,b)=>a.p-b.p).slice(0,3).map(c=>c.n+' ('+c.p+'%)').join(', ');
  fetch(TEACHER_URL,{method:'POST',body:JSON.stringify({type:'progress',name:nm(),section:sec(),overall:Math.round(C/A*100),attempted:A,correct:C,subjects:S,streak:st,weak:w})}).catch(()=>{});}catch(e){}}
-function consent(){if(!tConf()||localStorage.getItem(SYNK)==='seen')return;sh('📢 Ek zaroori baat','<p class="small">Is app mein aapka <b>naam, class, score aur streak</b> aapke teacher ko dikhta hai, taaki wo aapki padhai mein madad kar sakein aur batayein ki kya sudhaarna hai. Aur koi personal jaankari nahi li jaati.</p><button class="primary wa-btn" onclick="SYNset(\'seen\')">👍 Theek hai, samajh gaya</button>');}
+window.CONS=function(){consent();};function consent(){if(!tConf()||localStorage.getItem(SYNK)==='seen')return;sh('📢 Ek zaroori baat','<p class="small">Is app mein aapka <b>naam, class, score aur streak</b> aapke teacher ko dikhta hai, taaki wo aapki padhai mein madad kar sakein aur batayein ki kya sudhaarna hai. Aur koi personal jaankari nahi li jaati.</p><button class="primary wa-btn" onclick="SYNset(\'seen\')">👍 Theek hai, samajh gaya</button>');}
 window.SYNset=v=>{localStorage.setItem(SYNK,v);closeSheet();sync(true);};
 window.SYNtoggle=()=>{const v=localStorage.getItem(SYNK)==='yes'?'no':'yes';localStorage.setItem(SYNK,v);closeSheet();toast(v==='yes'?'Progress teacher ko dikhega':'Progress band kiya');if(v==='yes')sync(true);};
+function summ(d,top){const wk=d.filter(x=>x.days<=7),ina=d.filter(x=>x.days>=4),avg=d.length?Math.round(d.reduce((s,x)=>s+(+x.overall||0),0)/d.length):0,best=d.slice().sort((a,b)=>b.overall-a.overall).slice(0,3);
+ window._wk='📊 *Is hafte ki Class Report — अध्ययन Tuition Centre*\n\n✅ Active (7 din): '+wk.length+'/'+d.length+'\n📈 Class average: '+avg+'%\n🏆 Top 3: '+best.map(x=>x.name+' ('+x.overall+'%)').join(', ')+'\n⚠️ 4+ din se gayab: '+(ina.length?ina.map(x=>x.name).join(', '):'koi nahi')+'\n📚 Kamzor chapter: '+(top.length?top.slice(0,3).map(t=>t[0]).join(', '):'-')+'\n\nSab padhte raho! 💪';
+ return'<div class="weakbox" style="background:rgba(90,170,255,.08);border-color:rgba(90,170,255,.3)"><div class="nu-label">📊 CLASS SUMMARY</div><div class="small">Active (7 din): <b>'+wk.length+'/'+d.length+'</b> · Average: <b>'+avg+'%</b></div><div class="small">🏆 '+best.map(x=>escHtml(x.name)).join(', ')+'</div><button class="secondary wa-btn" style="margin-top:8px" onclick="window.open(\'https://wa.me/?text=\'+encodeURIComponent(_wk),\'_blank\')">📲 Weekly Report share karo</button></div>';}
 window.TVshow=async()=>{if(!tConf()){alert('Teacher Dashboard abhi setup nahi hua. teacher_dashboard.gs wala setup karke URL paste karo.');return;}
  let pin=sessionStorage.getItem('adhyayan_pin')||prompt('Teacher PIN daalo:');if(!pin)return;sh('👨‍🏫 Teacher View','<p class="small">Loading...</p>');
  try{const r=await fetch(TEACHER_URL+'?pin='+encodeURIComponent(pin)),d=await r.json();if(d.error){sessionStorage.removeItem('adhyayan_pin');sh('👨‍🏫 Teacher View','<p class="small">PIN galat hai.</p>');return;}sessionStorage.setItem('adhyayan_pin',pin);
   const now=Date.now();d.forEach(x=>x.days=x.last?Math.floor((now-new Date(x.last))/864e5):99);d.sort((a,b)=>b.days-a.days);
   const wk={};d.forEach(x=>String(x.weak||'').split('), ').forEach(w=>{const k=w.replace(/\s*\(\d+%\)?$/,'').trim();if(k)wk[k]=(wk[k]||0)+1;}));const top=Object.entries(wk).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const row=x=>{const f=x.days<=1?'🟢':x.days<=3?'🟡':'🔴';const msg='Namaste '+x.name+', '+(x.days>=2?x.days+' din se app nahi khola. ':'')+'Aaj Daily 10 zaroor karo! 💪 '+location.origin+location.pathname;return'<div class="sr" style="cursor:default"><b>'+f+' '+escHtml(x.name)+(x.section?' ('+escHtml(x.section)+')':'')+'</b> — '+escHtml(x.overall)+'% · 🔥'+escHtml(x.streak||0)+'<br><small>Aakhri baar: '+(x.days>=99?'-':x.days===0?'aaj':x.days+' din pehle')+(x.weak?' · Weak: '+escHtml(x.weak):'')+'</small><div style="margin-top:6px"><button class="wa-btn" style="padding:6px 12px" onclick="TVmsg(\''+encodeURIComponent(msg)+'\')">📲 Message</button></div></div>';};
-  sh('👨‍🏫 Teacher View ('+d.length+')','<div class="small">🔴 = 4+ din se gayab · 🟡 = 2-3 din · 🟢 = active</div>'+(top.length?'<div class="weakbox" style="margin-top:8px"><div class="nu-label">CLASS KE SABSE KAMZOR CHAPTER</div>'+top.map(t=>'<div class="wk"><span>'+escHtml(t[0])+'</span><b>'+t[1]+' bacche</b></div>').join('')+'</div>':'')+d.map(row).join(''));
+  sh('👨‍🏫 Teacher View ('+d.length+')',summ(d,top)+'<div class="small">🔴 = 4+ din se gayab · 🟡 = 2-3 din · 🟢 = active</div>'+(top.length?'<div class="weakbox" style="margin-top:8px"><div class="nu-label">CLASS KE SABSE KAMZOR CHAPTER</div>'+top.map(t=>'<div class="wk"><span>'+escHtml(t[0])+'</span><b>'+t[1]+' bacche</b></div>').join('')+'</div>':'')+d.map(row).join(''));
  }catch(e){sh('👨‍🏫 Teacher View','<p class="small">Load nahi ho paya. Internet aur URL check karo.</p>');}};
 window.TVmsg=m=>window.open('https://wa.me/?text='+m,'_blank');
 /* hooks */
 const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{addPred();}catch(e){}return r;};
-setTimeout(()=>{try{if(!$('dashboard').classList.contains('hidden'))consent();sync();}catch(e){}},4000);document.addEventListener('visibilitychange',()=>{if(document.hidden)sync();});
+setTimeout(()=>{try{if(!$('dashboard').classList.contains('hidden')&&!window._gshown)consent();sync();}catch(e){}},4000);document.addEventListener('visibilitychange',()=>{if(document.hidden)sync();});
 try{renderDashboard();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V5: mock review, chapter notes, streak freeze, welcome guide ===== */
+(function(){
+const $=id=>document.getElementById(id),MK='adhyayan_lastmock_v1';
+function sh(t,h){closeSheet();const b=document.createElement('div');b.id='psheet';b.className='psheet';b.innerHTML='<div class="psh" role="dialog"><div class="psh-h"><b>'+t+'</b><button aria-label="Close" onclick="closeSheet()">✕</button></div>'+h+'</div>';b.onclick=e=>{if(e.target===b)closeSheet();};document.body.appendChild(b);}
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3800);}
+function startQs(qs,title){if(!qs.length)return;closeSheet();isRevisionMode=true;isSavedMode=true;qTimesLog=[];currentQuestions=qs;qi=0;hideAllScreens();$('practice').classList.remove('hidden');$('practiceBackLink').textContent='\u2190 Back to Dashboard';$('pTitle').textContent=title;renderQuestion();}
+const tm=s=>s>=60?Math.floor(s/60)+'m '+(s%60)+'s':s+'s';
+/* ---- Mock test review ---- */
+let MR={t:{},id:null,at:0};
+const tick=()=>{const q=currentQuestions[qi],n=Date.now();if(MR.id)MR.t[MR.id]=(MR.t[MR.id]||0)+(n-MR.at)/1000;MR.id=q?q.id:null;MR.at=n;};
+const _sm=startMockTest;startMockTest=function(){MR={t:{},id:null,at:0};return _sm.apply(this,arguments);};
+const _rq=renderQuestion;renderQuestion=function(){const r=_rq.apply(this,arguments);try{if(isMockMode)tick();}catch(e){}return r;};
+const _fc=finishChapter;finishChapter=function(){const was=isMockMode,paper=currentQuestions.slice(),marks=mockMarks.slice(),res=Object.assign({},mockRes),key=currentSubject;if(was)try{tick();}catch(e){}
+ const r=_fc.apply(this,arguments);
+ try{if(was){const items=paper.map((q,i)=>({id:q.id,m:marks[i],s:res[q.id]||'',t:Math.round(MR.t[q.id]||0)}));let g=0,T=0;items.forEach(x=>{T+=x.m;g+=x.s==='correct'?x.m:x.s==='partial'?x.m/2:0;});
+  try{localStorage.setItem(MK,JSON.stringify({key,date:Date.now(),got:g,tot:T,items}));}catch(e){}
+  let b=$('mrBtn');if(!b){b=document.createElement('button');b.id='mrBtn';b.className='primary';b.style.marginBottom='10px';$('resultBackBtn').before(b);}b.textContent='📋 Test Review dekho';b.onclick=()=>MRshow('all');}
+  else{const b=$('mrBtn');if(b)b.remove();}}catch(e){}return r;};
+window.MRprac=()=>{try{const rec=JSON.parse(localStorage.getItem(MK)),map={};allQuestionsFlat().forEach(q=>map[q.id]=q);const w=rec.items.filter(x=>x.s==='incorrect'||x.s==='partial'||!x.s).map(x=>map[x.id]).filter(Boolean);if(!w.length){toast('Koi galat sawal nahi 🎉');return;}startQs(w.slice(0,15),'🔁 Mock ke galat sawal');}catch(e){}};
+window.MRshow=function(f){let rec;try{rec=JSON.parse(localStorage.getItem(MK));}catch(e){}
+ if(!rec){sh('📋 Test Review','<p class="small">Abhi tak koi Mock Test nahi diya.</p>');return;}
+ const map={};allQuestionsFlat().forEach(q=>map[q.id]=q);
+ const sec=m=>m===1?'MCQ (1)':m===2?'Short (2)':m===3?'Short (3)':m===5?'Long (5)':'Case (4)',S={};
+ rec.items.forEach(x=>{const k=sec(x.m),o=S[k]||(S[k]={g:0,t:0});o.t+=x.m;o.g+=x.s==='correct'?x.m:x.s==='partial'?x.m/2:0;});
+ const att=rec.items.filter(x=>x.s).length,tt=rec.items.reduce((s,x)=>s+x.t,0),pc=rec.tot?Math.round(rec.got/rec.tot*100):0;
+ const ic=s=>s==='correct'?'✅':s==='partial'?'🟡':s==='incorrect'?'❌':'⬜';
+ const rows=rec.items.map((x,i)=>({x,i,q:map[x.id]})).filter(o=>o.q&&(f==='all'||(f==='wrong'&&(o.x.s==='incorrect'||o.x.s==='partial'))||(f==='skip'&&!o.x.s)));
+ const ans=q=>String(q.options&&q.options[q.correct]!==undefined?q.options[q.correct]:(q.answer||'')).slice(0,500);
+ sh('📋 Mock Test Review','<div class="chres"><b>'+rec.got+' / '+rec.tot+' marks ('+pc+'%)</b><br><small>'+escHtml(DB[rec.key]?DB[rec.key].name:'')+' · Attempted '+att+'/'+rec.items.length+' · Total time '+tm(Math.round(tt))+'</small></div>'+
+  '<table class="cp-tbl" style="width:100%;font-size:13px;margin:6px 0">'+Object.keys(S).map(k=>'<tr><td style="padding:5px">'+k+'</td><td style="text-align:right;padding:5px"><b>'+S[k].g+'/'+S[k].t+'</b></td></tr>').join('')+'</table>'+
+  '<div class="mrf"><button onclick="MRshow(\'all\')">Sab</button><button onclick="MRshow(\'wrong\')">❌ Galat</button><button onclick="MRshow(\'skip\')">⬜ Chhode</button></div><button class="secondary" style="margin:8px 0" onclick="MRprac()">🔁 Galat/chhode sawal practice karo</button>'+
+  (rows.length?rows.map(o=>{const q=o.q,e=typeof EXPL!=='undefined'?EXPL[q.id]:'';return'<details class="mrq"><summary>'+ic(o.x.s)+' Q'+(o.i+1)+' · '+o.x.m+'M · ⏱ '+tm(o.x.t)+'<br><span>'+escHtml(String(q.q).replace(/\s+/g,' ').slice(0,110))+'</span></summary><div class="ans">✔ '+escHtml(ans(q))+'</div>'+(e?'<div class="small" style="margin-top:6px">💡 '+escHtml(String(e).slice(0,700))+'</div>':'')+'</details>';}).join(''):'<p class="small">Is filter mein kuch nahi.</p>'));};
+/* ---- chapter notes ---- */
+let NOTES={};const nl=n=>NOTES[n]||NOTES._all||'';const idCh={};for(const k in DB)DB[k].chapters.forEach(c=>c.questions.forEach(q=>idCh[q.id]=c.name));
+const nb=document.createElement('button');nb.className='secondary hidden';nb.style.marginTop='8px';nb.textContent='📚 Is chapter ke Notes';nb.onclick=()=>{try{const u=nl(idCh[currentQuestions[qi].id]);if(u)window.open(u,'_blank');}catch(e){}};$('pExplain').after(nb);
+const _rq2=renderQuestion;renderQuestion=function(){const r=_rq2.apply(this,arguments);try{const q=currentQuestions[qi];nb.classList.toggle('hidden',isMockMode||!(q&&nl(idCh[q.id])));}catch(e){}return r;};
+fetch('notes.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{NOTES=j||{};}).catch(()=>{});
+window.NLIB=()=>{let h='';for(const k in DB){const l=DB[k].chapters.filter(c=>NOTES[c.name]);if(l.length)h+='<div class="nu-label" style="margin-top:12px">'+escHtml(DB[k].name.toUpperCase())+'</div>'+l.map(c=>'<a class="sr" style="display:block;color:inherit;text-decoration:none" href="'+escHtml(NOTES[c.name])+'" target="_blank" rel="noopener">📄 '+escHtml(c.name)+'</a>').join('');}
+ sh('📚 Notes Library',(NOTES._all?'<a class="sr" style="display:block;color:inherit;text-decoration:none" href="'+escHtml(NOTES._all)+'" target="_blank" rel="noopener">📁 Saare Notes (poora folder)</a>':'')+(h||(NOTES._all?'':'<p class="small">Notes jald aa rahe hain. 🙂</p>')));};
+/* ---- streak freeze (hafte mein 1 din bachta hai) ---- */
+function freeze(){try{const a=loadActivity(),n=new Date(),y=new Date(n),y2=new Date(n);y.setDate(n.getDate()-1);y2.setDate(n.getDate()-2);const ky=dayKey(y),FK='adhyayan_freeze_v1';
+ if(!a[ky]&&a[dayKey(y2)]>0){const last=+localStorage.getItem(FK)||0;if(Date.now()-last>7*864e5){a[ky]=1;localStorage.setItem(ACT_KEY,JSON.stringify(a));localStorage.setItem(FK,Date.now());toast('🧊 Streak Freeze! Kal ka din bacha liya (hafte mein 1 baar milta hai).');try{renderTracker();}catch(e){}}}}catch(e){}}
+setTimeout(freeze,1500);document.addEventListener('visibilitychange',()=>{if(!document.hidden)freeze();});
+/* ---- welcome guide ---- */
+const GS=[['📚','Practice karo','Chapter chuno, sawal solve karo, aur har sawal ke baad explanation padho.'],['🎯','Roz ka rhythm','Daily 10 Challenge karo, streak bachao, XP kamao. "Aaj ka Plan" batata hai ki kya padhna hai.'],['💬','Madad aur Report','Doubt ho toh button dabao. Mock Test do aur apna Report Card Certificate download karo.']];
+function guide(i){sh('👋 Swagat hai ('+(i+1)+'/3)','<div style="text-align:center;padding:6px 0"><div style="font-size:60px">'+GS[i][0]+'</div><h3 style="margin:8px 0">'+GS[i][1]+'</h3><p class="small">'+GS[i][2]+'</p></div><button class="primary" onclick="GD('+(i+1)+')">'+(i<2?'Aage →':'Shuru karo 🚀')+'</button>');}
+window.GD=i=>{if(i>2){closeSheet();try{CONS();}catch(e){}return;}guide(i);};
+setTimeout(()=>{try{if(!$('dashboard').classList.contains('hidden')&&!localStorage.getItem('adhyayan_guide_v1')){localStorage.setItem('adhyayan_guide_v1','1');window._gshown=true;guide(0);}}catch(e){}},2500);
 })();
 </script>
 </body>
