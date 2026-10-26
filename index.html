@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-26-v20">
+<meta name="app-version" content="2026-10-26-v21">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -6173,7 +6173,7 @@ function showReport(){
     chapList.innerHTML = '<p class="small">No chapters attempted yet - start practicing to see your chapter-wise analysis here.</p>';
   } else {
     chapStats.forEach(c=>{
-      const label = c.acc>=80 ? 'Strong' : c.acc>=60 ? 'Good' : 'Priority';
+      const label = c.att<5 ? 'Abhi kam practice' : c.acc>=80 ? 'Strong' : c.acc>=60 ? 'Good' : 'Priority';
       chapList.innerHTML += '<div class="chapter-analysis-row"><span>'+c.name+'</span><span>'+c.acc+'% ('+label+')</span></div>';
     });
   }
@@ -6873,7 +6873,7 @@ const nav=$('pnav');if(nav){nav.innerHTML=[['🏠','Home','P.home()','h'],['📚
 /* ---------- push notifications (OneSignal) ---------- */
 const PUSH=ONESIGNAL_APP_ID.indexOf('PASTE_YOUR')===-1;
 if(PUSH){window.OneSignalDeferred=window.OneSignalDeferred||[];const s=document.createElement('script');s.src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';s.defer=true;document.head.appendChild(s);
- OneSignalDeferred.push(async OS=>{try{await OS.init({appId:ONESIGNAL_APP_ID,serviceWorkerPath:location.pathname.replace(/[^\/]*$/,'').replace(/^\//,'')+'sw.js',serviceWorkerParam:{scope:location.pathname.replace(/[^\/]*$/,'')}});}catch(e){}});}
+ OneSignalDeferred.push(async OS=>{try{await OS.init({appId:ONESIGNAL_APP_ID,serviceWorkerPath:location.pathname.replace(/[^\/]*$/,'').replace(/^\//,'')+'sw.js',serviceWorkerParam:{scope:location.pathname.replace(/[^\/]*$/,'')}});}catch(e){window._osErr=String(e&&e.message||e);}});}
 window.PUSHon=function(){if(!PUSH)return;OneSignalDeferred.push(async OS=>{try{await OS.Notifications.requestPermission();toast('🔔 Notification chalu!');}catch(e){toast('Notification allow nahi hui');}});};
 window.PUSH_ON=PUSH;
 /* ---------- hooks ---------- */
@@ -6945,6 +6945,7 @@ function items(){const L=[];const seen=JSON.parse(localStorage.getItem(SM)||'[]'
  try{const bd=_badges().filter(b=>b[2]);if(bd.length)L.push({i:'🏅',t:bd.length+' badge jeete',x:bd.map(b=>b[0]+' '+b[1]).join(' · ')});}catch(e){}
  return L.filter(x=>!isDis(x));}
 function badge(){try{const n=items().filter(x=>x.unread).length;['navBadge','bellBadge'].forEach(i=>{const b=$(i);if(b){b.textContent=n;b.style.display=n?'flex':'none';}});}catch(e){}}
+window._NI=items;window._NB=badge;
 /* ---- profile screen ---- */
 window.showProfile=function(){let v=$('profileView');if(!v){v=document.createElement('div');v.id='profileView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');renderProfile();window.scrollTo(0,0);
  try{const s=JSON.parse(localStorage.getItem(SM)||'[]');items().forEach(x=>{if(x.id&&s.indexOf(x.id)<0)s.push(x.id);});localStorage.setItem(SM,JSON.stringify(s));}catch(e){}setTimeout(badge,50);};
@@ -6971,7 +6972,7 @@ setInterval(badge,5000);try{tweak();badge();}catch(e){}
 (function(){
 const $=id=>document.getElementById(id),W=document.querySelector('.wrap'),D=$('dashboard');
 function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3000);}
-function top(){if($('homeTop')||!D)return;const t=document.createElement('div');t.id='homeTop';t.innerHTML='<button aria-label="Notifications" onclick="showProfile()">🔔<b class="nb" id="bellBadge" style="display:none"></b></button><button aria-label="Settings" onclick="showSettings()">⚙️</button>';D.prepend(t);}
+function top(){if($('homeTop')||!D)return;const t=document.createElement('div');t.id='homeTop';t.innerHTML='<button aria-label="Notifications" onclick="showNotifs()">🔔<b class="nb" id="bellBadge" style="display:none"></b></button><button aria-label="Settings" onclick="showSettings()">⚙️</button>';D.prepend(t);}
 const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('settingsView');if(v)v.classList.add('hidden');};
 const sec=(t,b)=>'<div class="st-sec"><div class="nu-label">'+t+'</div>'+b+'</div>';
 const row=(a,s,r)=>'<div class="st-row"><div><b>'+a+'</b>'+(s?'<small>'+s+'</small>':'')+'</div><div class="st-r">'+r+'</div></div>';
@@ -7077,7 +7078,7 @@ window.PUSHASK=function(){if($('pAsk'))return;const o=document.createElement('di
  o.innerHTML='<div class="pa-box"><div class="pa-bell"><span>🔔</span></div><h3>Roz ka reminder chalu karo</h3><p class="pa-sub">Kabhi practice miss mat karo</p><div class="pa-li"><i>🎯</i><span>Daily 10 Challenge ka yaad dilana</span></div><div class="pa-li"><i>🔥</i><span>Streak khatre mein ho toh turant alert</span></div><div class="pa-li"><i>📢</i><span>Teacher ke notice sabse pehle</span></div><button class="primary" onclick="PAyes()">🔔 Haan, chalu karo</button><button class="pa-no" onclick="PAno()">Baad mein</button><small>Aap kabhi bhi Settings se band kar sakte ho</small></div>';document.body.appendChild(o);};
 window.PAyes=function(){const o=$('pAsk');if(o)o.remove();try{PUSHon();}catch(e){}};
 window.PAno=function(){const o=$('pAsk');if(o)o.remove();};
-setTimeout(()=>{try{const d=new Date().toDateString();if(window.PUSH_ON&&perm()==='default'&&localStorage.getItem('adhyayan_pp')!==d&&!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){localStorage.setItem('adhyayan_pp',d);PUSHASK();}}catch(e){}},7000);
+setTimeout(()=>{try{const d=new Date().toDateString();if(window.PUSH_ON&&perm()!=='granted'&&perm()!=='unsupported'&&!sessionStorage.getItem('adhyayan_pk')&&!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){sessionStorage.setItem('adhyayan_pk','1');localStorage.setItem('adhyayan_pp',d);PUSHASK();}}catch(e){}},7000);
 const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{installCard();}catch(e){}return r;};
 try{installCard();}catch(e){}
 })();
@@ -7098,7 +7099,7 @@ window.NTEST=async function(){
  sh('🔧 Notification check',
   ok(p==='granted','Permission: Allow hai','Permission: '+(p==='denied'?'Blocked (site settings mein Allow karo)':'abhi di nahi'))+
   ok(i&&i.opt&&i.id,'Is phone ka subscription ban gaya','Subscription nahi bana — pehle 🔔 Allow karo, phir app band-chalu karo')+
-  ok(inst,'App installed hai','App install nahi hai (install karne se zyada bharosemand)')+
+  (window._osErr?'<div class="nt-r"><span>⚠️</span><span>OneSignal error: '+window._osErr+'</span></div>':'')+ok(inst,'App installed hai','App install nahi hai (install karne se zyada bharosemand)')+
   (good?'<button class="primary" id="ntGo" style="margin-top:12px">🧪 Test notification bhejo</button><p class="small" id="ntHelp">Dabane ke baad <b>turant app band karo</b> (recents se bhi hata do) aur screen lock kar do. <b>15 second</b> mein notification aani chahiye.</p>':'')+
   '<details class="nt-d"><summary>📱 Test nahi aaya / der se aata hai? Ye settings karo</summary><div class="small"><p><b>Sabse badi wajah:</b> phone ka battery saver app ko band kar deta hai.</p><p>1. Phone <b>Settings → Apps → Chrome</b> (aur install kiya ho toh <b>Adhyayan</b>)</p><p>2. <b>Battery</b> → <b>No restrictions / Unrestricted</b> chuno</p><p>3. <b>Autostart</b> on karo (Xiaomi/Redmi/Poco/Oppo/Vivo mein zaroori)</p><p>4. <b>Notifications</b> → Allow, aur silent/low priority na ho</p><p>5. Recents mein Chrome/Adhyayan ko <b>lock 🔒</b> kar do (card ko dabake pakdo)</p><p>6. Data saver / Battery saver band rakho</p></div></details>');
  const g=$('ntGo');if(g)g.onclick=async()=>{g.disabled=true;g.textContent='Bhej raha hoon… ab app band karo';
@@ -7106,6 +7107,77 @@ window.NTEST=async function(){
 };
 /* Settings mein row jodo + Owner Panel mein recipients dikhao */
 const css=document.createElement('style');css.textContent='.nt-r{display:flex;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}.nt-d{margin-top:14px}.nt-d summary{cursor:pointer;color:var(--gold-soft)}.nt-d .small{margin-top:8px}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V15: notifications page + persistent permission + force subscribe ===== */
+(function(){
+const $=id=>document.getElementById(id),W=document.querySelector('.wrap'),D=$('dashboard');
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3500);}
+const perm=()=>('Notification' in window)?Notification.permission:'unsupported';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* --- 1. permission mil chuki ho toh subscription zaroor banao --- */
+function optin(){if(!window.PUSH_ON||!window.OneSignalDeferred)return;OneSignalDeferred.push(async OS=>{try{if(perm()==='granted'&&!OS.User.PushSubscription.optedIn)await OS.User.PushSubscription.optIn();}catch(e){window._osErr=String(e&&e.message||e);}});}
+optin();setTimeout(optin,6000);
+window.PUSHon=function(){if(!window.PUSH_ON||!window.OneSignalDeferred)return;
+ if(perm()==='denied'){PUSHASK();return;}
+ OneSignalDeferred.push(async OS=>{try{await OS.Notifications.requestPermission();
+  if(perm()==='granted'){try{await OS.User.PushSubscription.optIn();}catch(e){}toast('🔔 Notification chalu ho gayi!');const c=$('pushCard');if(c)c.remove();}else toast('Allow nahi hui — dobara koshish karenge');
+  if(!$('notifView').classList.contains('hidden'))render();}catch(e){window._osErr=String(e&&e.message||e);toast('Dikkat aayi, Settings → Notification check dekho');}});};
+/* --- 2. popup: jab tak allow na ho, har baar app kholne par --- */
+window.PUSHASK=function(){if($('pAsk'))return;const o=document.createElement('div');o.id='pAsk';const bl=perm()==='denied';
+ o.innerHTML=bl?
+ '<div class="pa-box"><div class="pa-bell"><span>🚫</span></div><h3>Notification blocked hai</h3><p class="pa-sub">Bina allow kiye reminder nahi aayega</p><div class="pa-li"><i>1️⃣</i><span>Chrome mein upar address bar ke bagal wala <b>🔒 / ⚙</b> icon dabao</span></div><div class="pa-li"><i>2️⃣</i><span><b>Permissions → Notifications → Allow</b></span></div><div class="pa-li"><i>3️⃣</i><span>App <b>reload</b> karo (khinch ke ya ⟳)</span></div><button class="primary" onclick="PAno()">Samajh gaya</button><small>Ye message tab tak aayega jab tak allow nahi hota</small></div>':
+ '<div class="pa-box"><div class="pa-bell"><span>🔔</span></div><h3>Roz ka reminder chalu karo</h3><p class="pa-sub">Kabhi practice miss mat karo</p><div class="pa-li"><i>🎯</i><span>Daily 10 Challenge ka yaad dilana</span></div><div class="pa-li"><i>🔥</i><span>Streak khatre mein ho toh turant alert</span></div><div class="pa-li"><i>📢</i><span>Teacher ke notice sabse pehle</span></div><button class="primary" onclick="PAyes()">🔔 Haan, chalu karo</button><button class="pa-no" onclick="PAno()">Baad mein</button><small>Allow karne ke baad ye popup nahi aayega</small></div>';
+ document.body.appendChild(o);};
+/* --- 3. Home par permanent card jab tak allow na ho --- */
+function pushCard(){const c=$('pushCard'),p=perm();if(!window.PUSH_ON||p==='granted'||p==='unsupported'){if(c)c.remove();return;}
+ const h=$('homeCta');if(!h)return;if(c)c.remove();
+ const n=document.createElement('div');n.id='pushCard';n.innerHTML='<span>'+(p==='denied'?'🚫 Notification blocked hai':'🔔 Roz ka reminder chahiye?')+'</span><button class="primary" onclick="'+(p==='denied'?'PUSHASK()':'PUSHon()')+'">'+(p==='denied'?'Kaise chalu karein':'Chalu karo')+'</button>';h.before(n);}
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{pushCard();}catch(e){}return r;};
+try{pushCard();}catch(e){}
+/* --- 4. Alag Notifications page --- */
+function permCard(){if(!window.PUSH_ON)return'';const p=perm();
+ if(p==='granted')return'<div class="nv-p ok"><i>✅</i><div><b>Phone notification chalu hai</b><small>Reminder aur teacher ke notice milte rahenge</small></div></div>';
+ if(p==='denied')return'<div class="nv-p bad"><i>🚫</i><div><b>Phone notification blocked hai</b><small>Chrome settings mein Allow karna padega</small></div><button class="primary" onclick="PUSHASK()">Kaise?</button></div>';
+ if(p==='unsupported')return'<div class="nv-p"><i>📲</i><div><b>Is browser mein notification nahi</b><small>iPhone: pehle Add to Home Screen karo</small></div><button class="primary" onclick="INSTALL()">Install</button></div>';
+ return'<div class="nv-p warn"><i>🔔</i><div><b>Phone notification band hai</b><small>Chalu karoge tabhi reminder milega</small></div><button class="primary" onclick="PUSHon()">Chalu karo</button></div>';}
+function render(){const v=$('notifView');if(!v)return;const s=(typeof loadStudent==='function'&&loadStudent())||{},L=(window._NI?window._NI():[]);
+ v.innerHTML='<button class="back" onclick="showDashboard()">← Back</button><div class="nv-hd"><div><div class="nu-label">NOTIFICATIONS</div><h2 style="margin:2px 0">🔔 '+esc(s.name||'Student')+'</h2></div>'+(L.length?'<button class="pf-clear" onclick="NCLR();NVre()">Sab clear karo</button>':'')+'</div>'+permCard()+
+ (L.length?L.map(n=>{const k=String(n.id||n.i);return '<div class="pf-n'+(n.unread?' un':'')+'"><i>'+n.i+'</i><div><b>'+esc(n.t)+'</b><div class="small">'+esc(n.x||'')+(n.d?' · '+esc(n.d):'')+'</div>'+(n.link?'<a href="'+esc(n.link)+'" target="_blank" rel="noopener">'+esc(n.ll||'Dekho →')+'</a>':'')+'</div>'+(n.a?'<button class="primary" onclick="'+n.a+'">'+esc(n.al||'Go')+'</button>':'')+'<button class="nx" aria-label="Hatao" onclick="NVdis(\''+k.replace(/'/g,'')+'\')">✕</button></div>';}).join(''):'<div class="nv-empty"><div>🎉</div><b>Koi nayi notification nahi</b><small>Teacher ke notice aur reminders yahin dikhenge</small></div>');}
+window.NVre=function(){render();try{_NB();}catch(e){}};
+window.NVdis=function(k){try{NDIS(k,1);}catch(e){}NVre();};
+window.showNotifs=function(){let v=$('notifView');if(!v){v=document.createElement('div');v.id='notifView';v.className='card hidden';W.appendChild(v);}
+ hideAllScreens();v.classList.remove('hidden');render();window.scrollTo(0,0);
+ try{const k='adhyayan_seen_msgs',s=JSON.parse(localStorage.getItem(k)||'[]');(window._NI?_NI():[]).forEach(x=>{if(x.id&&s.indexOf(x.id)<0)s.push(x.id);});localStorage.setItem(k,JSON.stringify(s));}catch(e){}setTimeout(()=>{try{_NB();}catch(e){}},50);};
+const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('notifView');if(v)v.classList.add('hidden');};
+const css=document.createElement('style');css.textContent='.nv-hd{display:flex;justify-content:space-between;align-items:flex-end;margin:10px 0 14px}.nv-p{display:flex;align-items:center;gap:10px;padding:12px;margin:0 0 12px;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04)}.nv-p>i{font-style:normal;font-size:26px}.nv-p>div{flex:1;min-width:0}.nv-p b{display:block;font-size:14px}.nv-p small{display:block;color:var(--muted);font-size:11.5px}.nv-p .primary{width:auto;padding:9px 14px;font-size:13px;white-space:nowrap}.nv-p.ok{border-color:rgba(37,211,102,.5);background:rgba(37,211,102,.08)}.nv-p.warn{border-color:rgba(205,164,73,.7);background:rgba(205,164,73,.1)}.nv-p.bad{border-color:rgba(255,107,107,.6);background:rgba(255,107,107,.08)}.nv-empty{text-align:center;padding:36px 10px;color:var(--muted)}.nv-empty div{font-size:44px}.nv-empty b{display:block;color:var(--cream);margin:8px 0 4px}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V16: honest performance meter (accuracy + practice + consistency) ===== */
+(function(){
+const $=id=>document.getElementById(id);
+statusBadge=function(acc,att){
+ if(!att)return '<span class="badge none">Not started</span>';
+ if(att<15)return '<span class="badge none">Abhi shuru ('+att+' Q)</span>';
+ if(acc>=80)return '<span class="badge strong">Strong</span>';
+ if(acc>=60)return '<span class="badge good">Good</span>';
+ return '<span class="badge improve">Improve</span>';};
+function calc(){let att=0,cor=0;allQuestionsFlat().forEach(q=>{const s=progress[q.id];if(s){att++;if(s==='correct')cor++;}});
+ const act=loadActivity();let d=0;const t=new Date();for(let i=0;i<14;i++){if(act[dayKey(t)]>0)d++;t.setDate(t.getDate()-1);}
+ const A=att?cor/att*100:0,accEff=A*Math.min(1,att/30),P=Math.min(100,att/500*100),C=Math.min(100,d/10*100);
+ return{att,cor,d,A:Math.round(A),accEff:Math.round(accEff),P:Math.round(P),C:Math.round(C),score:Math.round(.4*accEff+.3*P+.3*C)};}
+function verdict(s){return s>=80?['🏆','Excellent','Board ke liye ekdum tayyar!','#25D366']:s>=65?['💪','Strong','Bahut badhiya, aise hi lage raho','#7ed957']:s>=45?['🙂','Average','Theek chal raha hai — thoda aur practice chahiye','#e8c76a']:s>=25?['⚠️','Weak','Practice aur consistency badhani hogi','#ff9f43']:['🌱','Abhi shuru','Roz thode sawal karo, score badhta jayega','#8aa0c8'];}
+function bar(e,l,v,n){return '<div class="pm-b"><div><span>'+e+' '+l+'</span><b>'+n+'</b></div><div class="bar"><div class="fill" style="width:'+v+'%"></div></div></div>';}
+function meter(){const rv=$('reportView');if(!rv)return;let m=$('perfMeter');if(!m){m=document.createElement('div');m.id='perfMeter';const f=rv.querySelector('.dash-stats');if(f)f.before(m);else rv.appendChild(m);}
+ const c=calc(),v=verdict(c.score),low=[['acc',c.accEff],['p',c.P],['c',c.C]].sort((a,b)=>a[1]-b[1])[0][0],
+ tip={acc:'Galat sawal <b>Mistake Notebook</b> se dobara karo aur concept padho.',p:'Roz kam se kam <b>20 sawal</b> ka goal rakho.',c:'Har din thoda karo — <b>streak mat todo</b>.'}[low];
+ m.innerHTML='<div class="pm-top"><div class="pm-ring" style="border-color:'+v[3]+'"><b>'+c.score+'</b><small>/100</small></div><div><div class="pm-v" style="color:'+v[3]+'">'+v[0]+' '+v[1]+'</div><small>'+v[2]+'</small></div></div>'+
+ bar('🎯','Accuracy',c.accEff,c.A+'% sahi'+(c.att<30?' (kam sawal)':''))+bar('📚','Practice',c.P,c.att+' / 500 sawal')+bar('📅','Consistency',c.C,c.d+' / 14 din active')+
+ '<div class="pm-tip">💡 '+tip+'</div><small class="pm-n">Score = Accuracy 40% + Practice 30% + Consistency 30%. Kam sawal karke 100% accuracy se "Strong" nahi banta.</small>';}
+const _s=showReport;showReport=function(){const r=_s.apply(this,arguments);try{meter();}catch(e){}return r;};
+const css=document.createElement('style');css.textContent='#perfMeter{margin:4px 0 18px;padding:16px;border-radius:20px;background:linear-gradient(160deg,rgba(205,164,73,.14),rgba(255,255,255,.03));border:1px solid rgba(205,164,73,.45)}.pm-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}.pm-ring{flex:0 0 78px;height:78px;border-radius:50%;border:5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center}.pm-ring b{font-size:26px;line-height:1}.pm-ring small{font-size:10px;color:var(--muted)}.pm-v{font-size:19px;font-weight:700}.pm-b{margin:9px 0}.pm-b>div:first-child{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}.pm-b b{color:var(--gold-soft);font-weight:600}.pm-tip{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);font-size:13px}.pm-n{display:block;margin-top:8px;color:var(--muted);font-size:11px}';document.head.appendChild(css);
 })();
 </script>
 </body>
