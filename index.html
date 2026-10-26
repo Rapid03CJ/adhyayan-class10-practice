@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v19">
+<meta name="app-version" content="2026-10-26-v20">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -6981,7 +6981,7 @@ function render(){const v=$('settingsView'),ui=_ui,s=loadStudent()||{},ex=localS
  v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">PREFERENCES</div><h2 style="margin:2px 0 6px">⚙️ Settings</h2>'+
  sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('👑 Owner Panel','Leaderboard, performance aur notice (PIN)',btn('Kholo','OWNER()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
  sec('🎨 APPEARANCE',row('Theme','Dark ya Light',btn(ui.theme==='light'?'☀️ Light':'🌙 Dark','STtheme()'))+row('Text size','Chhota ya bada',btn('A−','STfz(-1)')+btn('A+','STfz(1)')))+
- sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',PSUB(),PBTN())+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
+ sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',PSUB(),PBTN())+row('🔧 Notification check','Test bhejke dekho aa rahi hai ya nahi',btn('Check','NTEST()'))+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
  sec('📚 STUDY',row('Board exam date','Countdown ke liye','<input type="date" class="st-in" value="'+ex+'" onchange="setExamDate(this.value)">')+row('Daily goal','Roz kitne sawal','<select class="st-in" onchange="setDailyGoal(this.value)">'+[10,20,30,40,50].map(n=>'<option'+(String(n)===gl?' selected':'')+'>'+n+'</option>').join('')+'</select>'))+
  sec('💬 HELP',row('📲 Install App','Home screen par icon aur notification',window.INSTALLED?'✅ Installed':btn('Install','INSTALL()','wa'))+row('WhatsApp group','Doubt aur updates',btn('Join','WAadm()','wa'))+row('Feedback','Galat sawal ya suggestion',btn('Bhejo','FB()'))+row('Welcome guide','App kaise chalta hai',btn('Dekho','STguide()')))+
  sec('💾 DATA',row('Backup','Progress file save karo',btn('⬇ Backup','exportBackup()'))+row('Restore','Backup file wapas lao',btn('⬆ Restore','importBackup()'))+row('Reset','Saara progress mita do',btn('Reset','resetProgress()','danger')))+
@@ -7017,7 +7017,7 @@ async function list(){const el=$('owList');if(!el)return;try{const a=await (awai
 window.OWsend=async function(){const t=$('owT').value.trim(),m=$('owM').value.trim();if(!t||!m){toast('Title aur message likho');return;}
  const b=$('owB');b.disabled=true;b.textContent='Bhej raha hoon...';
  try{const r=await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice',pin:pin(),title:t,text:m,link:$('owL').value.trim(),push:$('owP').checked})});let j={ok:1};try{j=await r.json();}catch(e){}
-  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?'✅ Notice + phone notification bheja!':'✅ Notice bhej diya (app ke andar)');$('owT').value=$('owM').value=$('owL').value='';list();}}
+  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?(j.push.recipients>0?'✅ Notice + '+j.push.recipients+' phone par notification bheji!':'⚠️ Notice gaya, par abhi kisi phone par notification allow nahi hai'):'✅ Notice bhej diya (app ke andar)');$('owT').value=$('owM').value=$('owL').value='';list();}}
  catch(e){toast('Bhej nahi paya, internet check karo');}b.disabled=false;b.textContent='📣 Bhejo';};
 window.OWdel=async function(id){if(!confirm('Ye notice hata dein?'))return;try{await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice_del',pin:pin(),id:id})});}catch(e){}setTimeout(list,600);};
 /* ---- push tags: naam + aaj practice hui ya nahi (reminder tabhi jaye jab practice na hui ho) ---- */
@@ -7080,6 +7080,32 @@ window.PAno=function(){const o=$('pAsk');if(o)o.remove();};
 setTimeout(()=>{try{const d=new Date().toDateString();if(window.PUSH_ON&&perm()==='default'&&localStorage.getItem('adhyayan_pp')!==d&&!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){localStorage.setItem('adhyayan_pp',d);PUSHASK();}}catch(e){}},7000);
 const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{installCard();}catch(e){}return r;};
 try{installCard();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V14: notification check + test ===== */
+(function(){
+const $=id=>document.getElementById(id);
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),4500);}
+function sh(t,h){closeSheet();const b=document.createElement('div');b.id='psheet';b.className='psheet';b.innerHTML='<div class="psh" role="dialog"><div class="psh-h"><b>'+t+'</b><button aria-label="Close" onclick="closeSheet()">✕</button></div>'+h+'</div>';b.onclick=e=>{if(e.target===b)closeSheet();};document.body.appendChild(b);}
+const perm=()=>('Notification' in window)?Notification.permission:'unsupported';
+function info(){return new Promise(res=>{if(!window.OneSignalDeferred){res(null);return;}const t=setTimeout(()=>res(null),4000);OneSignalDeferred.push(async OS=>{try{const s=OS.User.PushSubscription;clearTimeout(t);res({id:s.id,opt:s.optedIn});}catch(e){res(null);}});});}
+const ok=(b,y,n)=>'<div class="nt-r"><span>'+(b?'✅':'❌')+'</span><span>'+(b?y:n)+'</span></div>';
+window.NTEST=async function(){
+ sh('🔧 Notification check','<p class="small">Check ho raha hai…</p>');
+ const i=await info(),p=perm(),inst=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const good=p==='granted'&&i&&i.id&&i.opt;
+ sh('🔧 Notification check',
+  ok(p==='granted','Permission: Allow hai','Permission: '+(p==='denied'?'Blocked (site settings mein Allow karo)':'abhi di nahi'))+
+  ok(i&&i.opt&&i.id,'Is phone ka subscription ban gaya','Subscription nahi bana — pehle 🔔 Allow karo, phir app band-chalu karo')+
+  ok(inst,'App installed hai','App install nahi hai (install karne se zyada bharosemand)')+
+  (good?'<button class="primary" id="ntGo" style="margin-top:12px">🧪 Test notification bhejo</button><p class="small" id="ntHelp">Dabane ke baad <b>turant app band karo</b> (recents se bhi hata do) aur screen lock kar do. <b>15 second</b> mein notification aani chahiye.</p>':'')+
+  '<details class="nt-d"><summary>📱 Test nahi aaya / der se aata hai? Ye settings karo</summary><div class="small"><p><b>Sabse badi wajah:</b> phone ka battery saver app ko band kar deta hai.</p><p>1. Phone <b>Settings → Apps → Chrome</b> (aur install kiya ho toh <b>Adhyayan</b>)</p><p>2. <b>Battery</b> → <b>No restrictions / Unrestricted</b> chuno</p><p>3. <b>Autostart</b> on karo (Xiaomi/Redmi/Poco/Oppo/Vivo mein zaroori)</p><p>4. <b>Notifications</b> → Allow, aur silent/low priority na ho</p><p>5. Recents mein Chrome/Adhyayan ko <b>lock 🔒</b> kar do (card ko dabake pakdo)</p><p>6. Data saver / Battery saver band rakho</p></div></details>');
+ const g=$('ntGo');if(g)g.onclick=async()=>{g.disabled=true;g.textContent='Bhej raha hoon… ab app band karo';
+  try{fetch(window._TU,{method:'POST',keepalive:true,body:JSON.stringify({type:'testpush',sid:i.id,delay:12})}).then(r=>r.json()).then(j=>{if(j&&j.error==='wait')toast('Thoda ruko, 30 second baad dobara');}).catch(()=>{});}catch(e){}};
+};
+/* Settings mein row jodo + Owner Panel mein recipients dikhao */
+const css=document.createElement('style');css.textContent='.nt-r{display:flex;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}.nt-d{margin-top:14px}.nt-d summary{cursor:pointer;color:var(--gold-soft)}.nt-d .small{margin-top:8px}';document.head.appendChild(css);
 })();
 </script>
 </body>
