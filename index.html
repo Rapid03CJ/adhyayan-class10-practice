@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v15">
+<meta name="app-version" content="2026-10-24-v17">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -522,6 +522,11 @@ html[data-theme=light] #pnav{background:rgba(255,255,255,.96) !important}
 .st-b{width:auto;padding:8px 14px;font-size:13px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.4);color:var(--cream)}
 .st-b.wa{background:#25D366;color:#fff;border:0}.st-b.danger{border-color:#e0716a;color:#e0716a}
 .st-in{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.4);color:var(--cream);font-size:13px;max-width:140px}
+.cc.daily .ring b{display:flex;flex-direction:column;align-items:center;line-height:1.05}.cc.daily .ring b small{font-size:8.5px;letter-spacing:1.2px;color:var(--muted);margin-top:2px}
+.ow-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.ow-btns button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 6px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(205,164,73,.35);color:var(--cream);font-size:12.5px;font-weight:600}.ow-btns i{font-style:normal;font-size:26px}
+.ow-in{width:100%;margin:8px 0 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.3);color:var(--cream);font-size:14px;font-family:inherit}
+.ow-ck{display:flex;gap:8px;align-items:center;margin:12px 0;font-size:13.5px}.ow-ck input{width:auto;margin:0}
 </style>
 </head>
 <body>
@@ -6651,7 +6656,7 @@ try{renderDashboard();}catch(e){}
 <script>
 /* ===== V4: friend challenge, predicted score, smart practice, teacher sync ===== */
 (function(){
-const TEACHER_URL='https://script.google.com/macros/s/AKfycbz7UPg40jvIjfrVzfK-1ZgTU0OGoy237dCMlRAVlWyb__iReBHLF9kHr2y69g3L_6p1ng/exec';
+const TEACHER_URL='https://script.google.com/macros/s/AKfycbz7UPg40jvIjfrVzfK-1ZgTU0OGoy237dCMlRAVlWyb__iReBHLF9kHr2y69g3L_6p1ng/exec';window._TU=TEACHER_URL;
 const $=id=>document.getElementById(id),CK='adhyayan_chal_v1',SYNK='adhyayan_sync_v1',TK='adhyayan_tsync_t';
 const tConf=()=>TEACHER_URL.indexOf('PASTE_YOUR')===-1;
 const nm=()=>{try{return(loadStudent()||{}).name||'Student';}catch(e){return'Student';}};
@@ -6795,7 +6800,7 @@ try{fix();}catch(e){}
 /* ===== V7: resume, circles, notes tab, push ===== */
 (function(){
 const $=id=>document.getElementById(id),D=$('dashboard'),W=document.querySelector('.wrap');
-const ONESIGNAL_APP_ID='PASTE_YOUR_ONESIGNAL_APP_ID';
+const ONESIGNAL_APP_ID='cefe93f9-24e6-41ab-9f41-87277fc76826';
 function sh(t,h){closeSheet();const b=document.createElement('div');b.id='psheet';b.className='psheet';b.innerHTML='<div class="psh" role="dialog"><div class="psh-h"><b>'+t+'</b><button aria-label="Close" onclick="closeSheet()">✕</button></div>'+h+'</div>';b.onclick=e=>{if(e.target===b)closeSheet();};document.body.appendChild(b);}
 function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
 /* ---------- resume where left ---------- */
@@ -6855,7 +6860,7 @@ const nav=$('pnav');if(nav){nav.innerHTML=[['🏠','Home','P.home()','h'],['📚
 /* ---------- push notifications (OneSignal) ---------- */
 const PUSH=ONESIGNAL_APP_ID.indexOf('PASTE_YOUR')===-1;
 if(PUSH){window.OneSignalDeferred=window.OneSignalDeferred||[];const s=document.createElement('script');s.src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';s.defer=true;document.head.appendChild(s);
- OneSignalDeferred.push(async OS=>{try{await OS.init({appId:ONESIGNAL_APP_ID,serviceWorkerPath:'sw.js',serviceWorkerParam:{scope:location.pathname.replace(/[^\/]*$/,'')}});}catch(e){}});}
+ OneSignalDeferred.push(async OS=>{try{await OS.init({appId:ONESIGNAL_APP_ID,serviceWorkerPath:location.pathname.replace(/[^\/]*$/,'').replace(/^\//,'')+'sw.js',serviceWorkerParam:{scope:location.pathname.replace(/[^\/]*$/,'')}});}catch(e){}});}
 window.PUSHon=function(){if(!PUSH)return;OneSignalDeferred.push(async OS=>{try{await OS.Notifications.requestPermission();toast('🔔 Notification chalu!');}catch(e){toast('Notification allow nahi hui');}});};
 window.PUSH_ON=PUSH;
 /* ---------- hooks ---------- */
@@ -6900,13 +6905,14 @@ const done=()=>localStorage.getItem(DD)===dk(new Date());
 const _fc=finishChapter;finishChapter=function(){const r=_fc.apply(this,arguments);try{if(($('pTitle').textContent||'').indexOf('Daily 10')>-1)localStorage.setItem(DD,dk(new Date()));}catch(e){}return r;};
 /* ---- home circles: date=Daily 10, 2nd=mood emoji, boards line ---- */
 function tweak(){const r=$('circRow');if(!r)return;const c=r.querySelectorAll('.cc');if(c.length<5)return;
- const dn=done(),a=c[0];a.classList.add('daily');a.onclick=()=>P.daily();a.querySelector('.ring').style.setProperty('--p',dn?100:0);
+ const dn=done(),a=c[0];a.classList.add('daily');{const dt=new Date();a.querySelector('.ring b').innerHTML=dt.getDate()+'<small>'+dt.toLocaleString('en-IN',{month:'short'}).toUpperCase()+'</small>';}a.onclick=()=>P.daily();a.querySelector('.ring').style.setProperty('--p',dn?100:0);
  a.querySelector('.ring').classList.toggle('pulse',!dn);a.querySelector('span').textContent=dn?'✅ DAILY DONE':'🎯 DAILY 10';
  const m=mood(),b=c[1];b.onclick=()=>toast(m.e+' '+m.m);b.innerHTML='<div class="ring" style="--p:'+m.a+'"><b style="font-size:26px">'+m.e+'</b></div><span>'+m.l+'</span>';
  let l=$('boardsLine');if(!l){l=document.createElement('div');l.id='boardsLine';r.after(l);}
  const ex=localStorage.getItem('adhyayan_examdate_v1');let t;if(ex){const dl=Math.ceil((new Date(ex)-new Date())/864e5);t=dl>=0?'⏳ Boards mein <b>'+dl+' din</b> baaki · date badlo':'📅 Nayi board date daalo';}else t='📅 Board exam ki date set karo';l.innerHTML=t;l.onclick=()=>SETEX();}
 /* ---- notifications inbox ---- */
-let NT=null;fetch('notice.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{NT=j||{};badge();}).catch(()=>{});
+let NT=null;function loadNT(){fetch('notice.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>({})).then(j=>{NT=j||{};const tu=window._TU;if(tu&&tu.indexOf('PASTE_YOUR')<0){return fetch(tu+'?notices=1').then(r=>r.json()).then(a=>{if(Array.isArray(a))NT.messages=(Array.isArray(NT.messages)?NT.messages:[]).concat(a.map(n=>({id:'s'+n.id,title:n.title,text:n.text,link:n.link,linkText:n.link?'Dekho →':'',date:n.date})));}).catch(()=>{});}}).then(()=>badge());}
+loadNT();document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadNT();});
 const DP='adhyayan_dis_perm',DY='adhyayan_dis_day';
 const ldA=k=>{try{return JSON.parse(localStorage.getItem(k))||[];}catch(e){return[];}};
 const dayDis=()=>{try{const o=JSON.parse(localStorage.getItem(DY));return o&&o.d===dk(new Date())?o.k:[];}catch(e){return[];}};
@@ -6960,7 +6966,7 @@ const btn=(t,a,c)=>'<button class="st-b'+(c?' '+c:'')+'" onclick="'+a+'">'+t+'</
 window.showSettings=function(){let v=$('settingsView');if(!v){v=document.createElement('div');v.id='settingsView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');render();window.scrollTo(0,0);};
 function render(){const v=$('settingsView'),ui=_ui,s=loadStudent()||{},ex=localStorage.getItem('adhyayan_examdate_v1')||'',gl=localStorage.getItem('adhyayan_goal_v1')||'20',ver=(document.querySelector('meta[name=app-version]')||{}).content||'';
  v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">PREFERENCES</div><h2 style="margin:2px 0 6px">⚙️ Settings</h2>'+
- sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('Teacher View','Sirf teacher ke liye (PIN)',btn('Kholo','TVshow()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
+ sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('👑 Owner Panel','Leaderboard, performance aur notice (PIN)',btn('Kholo','OWNER()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
  sec('🎨 APPEARANCE',row('Theme','Dark ya Light',btn(ui.theme==='light'?'☀️ Light':'🌙 Dark','STtheme()'))+row('Text size','Chhota ya bada',btn('A−','STfz(-1)')+btn('A+','STfz(1)')))+
  sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',window.PUSH_ON?'Reminder aur teacher ke messages':'Abhi available nahi',window.PUSH_ON?btn('Chalu karo','PUSHon()'):'')+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
  sec('📚 STUDY',row('Board exam date','Countdown ke liye','<input type="date" class="st-in" value="'+ex+'" onchange="setExamDate(this.value)">')+row('Daily goal','Roz kitne sawal','<select class="st-in" onchange="setDailyGoal(this.value)">'+[10,20,30,40,50].map(n=>'<option'+(String(n)===gl?' selected':'')+'>'+n+'</option>').join('')+'</select>'))+
@@ -6973,6 +6979,41 @@ window.STsnd=()=>{_ui.snd=_ui.snd?0:1;_saveUi();render();};
 window.STguide=()=>{localStorage.removeItem('adhyayan_guide_v1');toast('Page refresh ho raha hai...');setTimeout(()=>location.reload(),600);};
 const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{top();}catch(e){}return r;};
 try{top();}catch(e){}
+})();
+</script>
+<script>
+/* ===== V11: owner panel + push tags ===== */
+(function(){
+const $=id=>document.getElementById(id),W=document.querySelector('.wrap');
+const TU=window._TU||'',ok=()=>TU&&TU.indexOf('PASTE_YOUR')<0;
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('ownerView');if(v)v.classList.add('hidden');};
+const pin=()=>sessionStorage.getItem('adhyayan_pin');
+window.OWNER=async function(){if(!ok()){alert('Teacher script URL set nahi hai.');return;}
+ let p=pin()||prompt('Owner PIN daalo:');if(!p)return;
+ try{const r=await fetch(TU+'?pin='+encodeURIComponent(p)),d=await r.json();if(d.error){sessionStorage.removeItem('adhyayan_pin');alert('PIN galat hai.');return;}sessionStorage.setItem('adhyayan_pin',p);show(d);}catch(e){alert('Load nahi ho paya. Internet check karo.');}};
+function show(d){let v=$('ownerView');if(!v){v=document.createElement('div');v.id='ownerView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');
+ d.forEach(x=>x.days=x.last?Math.floor((Date.now()-new Date(x.last))/864e5):99);const td=new Date().toDateString(),act=d.filter(x=>x.last&&new Date(x.last).toDateString()===td).length,avg=d.length?Math.round(d.reduce((s,x)=>s+(+x.overall||0),0)/d.length):0;
+ v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">ADMIN</div><h2 style="margin:2px 0 10px">👑 Owner Panel</h2>'+
+ '<div class="pf-tiles"><div><b>'+d.length+'</b><span>STUDENTS</span></div><div><b>'+act+'</b><span>AAJ ACTIVE</span></div><div><b>'+avg+'%</b><span>CLASS AVG</span></div><div><b>'+d.filter(x=>x.days>=4).length+'</b><span>GAYAB</span></div></div>'+
+ '<div class="ow-btns"><button onclick="showLeaderboard()"><i>🏆</i><span>Leaderboard</span></button><button onclick="TVshow()"><i>📊</i><span>Performance &amp; Students</span></button></div>'+
+ '<div class="st-sec"><div class="nu-label">📣 NOTICE BHEJO (SAB STUDENTS KO)</div><input class="ow-in" id="owT" maxlength="80" placeholder="Title (jaise: Kal Maths test)"><textarea class="ow-in" id="owM" rows="3" maxlength="300" placeholder="Message likho..."></textarea><input class="ow-in" id="owL" placeholder="Link (optional)"><label class="ow-ck"><input type="checkbox" id="owP" checked> 📲 Phone notification bhi bhejo</label><button class="primary" id="owB" onclick="OWsend()">📣 Bhejo</button></div>'+
+ '<div class="st-sec"><div class="nu-label">PICHHLE NOTICES</div><div id="owList" class="small">Loading...</div></div>';
+ list();}
+async function list(){const el=$('owList');if(!el)return;try{const a=await (await fetch(TU+'?notices=1')).json();el.innerHTML=a.length?a.slice(0,8).map(n=>'<div class="st-row"><div><b>'+escHtml(n.title)+'</b><small>'+escHtml(String(n.text).slice(0,90))+' · '+escHtml(n.date)+'</small></div><button class="st-b danger" onclick="OWdel(\''+n.id+'\')">✕</button></div>').join(''):'Abhi koi notice nahi.';}catch(e){el.textContent='Load nahi hua.';}}
+window.OWsend=async function(){const t=$('owT').value.trim(),m=$('owM').value.trim();if(!t||!m){toast('Title aur message likho');return;}
+ const b=$('owB');b.disabled=true;b.textContent='Bhej raha hoon...';
+ try{const r=await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice',pin:pin(),title:t,text:m,link:$('owL').value.trim(),push:$('owP').checked})});let j={ok:1};try{j=await r.json();}catch(e){}
+  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?'✅ Notice + phone notification bheja!':'✅ Notice bhej diya (app ke andar)');$('owT').value=$('owM').value=$('owL').value='';list();}}
+ catch(e){toast('Bhej nahi paya, internet check karo');}b.disabled=false;b.textContent='📣 Bhejo';};
+window.OWdel=async function(id){if(!confirm('Ye notice hata dein?'))return;try{await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice_del',pin:pin(),id:id})});}catch(e){}setTimeout(list,600);};
+/* ---- push tags: naam + aaj practice hui ya nahi (reminder tabhi jaye jab practice na hui ho) ---- */
+const dk=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+function tag(){if(!window.PUSH_ON||!window.OneSignalDeferred)return;try{const s=JSON.parse(localStorage.getItem('adhyayan_stats_v1'))||{},t=(s[dk(new Date())]||{}).t||0,n=(loadStudent()||{}).name||'';
+ OneSignalDeferred.push(async OS=>{try{OS.User.addTags({name:n,done:t>0?dk(new Date()):'0'});}catch(e){}});}catch(e){}}
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{tag();}catch(e){}return r;};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)tag();});setInterval(tag,120000);
+if(location.hash==='#owner'){setTimeout(()=>{history.replaceState(null,'',location.pathname);if(!$('dashboard').classList.contains('hidden'))OWNER();},2500);}
 })();
 </script>
 </body>
