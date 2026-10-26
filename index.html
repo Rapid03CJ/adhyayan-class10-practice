@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-24-v17">
+<meta name="app-version" content="2026-10-24-v18">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -6968,7 +6968,7 @@ function render(){const v=$('settingsView'),ui=_ui,s=loadStudent()||{},ex=localS
  v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">PREFERENCES</div><h2 style="margin:2px 0 6px">⚙️ Settings</h2>'+
  sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('👑 Owner Panel','Leaderboard, performance aur notice (PIN)',btn('Kholo','OWNER()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
  sec('🎨 APPEARANCE',row('Theme','Dark ya Light',btn(ui.theme==='light'?'☀️ Light':'🌙 Dark','STtheme()'))+row('Text size','Chhota ya bada',btn('A−','STfz(-1)')+btn('A+','STfz(1)')))+
- sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',window.PUSH_ON?'Reminder aur teacher ke messages':'Abhi available nahi',window.PUSH_ON?btn('Chalu karo','PUSHon()'):'')+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
+ sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',PSUB(),PBTN())+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
  sec('📚 STUDY',row('Board exam date','Countdown ke liye','<input type="date" class="st-in" value="'+ex+'" onchange="setExamDate(this.value)">')+row('Daily goal','Roz kitne sawal','<select class="st-in" onchange="setDailyGoal(this.value)">'+[10,20,30,40,50].map(n=>'<option'+(String(n)===gl?' selected':'')+'>'+n+'</option>').join('')+'</select>'))+
  sec('💬 HELP',row('WhatsApp group','Doubt aur updates',btn('Join','WAadm()','wa'))+row('Feedback','Galat sawal ya suggestion',btn('Bhejo','FB()'))+row('Welcome guide','App kaise chalta hai',btn('Dekho','STguide()')))+
  sec('💾 DATA',row('Backup','Progress file save karo',btn('⬇ Backup','exportBackup()'))+row('Restore','Backup file wapas lao',btn('⬆ Restore','importBackup()'))+row('Reset','Saara progress mita do',btn('Reset','resetProgress()','danger')))+
@@ -7014,6 +7014,28 @@ function tag(){if(!window.PUSH_ON||!window.OneSignalDeferred)return;try{const s=
 const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{tag();}catch(e){}return r;};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)tag();});setInterval(tag,120000);
 if(location.hash==='#owner'){setTimeout(()=>{history.replaceState(null,'',location.pathname);if(!$('dashboard').classList.contains('hidden'))OWNER();},2500);}
+})();
+</script>
+<script>
+/* ===== V12: auto-lock owner panel + smoother notification permission ===== */
+(function(){
+const $=id=>document.getElementById(id);
+/* ---- owner panel auto-lock ---- */
+const vis=()=>{const v=$('ownerView');return v&&!v.classList.contains('hidden');};
+const lock=()=>{try{sessionStorage.removeItem('adhyayan_pin');}catch(e){}};
+const _ha=hideAllScreens;hideAllScreens=function(){const was=vis();_ha.apply(this,arguments);if(was)lock();};
+const _o=window.OWNER;window.OWNER=async function(){window._ownT=Date.now();return _o.apply(this,arguments);};
+function relock(){if(vis()){lock();try{closeSheet();}catch(e){}showDashboard();}else lock();}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)relock();});
+addEventListener('pagehide',lock);
+document.addEventListener('click',()=>{if(vis())window._ownT=Date.now();},true);
+setInterval(()=>{if(vis()&&Date.now()-(window._ownT||0)>3*60e3)relock();},15000);
+/* ---- notification status + auto prompt ---- */
+const perm=()=>('Notification' in window)?Notification.permission:'unsupported';
+window.PSUB=()=>{if(!window.PUSH_ON)return'Abhi available nahi';const p=perm();return p==='granted'?'✅ Chalu hai':p==='denied'?'❌ Blocked — browser ki site settings mein Allow karo':p==='unsupported'?'Is browser mein nahi chalta (iPhone: pehle Add to Home Screen karo)':'Reminder aur teacher ke messages';};
+window.PBTN=()=>{if(!window.PUSH_ON)return'';const p=perm();return p==='granted'||p==='unsupported'?'':p==='denied'?'<button class="st-b" onclick="PUSHhelp()">Kaise?</button>':'<button class="st-b wa" onclick="PUSHon();setTimeout(showSettings,1500)">Chalu karo</button>';};
+window.PUSHhelp=()=>alert('Notification Allow karne ke liye:\n\n1. Browser ke address bar mein 🔒 ya ⓘ icon dabao\n2. Permissions / Site settings kholo\n3. Notifications = Allow karo\n4. Page refresh karo');
+setTimeout(()=>{try{const d=new Date().toDateString();if(window.PUSH_ON&&perm()==='default'&&localStorage.getItem('adhyayan_pp')!==d&&!$('dashboard').classList.contains('hidden')&&!$('psheet')){localStorage.setItem('adhyayan_pp',d);OneSignalDeferred.push(async OS=>{try{await OS.Slidedown.promptPush();}catch(e){}});}}catch(e){}},12000);
 })();
 </script>
 </body>
