@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-27-v29">
+<meta name="app-version" content="2026-10-27-v30">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -6925,7 +6925,7 @@ function tweak(){const r=$('circRow');if(!r)return;const c=r.querySelectorAll('.
  let l=$('boardsLine');if(!l){l=document.createElement('div');l.id='boardsLine';r.after(l);}
  const ex=localStorage.getItem('adhyayan_examdate_v1');let t;if(ex){const dl=Math.ceil((new Date(ex)-new Date())/864e5);t=dl>=0?'⏳ Boards mein <b>'+dl+' din</b> baaki · date badlo':'📅 Nayi board date daalo';}else t='📅 Board exam ki date set karo';l.innerHTML=t;l.onclick=()=>SETEX();}
 /* ---- notifications inbox ---- */
-let NT=null;function loadNT(){fetch('notice.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>({})).then(j=>{NT=j||{};const tu=window._TU;if(tu&&tu.indexOf('PASTE_YOUR')<0){return fetch(tu+'?notices=1').then(r=>r.json()).then(a=>{if(Array.isArray(a))NT.messages=(Array.isArray(NT.messages)?NT.messages:[]).concat(a.map(n=>({id:'s'+n.id,title:n.title,text:n.text,link:n.link,linkText:n.link?'Dekho →':'',date:n.date})));}).catch(()=>{});}}).then(()=>badge());}
+let NT=null;function loadNT(){fetch('notice.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>({})).then(j=>{NT=j||{};const tu=window._TU;if(tu&&tu.indexOf('PASTE_YOUR')<0){return fetch(tu+'?notices=1').then(r=>r.json()).then(a=>{if(Array.isArray(a))NT.messages=(Array.isArray(NT.messages)?NT.messages:[]).concat(a.map(n=>({id:'s'+n.id,title:n.title,text:n.text,link:n.link,linkText:n.link?'Dekho →':'',date:window.fmtD(n.date)})));}).catch(()=>{});}}).then(()=>badge());}
 loadNT();document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadNT();});
 const DP='adhyayan_dis_perm',DY='adhyayan_dis_day';
 const ldA=k=>{try{return JSON.parse(localStorage.getItem(k))||[];}catch(e){return[];}};
@@ -7016,11 +7016,11 @@ function show(d){let v=$('ownerView');if(!v){v=document.createElement('div');v.i
  '<div class="st-sec"><div class="nu-label">📣 NOTICE BHEJO (SAB STUDENTS KO)</div><input class="ow-in" id="owT" maxlength="80" placeholder="Title (jaise: Kal Maths test)"><textarea class="ow-in" id="owM" rows="3" maxlength="300" placeholder="Message likho..."></textarea><input class="ow-in" id="owL" placeholder="Link (optional)"><label class="ow-ck"><input type="checkbox" id="owP" checked> 📲 Phone notification bhi bhejo</label><button class="primary" id="owB" onclick="OWsend()">📣 Bhejo</button></div>'+
  '<div class="st-sec"><div class="nu-label">PICHHLE NOTICES</div><div id="owList" class="small">Loading...</div></div>';
  list();}
-async function list(){const el=$('owList');if(!el)return;try{const a=await (await fetch(TU+'?notices=1')).json();el.innerHTML=a.length?a.slice(0,8).map(n=>'<div class="st-row"><div><b>'+escHtml(n.title)+'</b><small>'+escHtml(String(n.text).slice(0,90))+' · '+escHtml(n.date)+'</small></div><button class="st-b danger" onclick="OWdel(\''+n.id+'\')">✕</button></div>').join(''):'Abhi koi notice nahi.';}catch(e){el.textContent='Load nahi hua.';}}
+async function list(){const el=$('owList');if(!el)return;try{const a=await (await fetch(TU+'?notices=1')).json();el.innerHTML=a.length?a.slice(0,8).map(n=>'<div class="st-row"><div><b>'+escHtml(n.title)+'</b><small>'+escHtml(String(n.text).slice(0,90))+' · '+escHtml(window.fmtD(n.date))+'</small></div><button class="st-b danger" onclick="OWdel(\''+n.id+'\')">✕</button></div>').join(''):'Abhi koi notice nahi.';}catch(e){el.textContent='Load nahi hua.';}}
 window.OWsend=async function(){const t=$('owT').value.trim(),m=$('owM').value.trim();if(!t||!m){toast('Title aur message likho');return;}
  const b=$('owB');b.disabled=true;b.textContent='Bhej raha hoon...';
  try{const r=await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice',pin:pin(),title:t,text:m,link:$('owL').value.trim(),push:$('owP').checked})});let j={ok:1};try{j=await r.json();}catch(e){}
-  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?(j.push.recipients>0?'✅ Notice + '+j.push.recipients+' phone par notification bheji!':'⚠️ Notice gaya, par abhi kisi phone par notification allow nahi hai'):'✅ Notice bhej diya (app ke andar)');$('owT').value=$('owM').value=$('owL').value='';list();}}
+  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?(j.push.recipients>0?'✅ Notice + '+j.push.recipients+' phone par notification bheji!':'⚠️ Notice gaya, par phone push nahi gayi'+(j.push.errors?' ('+String(j.push.errors).slice(0,70)+')':'')):'✅ Notice bhej diya (app ke andar)');$('owT').value=$('owM').value=$('owL').value='';list();}}
  catch(e){toast('Bhej nahi paya, internet check karo');}b.disabled=false;b.textContent='📣 Bhejo';};
 window.OWdel=async function(id){if(!confirm('Ye notice hata dein?'))return;try{await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice_del',pin:pin(),id:id})});}catch(e){}setTimeout(list,600);};
 /* ---- push tags: naam + aaj practice hui ya nahi (reminder tabhi jaye jab practice na hui ho) ---- */
@@ -7277,7 +7277,7 @@ function draw(){prep();let v=$('ownerView');if(!v){v=document.createElement('div
  '<div class="ow-btns"><button onclick="showLeaderboard()"><i>🏆</i><span>Leaderboard</span></button><button onclick="TVshow()"><i>📊</i><span>Purana Teacher View</span></button></div>'+
  '<div class="st-sec"><div class="nu-label">📣 NOTICE BHEJO (SAB STUDENTS KO)</div><input class="ow-in" id="owT" maxlength="80" placeholder="Title (jaise: Kal Maths test)"><textarea class="ow-in" id="owM" rows="3" maxlength="300" placeholder="Message likho..."></textarea><input class="ow-in" id="owL" placeholder="Link (optional)"><label class="ow-ck"><input type="checkbox" id="owP" checked> 📲 Phone notification bhi bhejo</label><button class="primary" id="owB" onclick="OWsend()">📣 Bhejo</button></div>'+
  '<div class="st-sec"><div class="nu-label">PICHHLE NOTICES</div><div id="owList" class="small">Loading...</div></div>';
- fetch(TU+'?notices=1').then(r=>r.json()).then(a=>{const el=$('owList');if(el)el.innerHTML=a.length?a.slice(0,8).map(n=>'<div class="st-row"><div><b>'+e(n.title)+'</b><small>'+e(String(n.text).slice(0,90))+' · '+e(n.date)+'</small></div><button class="st-b danger" onclick="OWdel(\''+n.id+'\')">✕</button></div>').join(''):'Abhi koi notice nahi.';}).catch(()=>{const el=$('owList');if(el)el.textContent='Load nahi hua.';});}
+ fetch(TU+'?notices=1').then(r=>r.json()).then(a=>{const el=$('owList');if(el)el.innerHTML=a.length?a.slice(0,8).map(n=>'<div class="st-row"><div><b>'+e(n.title)+'</b><small>'+e(String(n.text).slice(0,90))+' · '+e(window.fmtD(n.date))+'</small></div><button class="st-b danger" onclick="OWdel(\''+n.id+'\')">✕</button></div>').join(''):'Abhi koi notice nahi.';}).catch(()=>{const el=$('owList');if(el)el.textContent='Load nahi hua.';});}
 /* panel chhupa hua: Settings se link hata, 7 baar tap se khulta hai */
 let c=0,t0=0;document.addEventListener('click',ev=>{const el=ev.target.closest('.dr-ft,#settingsView span');if(!el||(el.closest('#settingsView')&&el.textContent.indexOf('Version')!==0))return;const n=Date.now();c=n-t0<2500?c+1:1;t0=n;if(c>=7){c=0;if(window.DRclose)DRclose();OWNER();}});
 /* Notifications page khulte hi naye notices lao */
@@ -7402,6 +7402,9 @@ const css=document.createElement('style');css.textContent='#pNext{display:none!i
 '#resPerf{margin:16px 0;padding:16px;text-align:left;border-radius:18px;border:1px solid rgba(205,164,73,.45);background:rgba(205,164,73,.07)}#resPerf h3{margin:0 0 12px}.rp-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.rp-g div{text-align:center;padding:10px 4px;border-radius:12px;background:rgba(255,255,255,.06)}.rp-g b{display:block;font-size:22px}.rp-g span{font-size:10px;letter-spacing:.08em;opacity:.7}.rp-l{margin:7px 0;font-size:14px}.rp-t p{margin:7px 0;font-size:14px}.rp-d{margin-top:10px}.rp-d summary{cursor:pointer;color:var(--gold-soft)}.rp-w{display:flex;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.08);font-size:13px}.rp-w small{display:block;opacity:.7;margin-top:2px}';document.head.appendChild(css);
 const c2=document.createElement('style');c2.textContent='.rp-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}.rp-big{flex:0 0 auto;min-width:92px;text-align:center;padding:12px 8px;border-radius:16px;font:700 32px Georgia,serif;color:var(--gold-soft,#e8c76a);background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.5)}.rp-top b{display:block;font-size:17px}.rp-top small{display:block;margin-top:4px;opacity:.7;font-size:12px;line-height:1.4}.rp-tb{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px}.rp-tb th{padding:7px 4px;font-size:11px;letter-spacing:.04em;opacity:.7;border-bottom:1px solid rgba(255,255,255,.15);text-align:center}.rp-tb td{padding:8px 4px;text-align:center;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top}.rp-tb .l{text-align:left}.rp-tb td.g{color:#3ddc84;font-weight:700}.rp-tb td.y{color:#e8c76a;font-weight:700}.rp-tb td.r{color:#ff7b7b;font-weight:700}.rp-tb tr.tot td{font-weight:700;border-top:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.04)}.rp-tb small{display:block;margin-top:2px;opacity:.65;font-size:11px}.rp-h{margin:16px 0 4px;font-size:14px}';document.head.appendChild(c2);
 })();
+</script>
+<script>
+window.fmtD=function(d){try{if(d==null||d==='')return'';var s=String(d);if(/^\d{4}-\d\d-\d\dT/.test(s)){var t=new Date(s);if(!isNaN(t))return t.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Kolkata'});}return s;}catch(e){return String(d);}};
 </script>
 </body>
 </html>
