@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-27-v25">
+<meta name="app-version" content="2026-10-27-v27">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -540,6 +540,7 @@ html[data-theme=light] #pnav{background:rgba(255,255,255,.96) !important}
 .pa-box h3{margin:0;font-size:21px;color:var(--gold-soft)}.pa-sub{margin:4px 0 14px;color:var(--muted);font-size:13px}
 .pa-li{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 12px;margin:7px 0;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);font-size:14px}.pa-li i{font-style:normal;font-size:22px}
 .pa-box .primary{margin-top:14px;padding:15px}.pa-no{background:none;color:var(--muted);margin-top:8px;padding:10px;width:100%}.pa-box small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.pa-big{max-width:380px;padding:34px 22px 22px}.pa-big .pa-bell{width:110px;height:110px;font-size:58px}.pa-big h3{font-size:25px}.pa-big .pa-sub{font-size:15px;margin:8px 0 18px}.pa-big .primary{padding:18px;font-size:19px}
 </style>
 </head>
 <body>
@@ -7079,7 +7080,9 @@ window.PUSHASK=function(){if($('pAsk'))return;const o=document.createElement('di
  o.innerHTML='<div class="pa-box"><div class="pa-bell"><span>🔔</span></div><h3>Roz ka reminder chalu karo</h3><p class="pa-sub">Kabhi practice miss mat karo</p><div class="pa-li"><i>🎯</i><span>Daily 10 Challenge ka yaad dilana</span></div><div class="pa-li"><i>🔥</i><span>Streak khatre mein ho toh turant alert</span></div><div class="pa-li"><i>📢</i><span>Teacher ke notice sabse pehle</span></div><button class="primary" onclick="PAyes()">🔔 Haan, chalu karo</button><button class="pa-no" onclick="PAno()">Baad mein</button><small>Aap kabhi bhi Settings se band kar sakte ho</small></div>';document.body.appendChild(o);};
 window.PAyes=function(){const o=$('pAsk');if(o)o.remove();try{PUSHon();}catch(e){}};
 window.PAno=function(){const o=$('pAsk');if(o)o.remove();};
-setTimeout(()=>{try{const d=new Date().toDateString();if(window.PUSH_ON&&perm()!=='granted'&&perm()!=='unsupported'&&!sessionStorage.getItem('adhyayan_pk')&&!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){sessionStorage.setItem('adhyayan_pk','1');localStorage.setItem('adhyayan_pp',d);PUSHASK();}}catch(e){}},7000);
+(function(){let n=0;function tryAsk(){try{if(!window.PUSH_ON||perm()==='granted'||perm()==='unsupported'||sessionStorage.getItem('adhyayan_pk'))return;
+ if(!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){sessionStorage.setItem('adhyayan_pk','1');localStorage.setItem('adhyayan_pp',new Date().toDateString());PUSHASK();return;}
+ if(++n<10)setTimeout(tryAsk,2000);}catch(e){}}setTimeout(tryAsk,3500);})();
 const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{installCard();}catch(e){}return r;};
 try{installCard();}catch(e){}
 })();
@@ -7280,6 +7283,33 @@ let c=0,t0=0;document.addEventListener('click',ev=>{const el=ev.target.closest('
 /* Notifications page khulte hi naye notices lao */
 const _sn=window.showNotifs;window.showNotifs=function(){const r=_sn.apply(this,arguments);try{if(window._LNT){_LNT();setTimeout(()=>{const v=$('notifView');if(v&&!v.classList.contains('hidden'))NVre();},1500);}}catch(x){}return r;};
 const css=document.createElement('style');css.textContent='.ow-st{margin:7px 0;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);overflow:hidden}.ow-h{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer}.ow-h>div:nth-child(2){flex:1;min-width:0}.ow-h b{display:block;font-size:14px}.ow-h small{display:block;font-size:11.5px;color:var(--muted)}.ow-r{text-align:right}.ow-r b{color:var(--gold-soft)}.ow-d{display:none;padding:2px 12px 12px;border-top:1px solid rgba(255,255,255,.07)}.ow-st.op .ow-d{display:block}.ow-sb{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:12.5px}.ow-sb span{width:58px}.ow-sb .bar{flex:1}.ow-sb b{width:38px;text-align:right}.ow-tp{display:flex;justify-content:space-between;gap:8px;padding:6px 0;font-size:14px}.ow-tp span{color:var(--muted);font-size:12.5px}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V20: one-tap notification allow ===== */
+(function(){
+const $=id=>document.getElementById(id);
+const perm=()=>('Notification' in window)?Notification.permission:'unsupported';
+function toast(t,ms){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),ms||3500);}
+function subscribe(){try{if(window.OneSignalDeferred)OneSignalDeferred.push(async OS=>{try{if(!OS.User.PushSubscription.optedIn)await OS.User.PushSubscription.optIn();}catch(e){window._osErr=String(e&&e.message||e);}});}catch(e){}}
+function refresh(){const c=$('pushCard');if(c)c.remove();const v=$('notifView');if(v&&!v.classList.contains('hidden')&&window.NVre)NVre();}
+/* seedha Chrome ka Allow dialog: click ke andar hi, beech mein koi aur layer nahi */
+window.PUSHon=function(){
+ if(perm()==='unsupported'){toast('Is browser mein notification nahi. App install karke kholo.');return;}
+ if(perm()==='denied'){PUSHASK();return;}
+ if(perm()==='granted'){subscribe();toast('✅ Notification pehle se chalu hai');refresh();return;}
+ let done=false,pr;try{pr=Notification.requestPermission();}catch(e){}
+ setTimeout(()=>{if(!done&&perm()==='default')toast('Popup nahi dikha? Address bar mein 🔔 icon dabao → Allow',6000);},2200);
+ Promise.resolve(pr).then(p=>{done=true;p=p||perm();
+  if(p==='granted'){subscribe();toast('🔔 Notification chalu ho gayi!');refresh();}
+  else if(p==='denied'){setTimeout(()=>{if($('pAsk'))PAno();PUSHASK();},400);}
+  else toast('Allow nahi hui. Dobara "Allow karo" dabao.');});};
+window.PAyes=function(){const o=$('pAsk');if(o)o.remove();PUSHon();};
+window.PUSHASK=function(){if($('pAsk'))return;const o=document.createElement('div');o.id='pAsk';const bl=perm()==='denied';
+ o.innerHTML=bl?
+ '<div class="pa-box"><div class="pa-bell"><span>🚫</span></div><h3>Notification blocked hai</h3><p class="pa-sub">Bas 3 tap mein chalu hoga</p><div class="pa-li"><i>1️⃣</i><span>Address bar ke bagal <b>🔒</b> ya <b>⚙</b> icon dabao</span></div><div class="pa-li"><i>2️⃣</i><span><b>Permissions → Notifications → Allow</b></span></div><div class="pa-li"><i>3️⃣</i><span>App <b>reload</b> karo</span></div><div class="pa-li"><i>📲</i><span>App install ki hai? Icon dabake pakdo → <b>ⓘ → Notifications → ON</b></span></div><button class="primary" onclick="PAno()">Samajh gaya</button></div>':
+ '<div class="pa-box pa-big"><div class="pa-bell"><span>📢</span></div><h3>Notification Allow karo</h3><p class="pa-sub">Roz ka reminder aur teacher ke notice milenge</p><button class="primary" onclick="PAyes()">📢 Allow karo</button><button class="pa-no" onclick="PAno()">Baad mein</button></div>';
+ document.body.appendChild(o);};
 })();
 </script>
 </body>
