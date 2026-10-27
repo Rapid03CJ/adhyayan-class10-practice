@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-26-v21">
+<meta name="app-version" content="2026-10-27-v25">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -6946,6 +6946,7 @@ function items(){const L=[];const seen=JSON.parse(localStorage.getItem(SM)||'[]'
  return L.filter(x=>!isDis(x));}
 function badge(){try{const n=items().filter(x=>x.unread).length;['navBadge','bellBadge'].forEach(i=>{const b=$(i);if(b){b.textContent=n;b.style.display=n?'flex':'none';}});}catch(e){}}
 window._NI=items;window._NB=badge;
+window._LNT=loadNT;
 /* ---- profile screen ---- */
 window.showProfile=function(){let v=$('profileView');if(!v){v=document.createElement('div');v.id='profileView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');renderProfile();window.scrollTo(0,0);
  try{const s=JSON.parse(localStorage.getItem(SM)||'[]');items().forEach(x=>{if(x.id&&s.indexOf(x.id)<0)s.push(x.id);});localStorage.setItem(SM,JSON.stringify(s));}catch(e){}setTimeout(badge,50);};
@@ -6980,7 +6981,7 @@ const btn=(t,a,c)=>'<button class="st-b'+(c?' '+c:'')+'" onclick="'+a+'">'+t+'</
 window.showSettings=function(){let v=$('settingsView');if(!v){v=document.createElement('div');v.id='settingsView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');render();window.scrollTo(0,0);};
 function render(){const v=$('settingsView'),ui=_ui,s=loadStudent()||{},ex=localStorage.getItem('adhyayan_examdate_v1')||'',gl=localStorage.getItem('adhyayan_goal_v1')||'20',ver=(document.querySelector('meta[name=app-version]')||{}).content||'';
  v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">PREFERENCES</div><h2 style="margin:2px 0 6px">⚙️ Settings</h2>'+
- sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('👑 Owner Panel','Leaderboard, performance aur notice (PIN)',btn('Kholo','OWNER()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
+ sec('👤 ACCOUNT',row(escHtml(s.name||'Student'),'Class 10'+(s.section?' · '+escHtml(s.section):''),btn('Switch','switchStudent()'))+row('Progress sharing','Aapka naam, class aur score teacher ko dikhta hai',''))+
  sec('🎨 APPEARANCE',row('Theme','Dark ya Light',btn(ui.theme==='light'?'☀️ Light':'🌙 Dark','STtheme()'))+row('Text size','Chhota ya bada',btn('A−','STfz(-1)')+btn('A+','STfz(1)')))+
  sec('🔔 NOTIFICATIONS',row('Sound & vibration','Sahi / galat answer par',btn(ui.snd?'🔊 On':'🔇 Off','STsnd()'))+row('Phone notification',PSUB(),PBTN())+row('🔧 Notification check','Test bhejke dekho aa rahi hai ya nahi',btn('Check','NTEST()'))+row('Calendar reminder','Roz ka alarm lagao',btn('Lagao','REM()'))+row('Notifications','Sab hata do',btn('Clear all','NCLR()')))+
  sec('📚 STUDY',row('Board exam date','Countdown ke liye','<input type="date" class="st-in" value="'+ex+'" onchange="setExamDate(this.value)">')+row('Daily goal','Roz kitne sawal','<select class="st-in" onchange="setDailyGoal(this.value)">'+[10,20,30,40,50].map(n=>'<option'+(String(n)===gl?' selected':'')+'>'+n+'</option>').join('')+'</select>'))+
@@ -7178,6 +7179,107 @@ function meter(){const rv=$('reportView');if(!rv)return;let m=$('perfMeter');if(
  '<div class="pm-tip">💡 '+tip+'</div><small class="pm-n">Score = Accuracy 40% + Practice 30% + Consistency 30%. Kam sawal karke 100% accuracy se "Strong" nahi banta.</small>';}
 const _s=showReport;showReport=function(){const r=_s.apply(this,arguments);try{meter();}catch(e){}return r;};
 const css=document.createElement('style');css.textContent='#perfMeter{margin:4px 0 18px;padding:16px;border-radius:20px;background:linear-gradient(160deg,rgba(205,164,73,.14),rgba(255,255,255,.03));border:1px solid rgba(205,164,73,.45)}.pm-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}.pm-ring{flex:0 0 78px;height:78px;border-radius:50%;border:5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center}.pm-ring b{font-size:26px;line-height:1}.pm-ring small{font-size:10px;color:var(--muted)}.pm-v{font-size:19px;font-weight:700}.pm-b{margin:9px 0}.pm-b>div:first-child{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}.pm-b b{color:var(--gold-soft);font-weight:600}.pm-tip{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);font-size:13px}.pm-n{display:block;margin-top:8px;color:var(--muted);font-size:11px}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V18: hamburger side drawer ===== */
+(function(){
+const $=id=>document.getElementById(id),D=$('dashboard'),W=document.querySelector('.wrap');
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function unread(){try{return (window._NI?_NI():[]).filter(x=>x.unread).length;}catch(e){return 0;}}
+function item(i,l,a,b){return '<button class="dr-i" onclick="DRGO(\''+a+'\')"><i>'+i+'</i><span>'+l+'</span>'+(b?'<b class="dr-b">'+b+'</b>':'<em>›</em>')+'</button>';}
+const ACT={
+ home:()=>showDashboard(),notes:()=>NLIB(),daily:()=>P.daily(),mock:()=>P.mock(),report:()=>showReport(),rev:()=>startRevision(),
+ saved:()=>{const b=$('savedBtn');b&&b.click();},lb:()=>showLeaderboard(),notif:()=>showNotifs(),cert:()=>openCert(),nb:()=>P.nb(),
+ parent:()=>WAparent(),chal:()=>CHnew(),group:()=>WAadm(),fb:()=>FB(),inst:()=>INSTALL(),set:()=>showSettings(),prof:()=>showProfile(),
+ theme:()=>{P.theme();closeSheet();DRrender();},plan:()=>TOOL('📅 Aaj ka Plan','planBox'),pred:()=>TOOL('🔮 Predicted Board Score','predBox'),focus:()=>TOOL('⏱️ Focus Timer','focusCard')};
+function build(){const s=(typeof loadStudent==='function'&&loadStudent())||{},nm=s.name||'Student',st=(typeof calcStreak==='function')?calcStreak(loadActivity()):0;let lv=1;try{lv=xpInfo().lv;}catch(e){}
+ const dark=document.documentElement.getAttribute('data-theme')!=='light',u=unread();
+ return '<div class="dr-hd"><button class="dr-x" aria-label="Band karo" onclick="DRclose()">✕</button><div class="dr-av">'+esc(nm.trim().charAt(0).toUpperCase())+'</div><div class="dr-nm">'+esc(nm)+'</div><div class="dr-sub">Class 10'+(s.section?' · '+esc(s.section):'')+' · अध्ययन Tuition Centre</div><div class="dr-ch"><span>🔥 '+st+' din</span><span>⭐ Level '+lv+'</span></div><a class="dr-pf" onclick="DRGO(\'prof\')">Profile dekho →</a></div>'+
+ '<div class="dr-sc">'+item('🎯','Daily 10 Challenge','daily')+item('📝','Mock Test','mock')+item('🔁','Revision','rev')+item('⭐','Saved Questions','saved')+item('🏆','Leaderboard','lb')+
+ '<div class="dr-sep">STUDY TOOLS</div>'+item('📅','Aaj ka Plan','plan')+item('🔮','Predicted Board Score','pred')+item('⏱️','Focus Timer','focus')+item('📓','Mistake Notebook','nb')+'<div class="dr-sep">TOOLS</div>'+item('🔔','Notifications','notif',u||'')+item('🎓','Report Card Certificate','cert')+item('📲','Parent Report','parent')+item('🧑‍🤝‍🧑','Dost Challenge','chal')+
+ '<div class="dr-sep">HELP</div>'+item('💬','Doubt / WhatsApp Group','group')+item('🚩','Feedback','fb')+(window.INSTALLED?'':item('📲','App Install karo','inst'))+
+ '<div class="dr-sep">SETTINGS</div><button class="dr-i" onclick="DRGO(\'theme\',1)"><i>🌙</i><span>Dark Theme</span><span class="dr-sw'+(dark?' on':'')+'"><u></u></span></button>'+item('⚙️','Settings','set')+
+ '</div><div class="dr-ft">Designed by Chandravesh Jukariya<br><small>CONCEPT CLEAR → PRACTICE REGULAR → SUCCESS SURE</small></div>';}
+function DRrender(){const d=$('drawer');if(d)d.innerHTML=build();}
+window.DRrender=DRrender;
+
+/* tool screen: asli elements ko alag page mein laata hai, wapas jaate waqt jagah par rakh deta hai */
+const MOVED=[];function restore(){MOVED.splice(0).forEach(m=>{try{m.parent.insertBefore(m.el,m.next);m.el.style.display=m.disp;}catch(e){}});}
+const _hs=hideAllScreens;hideAllScreens=function(){restore();_hs.apply(this,arguments);const v=$('toolView');if(v)v.classList.add('hidden');};
+window.TOOL=function(title,id){showDashboard();setTimeout(()=>{const el=$(id);let v=$('toolView');if(!v){v=document.createElement('div');v.id='toolView';v.className='card hidden';W.appendChild(v);}
+ hideAllScreens();v.classList.remove('hidden');
+ v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><h2 style="margin:10px 0 14px">'+title+'</h2><div id="toolHost"></div>';
+ if(!el){$('toolHost').innerHTML='<div class="small">Abhi ye dikh nahi raha. Thodi der baad dobara kholo.</div>';}
+ else{MOVED.push({el:el,parent:el.parentNode,next:el.nextSibling,disp:el.style.display});el.style.display='block';$('toolHost').appendChild(el);}
+ window.scrollTo(0,0);},120);};
+window.DRG=function(){if(!$('drawer')){const bg=document.createElement('div');bg.id='drawerBg';bg.onclick=()=>DRclose();const d=document.createElement('aside');d.id='drawer';d.setAttribute('aria-label','Menu');document.body.append(bg,d);
+  let x0=null;d.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});d.addEventListener('touchmove',e=>{if(x0!=null&&e.touches[0].clientX-x0<-60){x0=null;DRclose();}},{passive:true});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')DRclose();});}
+ DRrender();requestAnimationFrame(()=>{$('drawerBg').classList.add('on');$('drawer').classList.add('on');});document.body.style.overflow='hidden';};
+window.DRclose=function(){const d=$('drawer');if(d){d.classList.remove('on');$('drawerBg').classList.remove('on');}document.body.style.overflow='';};
+window.DRGO=function(k,keep){if(!keep)DRclose();try{ACT[k]();}catch(e){}};
+/* top bar: ☰ left, 🔔 ⚙️ right */
+function top(){const t=$('homeTop');if(!t||t.dataset.v18)return;t.dataset.v18=1;
+ t.innerHTML='<button id="mnuBtn" aria-label="Menu" onclick="DRG()"><span class="ham"><i></i><i></i><i></i></span></button><div class="ht-r"><button aria-label="Notifications" onclick="showNotifs()">🔔<b class="nb" id="bellBadge" style="display:none"></b></button><button aria-label="Settings" onclick="showSettings()">⚙️</button></div>';}
+top();const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{top();}catch(e){}return r;};
+const css=document.createElement('style');css.textContent=
+'#homeTop .ht-r{display:flex;gap:8px;pointer-events:none}.ham{display:flex;flex-direction:column;gap:4px}.ham i{display:block;width:19px;height:2.4px;border-radius:2px;background:var(--gold-soft,#e8c76a)}'+
+'#drawerBg{position:fixed;inset:0;z-index:119;background:rgba(2,5,12,.62);opacity:0;pointer-events:none;transition:opacity .25s;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}#drawerBg.on{opacity:1;pointer-events:auto}'+
+'#drawer{position:fixed;top:0;bottom:0;left:0;width:min(84vw,330px);z-index:120;display:flex;flex-direction:column;background:linear-gradient(180deg,#101a36,#080c17);border-right:1px solid rgba(205,164,73,.4);box-shadow:8px 0 40px rgba(0,0,0,.55);transform:translateX(-102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);color:var(--cream,#f3ead2)}#drawer.on{transform:none}'+
+'[data-theme=light] #drawer{background:linear-gradient(180deg,#fff,#f6f3ea)}'+
+'.dr-hd{position:relative;padding:calc(env(safe-area-inset-top,0px) + 22px) 18px 16px;background:linear-gradient(135deg,rgba(205,164,73,.22),rgba(205,164,73,.04));border-bottom:1px solid rgba(205,164,73,.35)}.dr-x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;width:34px;height:34px;padding:0;border-radius:50%;background:rgba(255,255,255,.07);color:inherit;font-size:15px}'+
+'.dr-av{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 28px Georgia,serif;color:#1a1206;background:linear-gradient(135deg,#f6dc9a,#cda449);box-shadow:0 4px 14px rgba(205,164,73,.4)}.dr-nm{margin-top:10px;font:700 20px Georgia,serif}.dr-sub{font-size:12px;opacity:.7;margin-top:2px}'+
+'.dr-ch{display:flex;gap:8px;margin-top:10px}.dr-ch span{padding:4px 10px;border-radius:12px;font-size:12px;background:rgba(255,255,255,.08);border:1px solid rgba(205,164,73,.3)}.dr-pf{display:inline-block;margin-top:10px;font-size:13px;color:var(--gold-soft,#e8c76a);cursor:pointer}'+
+'.dr-sc{flex:1;overflow-y:auto;padding:8px 10px;-webkit-overflow-scrolling:touch}.dr-i{display:flex;align-items:center;gap:14px;width:100%;padding:13px 10px;margin:1px 0;border-radius:12px;background:none;color:inherit;font-size:15px;text-align:left}.dr-i:active{background:rgba(205,164,73,.14)}.dr-i i{font-style:normal;font-size:20px;width:26px;text-align:center}.dr-i span:not(.dr-sw){flex:1}.dr-i em{font-style:normal;opacity:.4;font-size:18px}'+
+'.dr-b{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#e0716a;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}.dr-sep{margin:12px 10px 4px;font-size:11px;letter-spacing:.14em;color:var(--gold-soft,#e8c76a);opacity:.85}'+
+'.dr-sw{width:42px;height:24px;border-radius:12px;background:rgba(255,255,255,.18);position:relative;transition:.2s}.dr-sw u{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}.dr-sw.on{background:#4c8dff}.dr-sw.on u{left:21px}'+
+'.dr-ft{padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 14px);font-size:12px;text-align:center;opacity:.7;border-top:1px solid rgba(255,255,255,.08)}.dr-ft small{font-size:9px;letter-spacing:.08em;opacity:.8}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V19: hidden + detailed Owner Panel; notices refresh ===== */
+(function(){
+const $=id=>document.getElementById(id),W=document.querySelector('.wrap'),TU=window._TU||'',ok=()=>TU&&TU.indexOf('PASTE_YOUR')<0;
+const e=s=>escHtml(s==null?'':s);
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+const pin=()=>sessionStorage.getItem('adhyayan_pin');
+function ago(ms){if(ms==null||isNaN(ms))return 'kabhi nahi';const m=Math.floor(ms/6e4);if(m<2)return 'abhi';if(m<60)return m+' min pehle';const h=Math.floor(m/60);if(h<24)return h+' ghante pehle';return Math.floor(h/24)+' din pehle';}
+let DATA=[];
+window.OWNER=async function(){window._ownT=Date.now();if(!ok()){alert('Teacher script URL set nahi hai.');return;}
+ const p=pin()||prompt('Owner PIN daalo:');if(!p)return;
+ try{const d=await (await fetch(TU+'?pin='+encodeURIComponent(p))).json();if(d.error){sessionStorage.removeItem('adhyayan_pin');alert('PIN galat hai.');return;}sessionStorage.setItem('adhyayan_pin',p);DATA=d;draw();}catch(x){alert('Load nahi ho paya. Internet check karo.');}};
+function prep(){DATA.forEach(x=>{x.ms=x.last?Date.now()-new Date(x.last):null;x.days=x.ms==null?99:Math.floor(x.ms/864e5);x.today=x.last&&new Date(x.last).toDateString()===new Date().toDateString();});}
+function dot(x){return x.today?'🟢':x.days<=3?'🟡':'🔴';}
+function bar(l,v){v=v===''||v==null?null:+v;return '<div class="ow-sb"><span>'+l+'</span><div class="bar"><div class="fill" style="width:'+(v||0)+'%"></div></div><b>'+(v==null?'—':v+'%')+'</b></div>';}
+function row(x,i){const wk=String(x.weak||'').split(/[,;|]/).map(s=>s.trim()).filter(Boolean);
+ return '<div class="ow-st" data-n="'+e(String(x.name).toLowerCase())+'"><div class="ow-h" onclick="this.parentNode.classList.toggle(\'op\')"><span>'+dot(x)+'</span><div><b>'+e(x.name)+'</b><small>'+(x.section?e(x.section)+' · ':'')+ago(x.ms)+'</small></div><div class="ow-r"><b>'+(+x.overall||0)+'%</b><small>'+(+x.att||0)+' Q · 🔥'+(+x.streak||0)+'</small></div></div>'+
+ '<div class="ow-d">'+bar('Maths',x.maths)+bar('Science',x.science)+bar('SST',x.sst)+bar('English',x.english)+'<div class="small" style="margin:6px 0">Sahi: <b>'+(+x.cor||0)+'</b> / '+(+x.att||0)+(wk.length?'<br>⚠️ Weak: '+e(wk.join(', ')):'')+'</div><button class="st-b" onclick="OWcopy('+i+')">📋 Nudge message copy</button></div></div>';}
+window.OWcopy=function(i){const x=DATA[i];const t=x.days>=4?'Namaste '+x.name+'! '+x.days+' din se app par practice nahi hui. Aaj sirf 10 sawal karo 🎯 Boards paas hain!':'Shabash '+x.name+'! Aaj ke Daily 10 pure karo aur streak banaye rakho 🔥';(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Message copy ho gaya')).catch(()=>prompt('Copy karo:',t));};
+window.OWfind=function(q){q=q.toLowerCase();document.querySelectorAll('.ow-st').forEach(r=>r.style.display=r.dataset.n.indexOf(q)<0?'none':'');};
+function draw(){prep();let v=$('ownerView');if(!v){v=document.createElement('div');v.id='ownerView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');
+ const d=DATA,n=d.length,act=d.filter(x=>x.today).length,w7=d.filter(x=>x.days<=6).length,gone=d.filter(x=>x.days>=4),avg=n?Math.round(d.reduce((s,x)=>s+(+x.overall||0),0)/n):0,tot=d.reduce((s,x)=>s+(+x.att||0),0),str=n?Math.round(d.reduce((s,x)=>s+(+x.streak||0),0)/n*10)/10:0;
+ const sa=k=>{const a=d.map(x=>x[k]).filter(z=>z!==''&&z!=null).map(Number);return a.length?Math.round(a.reduce((s,z)=>s+z,0)/a.length):null;};
+ const top=d.slice().sort((a,b)=>(+b.cor||0)-(+a.cor||0)).slice(0,3),med=['🥇','🥈','🥉'];
+ const wc={};d.forEach(x=>String(x.weak||'').split(/[,;|]/).map(s=>s.trim()).filter(Boolean).forEach(c=>wc[c]=(wc[c]||0)+1));const wl=Object.entries(wc).sort((a,b)=>b[1]-a[1]).slice(0,5);
+ const sorted=d.map((x,i)=>({x,i})).sort((a,b)=>(a.x.ms==null?1e15:a.x.ms)-(b.x.ms==null?1e15:b.x.ms));
+ v.innerHTML='<span class="backlink" onclick="showDashboard()">&larr; Back</span><div class="nu-label" style="margin-top:8px">ADMIN</div><h2 style="margin:2px 0 10px">👑 Owner Panel</h2>'+
+ '<div class="pf-tiles"><div><b>'+n+'</b><span>STUDENTS</span></div><div><b>'+act+'</b><span>AAJ ACTIVE</span></div><div><b>'+w7+'</b><span>7 DIN ACTIVE</span></div><div><b>'+gone.length+'</b><span>GAYAB (4+ DIN)</span></div></div>'+
+ '<div class="pf-tiles"><div><b>'+avg+'%</b><span>CLASS AVG</span></div><div><b>'+tot+'</b><span>TOTAL SAWAL</span></div><div><b>'+str+'</b><span>AVG STREAK</span></div><div><b>'+(sa('maths')==null?'—':sa('maths')+'%')+'</b><span>MATHS AVG</span></div></div>'+
+ '<div class="st-sec"><div class="nu-label">📚 SUBJECT-WISE CLASS AVERAGE</div>'+bar('Maths',sa('maths'))+bar('Science',sa('science'))+bar('SST',sa('sst'))+bar('English',sa('english'))+'</div>'+
+ (top.length?'<div class="st-sec"><div class="nu-label">🏆 TOP 3 (sahi jawab)</div>'+top.map((x,i)=>'<div class="ow-tp">'+med[i]+' <b>'+e(x.name)+'</b> <span>'+(+x.cor||0)+' sahi · '+(+x.overall||0)+'%</span></div>').join('')+'</div>':'')+
+ (gone.length?'<div class="st-sec"><div class="nu-label">🔴 GAYAB (4+ DIN SE NAHI AAYE)</div><div class="small">'+gone.map(x=>e(x.name)+' ('+(x.days>=99?'kabhi nahi':x.days+' din')+')').join(' · ')+'</div></div>':'')+
+ (wl.length?'<div class="st-sec"><div class="nu-label">⚠️ CLASS KE SABSE KAMZOR CHAPTER</div>'+wl.map(c=>'<div class="ow-tp"><b>'+e(c[0])+'</b> <span>'+c[1]+' student</span></div>').join('')+'</div>':'')+
+ '<div class="st-sec"><div class="nu-label">👥 SAB STUDENTS ('+n+') — tap karke detail dekho</div><input class="ow-in" placeholder="🔍 Naam se dhundo" oninput="OWfind(this.value)">'+sorted.map(o=>row(o.x,o.i)).join('')+'</div>'+
+ '<div class="ow-btns"><button onclick="showLeaderboard()"><i>🏆</i><span>Leaderboard</span></button><button onclick="TVshow()"><i>📊</i><span>Purana Teacher View</span></button></div>'+
+ '<div class="st-sec"><div class="nu-label">📣 NOTICE BHEJO (SAB STUDENTS KO)</div><input class="ow-in" id="owT" maxlength="80" placeholder="Title (jaise: Kal Maths test)"><textarea class="ow-in" id="owM" rows="3" maxlength="300" placeholder="Message likho..."></textarea><input class="ow-in" id="owL" placeholder="Link (optional)"><label class="ow-ck"><input type="checkbox" id="owP" checked> 📲 Phone notification bhi bhejo</label><button class="primary" id="owB" onclick="OWsend()">📣 Bhejo</button></div>'+
+ '<div class="st-sec"><div class="nu-label">PICHHLE NOTICES</div><div id="owList" class="small">Loading...</div></div>';
+ fetch(TU+'?notices=1').then(r=>r.json()).then(a=>{const el=$('owList');if(el)el.innerHTML=a.length?a.slice(0,8).map(n=>'<div class="st-row"><div><b>'+e(n.title)+'</b><small>'+e(String(n.text).slice(0,90))+' · '+e(n.date)+'</small></div><button class="st-b danger" onclick="OWdel(\''+n.id+'\')">✕</button></div>').join(''):'Abhi koi notice nahi.';}).catch(()=>{const el=$('owList');if(el)el.textContent='Load nahi hua.';});}
+/* panel chhupa hua: Settings se link hata, 7 baar tap se khulta hai */
+let c=0,t0=0;document.addEventListener('click',ev=>{const el=ev.target.closest('.dr-ft,#settingsView span');if(!el||(el.closest('#settingsView')&&el.textContent.indexOf('Version')!==0))return;const n=Date.now();c=n-t0<2500?c+1:1;t0=n;if(c>=7){c=0;if(window.DRclose)DRclose();OWNER();}});
+/* Notifications page khulte hi naye notices lao */
+const _sn=window.showNotifs;window.showNotifs=function(){const r=_sn.apply(this,arguments);try{if(window._LNT){_LNT();setTimeout(()=>{const v=$('notifView');if(v&&!v.classList.contains('hidden'))NVre();},1500);}}catch(x){}return r;};
+const css=document.createElement('style');css.textContent='.ow-st{margin:7px 0;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);overflow:hidden}.ow-h{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer}.ow-h>div:nth-child(2){flex:1;min-width:0}.ow-h b{display:block;font-size:14px}.ow-h small{display:block;font-size:11.5px;color:var(--muted)}.ow-r{text-align:right}.ow-r b{color:var(--gold-soft)}.ow-d{display:none;padding:2px 12px 12px;border-top:1px solid rgba(255,255,255,.07)}.ow-st.op .ow-d{display:block}.ow-sb{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:12.5px}.ow-sb span{width:58px}.ow-sb .bar{flex:1}.ow-sb b{width:38px;text-align:right}.ow-tp{display:flex;justify-content:space-between;gap:8px;padding:6px 0;font-size:14px}.ow-tp span{color:var(--muted);font-size:12.5px}';document.head.appendChild(css);
 })();
 </script>
 </body>
