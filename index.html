@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-27-v30">
+<meta name="app-version" content="2026-10-27-v32">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7020,7 +7020,7 @@ async function list(){const el=$('owList');if(!el)return;try{const a=await (awai
 window.OWsend=async function(){const t=$('owT').value.trim(),m=$('owM').value.trim();if(!t||!m){toast('Title aur message likho');return;}
  const b=$('owB');b.disabled=true;b.textContent='Bhej raha hoon...';
  try{const r=await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice',pin:pin(),title:t,text:m,link:$('owL').value.trim(),push:$('owP').checked})});let j={ok:1};try{j=await r.json();}catch(e){}
-  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?(j.push.recipients>0?'✅ Notice + '+j.push.recipients+' phone par notification bheji!':'⚠️ Notice gaya, par phone push nahi gayi'+(j.push.errors?' ('+String(j.push.errors).slice(0,70)+')':'')):'✅ Notice bhej diya (app ke andar)');$('owT').value=$('owM').value=$('owL').value='';list();}}
+  if(j.ok===0){toast('PIN ya server problem');}else{toast(j.push&&j.push.code===200?((j.push.id||j.push.recipients>0)?'✅ Notice + phone notification bheji!'+(j.push.recipients?' ('+j.push.recipients+' phone)':''):'⚠️ Notice gaya, par phone push nahi gayi'+(j.push.errors?' ('+String(j.push.errors).slice(0,70)+')':'')):(j.push&&j.push.skipped?'⚠️ Script mein OneSignal REST key khali hai, push nahi gayi':'✅ Notice bhej diya (app ke andar)'));$('owT').value=$('owM').value=$('owL').value='';list();}}
  catch(e){toast('Bhej nahi paya, internet check karo');}b.disabled=false;b.textContent='📣 Bhejo';};
 window.OWdel=async function(id){if(!confirm('Ye notice hata dein?'))return;try{await fetch(TU,{method:'POST',body:JSON.stringify({type:'notice_del',pin:pin(),id:id})});}catch(e){}setTimeout(list,600);};
 /* ---- push tags: naam + aaj practice hui ya nahi (reminder tabhi jaye jab practice na hui ho) ---- */
