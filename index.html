@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-28-v34">
+<meta name="app-version" content="2026-10-28-v35">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7465,6 +7465,25 @@ setTimeout(async()=>{try{if(!window.PUSH_ON||perm()!=='granted'||sessionStorage.
  const i=await info();if(okSub(i))return;
  const wait=()=>{if(!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){sessionStorage.setItem('adhyayan_rs','1');modal();}else setTimeout(wait,2000);};wait();}catch(e){}},8000);
 const css=document.createElement('style');css.textContent='.nlog{margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,255,255,.05);font:11px/1.45 monospace;word-break:break-word;opacity:.85}.nlog b{display:block;margin-bottom:4px;font-family:inherit}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V24: refresh karne par usi screen par raho ===== */
+(function(){
+const K='adhyayan_screen_v1';
+let SAVED=null;try{SAVED=JSON.parse(sessionStorage.getItem(K)||'null');}catch(e){}
+const MAP={reportView:()=>showReport(),leaderboardView:()=>showLeaderboard(),notesView:()=>showNotes(),settingsView:()=>showSettings(),profileView:()=>showProfile(),notifView:()=>showNotifs(),subjectView:()=>openSubject(currentSubject)};
+const ORDER=['practice','result','reportView','leaderboardView','subjectView','notesView','settingsView','profileView','notifView','toolView','ownerView','nameScreen','dashboard'];
+const cur=()=>{for(const id of ORDER){const e=document.getElementById(id);if(e&&!e.classList.contains('hidden'))return id;}return null;};
+function save(){try{const id=cur();if(!id)return;sessionStorage.setItem(K,JSON.stringify({id:id,y:Math.round(window.scrollY||0),t:Date.now(),sub:(typeof currentSubject!=='undefined'?currentSubject:null)}));}catch(e){}}
+function startSaving(){setInterval(save,800);addEventListener('pagehide',save);document.addEventListener('visibilitychange',save);let tt;addEventListener('scroll',()=>{clearTimeout(tt);tt=setTimeout(save,250);},{passive:true});}
+setTimeout(()=>{try{
+ if(SAVED&&Date.now()-SAVED.t<30*60*1000&&MAP[SAVED.id]&&cur()==='dashboard'&&!document.getElementById('pAsk')&&!document.getElementById('psheet')){
+  if(SAVED.id==='subjectView'&&SAVED.sub)currentSubject=SAVED.sub;
+  MAP[SAVED.id]();
+  if(SAVED.y>0)setTimeout(()=>window.scrollTo(0,SAVED.y),350);}
+ }catch(e){}
+ startSaving();},1800);
 })();
 </script>
 </body>
