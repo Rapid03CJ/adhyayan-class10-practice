@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-27-v32">
+<meta name="app-version" content="2026-10-28-v33">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7405,6 +7405,32 @@ const c2=document.createElement('style');c2.textContent='.rp-top{display:flex;al
 </script>
 <script>
 window.fmtD=function(d){try{if(d==null||d==='')return'';var s=String(d);if(/^\d{4}-\d\d-\d\dT/.test(s)){var t=new Date(s);if(!isNaN(t))return t.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Kolkata'});}return s;}catch(e){return String(d);}};
+</script>
+<script>
+/* ===== V22: notification connection repair + reason display ===== */
+(function(){
+const $=id=>document.getElementById(id);
+function toast(t){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),4000);}
+const sc=document.querySelector('script[src*="OneSignalSDK.page.js"]');window._osSdk=window.OneSignal?'loaded':'loading';
+if(sc){sc.addEventListener('load',()=>{window._osSdk='loaded';});sc.addEventListener('error',()=>{window._osSdk='blocked';});}
+function info(){return new Promise(res=>{if(!window.OneSignalDeferred){res(null);return;}const t=setTimeout(()=>res(null),3500);OneSignalDeferred.push(async OS=>{try{const s=OS.User.PushSubscription;clearTimeout(t);res({id:s.id,opt:s.optedIn});}catch(e){res(null);}});});}
+/* sirf notification ka connection reset: SW + OneSignal ka local data + cache. localStorage (progress) nahi chhua jata */
+window.NFIX=async function(){const b=$('nfixBtn');if(b){b.disabled=true;b.textContent='Theek kar raha hoon…';}
+ try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()));}catch(e){}
+ try{['ONE_SIGNAL_SDK_DB','OneSignal','onesignal'].forEach(n=>indexedDB.deleteDatabase(n));}catch(e){}
+ try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)));}catch(e){}
+ toast('Ho gaya. App dobara khul rahi hai…');setTimeout(()=>location.reload(),900);};
+const _n=window.NTEST;
+window.NTEST=async function(){await _n.apply(this,arguments);
+ try{const sh=document.querySelector('#psheet .psh');if(!sh||$('nfixBlock'))return;
+  const i=await info(),regs=await (navigator.serviceWorker?navigator.serviceWorker.getRegistrations():Promise.resolve([])).catch(()=>[]);
+  const good=i&&i.id&&i.opt,sdk=window._osSdk||'?',scopes=regs.map(r=>r.scope.replace(location.origin,'')).join(', ')||'koi nahi';
+  const d=document.createElement('div');d.id='nfixBlock';
+  d.innerHTML='<div class="nt-r"><span>🧩</span><span>OneSignal: <b>'+(sdk==='loaded'?'load hua':sdk==='blocked'?'BLOCK hua (internet/adblock?)':'abhi load ho raha hai')+'</b></span></div>'+
+   '<div class="nt-r"><span>⚙️</span><span>Service worker: <b>'+scopes+'</b></span></div>'+
+   (good?'':'<button class="primary" id="nfixBtn" style="margin-top:12px" onclick="NFIX()">🔄 Notification connection theek karo</button><p class="small">Sirf notification ka connection reset hota hai. Progress, naam, streak sab safe rahta hai. App delete nahi karni padti.</p>');
+  sh.appendChild(d);}catch(e){}};
+})();
 </script>
 </body>
 </html>
