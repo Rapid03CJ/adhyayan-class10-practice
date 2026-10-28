@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-28-v33">
+<meta name="app-version" content="2026-10-28-v34">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7430,6 +7430,41 @@ window.NTEST=async function(){await _n.apply(this,arguments);
    '<div class="nt-r"><span>⚙️</span><span>Service worker: <b>'+scopes+'</b></span></div>'+
    (good?'':'<button class="primary" id="nfixBtn" style="margin-top:12px" onclick="NFIX()">🔄 Notification connection theek karo</button><p class="small">Sirf notification ka connection reset hota hai. Progress, naam, streak sab safe rahta hai. App delete nahi karni padti.</p>');
   sh.appendChild(d);}catch(e){}};
+})();
+</script>
+<script>
+/* ===== V23: OneSignal ka asli log + re-subscribe popup ===== */
+(function(){
+const $=id=>document.getElementById(id),D=$('dashboard');
+const perm=()=>('Notification' in window)?Notification.permission:'unsupported';
+function toast(t,ms){const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),ms||4000);}
+/* --- console ka relevant log pakad lo (SDK load hone se pehle) --- */
+window._osLog=[];const RX=/onesignal|push|subscri|service ?worker|notification|vapid|applicationserverkey|permission/i;
+function keep(l,a){try{const s=[].map.call(a,x=>x&&x.message?x.message:(typeof x==='object'?JSON.stringify(x):String(x))).join(' ');if(RX.test(s)){_osLog.push(l+': '+s.slice(0,170));if(_osLog.length>30)_osLog.shift();}}catch(e){}}
+['error','warn'].forEach(l=>{const o=console[l];console[l]=function(){keep(l,arguments);return o.apply(console,arguments);};});
+addEventListener('unhandledrejection',e=>{keep('promise',[e.reason]);});addEventListener('error',e=>{keep('error',[e.message]);});
+function info(){return new Promise(res=>{if(!window.OneSignalDeferred){res(null);return;}const t=setTimeout(()=>res(null),3500);OneSignalDeferred.push(async OS=>{try{const s=OS.User.PushSubscription;clearTimeout(t);res({id:s.id,opt:s.optedIn});}catch(e){res(null);}});});}
+const okSub=i=>!!(i&&i.id&&i.opt);
+/* --- gesture ke andar dobara subscribe karne ki koshish --- */
+window.NSUB=function(){if(!window.OneSignalDeferred){toast('OneSignal load nahi hua');return;}
+ OneSignalDeferred.push(async OS=>{try{await OS.Notifications.requestPermission();}catch(e){keep('requestPermission',[e]);}try{await OS.User.PushSubscription.optIn();}catch(e){keep('optIn',[e]);}});
+ setTimeout(async()=>{const i=await info();if(okSub(i)){toast('✅ Notification connect ho gayi!');const c=$('pushCard');if(c)c.remove();if(window.closeSheet)closeSheet();}else toast('❌ Abhi bhi connect nahi hui. Settings → Notification check dekho.',5000);},3500);};
+/* --- Notification check sheet mein log dikhao --- */
+const _n=window.NTEST;
+window.NTEST=async function(){await _n.apply(this,arguments);
+ try{const sh=document.querySelector('#psheet .psh');if(!sh||$('nlogBlock'))return;
+  const i=await info(),d=document.createElement('div');d.id='nlogBlock';
+  const L=_osLog.slice(-6).map(x=>'<div>'+escHtml(x)+'</div>').join('')||'<div>Koi error log nahi mila</div>';
+  d.innerHTML='<div class="nt-r"><span>🆔</span><span>Subscription id: <b>'+(i&&i.id?'mil gayi':'nahi')+'</b> · opted in: <b>'+(i?String(i.opt):'?')+'</b></span></div>'+
+   (okSub(i)?'':'<button class="primary" style="margin-top:10px" onclick="NSUB()">🔔 Dobara connect karo</button>')+
+   '<div class="nlog"><b>OneSignal ka log:</b>'+L+'</div>';sh.appendChild(d);}catch(e){}};
+/* --- app khulte hi popup: permission Allow ho par subscription na ho tab bhi --- */
+function modal(){if($('pAsk'))return;const o=document.createElement('div');o.id='pAsk';
+ o.innerHTML='<div class="pa-box pa-big"><div class="pa-bell"><span>📢</span></div><h3>Notification connect karo</h3><p class="pa-sub">Ek baar dabao, phir reminder aur teacher ke notice aate rahenge</p><button class="primary" onclick="PAno();NSUB()">📢 Allow karo</button><button class="pa-no" onclick="PAno()">Baad mein</button></div>';document.body.appendChild(o);}
+setTimeout(async()=>{try{if(!window.PUSH_ON||perm()!=='granted'||sessionStorage.getItem('adhyayan_rs'))return;
+ const i=await info();if(okSub(i))return;
+ const wait=()=>{if(!D.classList.contains('hidden')&&!$('psheet')&&!$('pAsk')){sessionStorage.setItem('adhyayan_rs','1');modal();}else setTimeout(wait,2000);};wait();}catch(e){}},8000);
+const css=document.createElement('style');css.textContent='.nlog{margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,255,255,.05);font:11px/1.45 monospace;word-break:break-word;opacity:.85}.nlog b{display:block;margin-bottom:4px;font-family:inherit}';document.head.appendChild(css);
 })();
 </script>
 </body>
