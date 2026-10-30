@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-29-v41"><meta name="app-semver" content="2.6.0">
+<meta name="app-version" content="2026-10-29-v42"><meta name="app-semver" content="2.6.0">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7621,10 +7621,10 @@ const lgPrep=()=>{try{return JSON.parse(localStorage.getItem('adhyayan_prep_v1')
 const tkey=()=>{const t=new Date();return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();};
 function snap(){const m={};let a=0,k=0,p=0,w=0,sig='';NC().forEach(q=>{const s=progress[q.id];sig+=s?s[0]:'-';if(!s)return;const r=m[q.ex]||(m[q.ex]={k:0,p:0,w:0});a++;if(s==='correct'){r.k++;k++;}else if(s==='incorrect'){r.w++;w++;}else{r.p++;p++;}});return{m:m,a:a,k:k,p:p,w:w,sig:sig};}
 let lastSig=localStorage.getItem('adhyayan_prepsig')||'',lastAt=0;
-function pushPrep(force){try{if(!ok())return;const s=snap();if(!s.a)return;if(!force&&s.sig===lastSig)return;if(!force&&Date.now()-lastAt<15000)return;
- lastAt=Date.now();lastSig=s.sig;localStorage.setItem('adhyayan_prepsig',s.sig);
+function pushPrep(force){try{if(!ok())return;const s=snap();if(!s.a)return;if(!force&&s.sig===lastSig)return;if(!force&&Date.now()-lastAt<8000)return;
+ lastAt=Date.now();
  const acc=Math.round((s.k+s.p*.5)/s.a*100),days=Object.keys(lgPrep()).length,today=lgPrep()[tkey()]||0,w=Object.keys(s.m).map(e=>e+':'+s.m[e].k+','+s.m[e].p+','+s.m[e].w).join(';');
- fetch(TU(),{method:'POST',body:JSON.stringify({type:'progress',name:'[PREP] '+(ST().name||'Student'),section:ST().section||'',overall:acc,attempted:s.a,correct:s.k,subjects:{maths:today,science:'',sst:'',english:''},streak:days,weak:w})}).catch(()=>{});}catch(e){}}
+ fetch(TU(),{method:'POST',keepalive:true,body:JSON.stringify({type:'progress',name:'[PREP] '+(ST().name||'Student'),section:ST().section||'',overall:acc,attempted:s.a,correct:s.k,subjects:{maths:today,science:'',sst:'',english:''},streak:days,weak:w})}).then(r=>{if(r&&r.ok!==false){lastSig=s.sig;localStorage.setItem('adhyayan_prepsig',s.sig);}}).catch(()=>{});}catch(e){}}
 window.prepSync=pushPrep;
 setInterval(()=>pushPrep(false),15000);setTimeout(()=>pushPrep(false),5000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')pushPrep(false);});
