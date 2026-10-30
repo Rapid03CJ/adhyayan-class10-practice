@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-29-v42"><meta name="app-semver" content="2.6.0">
+<meta name="app-version" content="2026-10-31-v43"><meta name="app-semver" content="2.6.1">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7619,11 +7619,12 @@ const _f=window.fetch;window.fetch=function(u){const p=_f.apply(this,arguments);
 const NC=()=>window.NCQ||[],ST=()=>{try{return loadStudent()||{};}catch(e){return{};}};
 const lgPrep=()=>{try{return JSON.parse(localStorage.getItem('adhyayan_prep_v1'))||{};}catch(e){return{};}};
 const tkey=()=>{const t=new Date();return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();};
-function snap(){const m={};let a=0,k=0,p=0,w=0,sig='';NC().forEach(q=>{const s=progress[q.id];sig+=s?s[0]:'-';if(!s)return;const r=m[q.ex]||(m[q.ex]={k:0,p:0,w:0});a++;if(s==='correct'){r.k++;k++;}else if(s==='incorrect'){r.w++;w++;}else{r.p++;p++;}});return{m:m,a:a,k:k,p:p,w:w,sig:sig};}
+const OLD=()=>{let a=0,k=0;try{DB.maths.chapters.slice(0,7).forEach(c=>c.questions.forEach(q=>{const s=progress[q.id];if(s){a++;if(s==='correct')k++;}}));}catch(e){}return{a:a,k:k};};
+function snap(){const m={};let a=0,k=0,p=0,w=0,sig='';NC().forEach(q=>{const s=progress[q.id];sig+=s?s[0]:'-';if(!s)return;const r=m[q.ex]||(m[q.ex]={k:0,p:0,w:0});a++;if(s==='correct'){r.k++;k++;}else if(s==='incorrect'){r.w++;w++;}else{r.p++;p++;}});const o=OLD();return{m:m,a:a,k:k,p:p,w:w,o:o,sig:sig+'|'+o.a+'.'+o.k+'|'+(window.SEMV?SEMV():'')};}
 let lastSig=localStorage.getItem('adhyayan_prepsig')||'',lastAt=0;
-function pushPrep(force){try{if(!ok())return;const s=snap();if(!s.a)return;if(!force&&s.sig===lastSig)return;if(!force&&Date.now()-lastAt<8000)return;
+function pushPrep(force){try{if(!ok())return;const s=snap();if(!force&&s.sig===lastSig)return;if(!force&&Date.now()-lastAt<8000)return;
  lastAt=Date.now();
- const acc=Math.round((s.k+s.p*.5)/s.a*100),days=Object.keys(lgPrep()).length,today=lgPrep()[tkey()]||0,w=Object.keys(s.m).map(e=>e+':'+s.m[e].k+','+s.m[e].p+','+s.m[e].w).join(';');
+ const acc=s.a?Math.round((s.k+s.p*.5)/s.a*100):0,days=Object.keys(lgPrep()).length,today=lgPrep()[tkey()]||0,w=Object.keys(s.m).map(e=>e+':'+s.m[e].k+','+s.m[e].p+','+s.m[e].w).join(';')+'|O:'+s.o.a+','+s.o.k+'|V:'+(window.SEMV?SEMV():'');
  fetch(TU(),{method:'POST',keepalive:true,body:JSON.stringify({type:'progress',name:'[PREP] '+(ST().name||'Student'),section:ST().section||'',overall:acc,attempted:s.a,correct:s.k,subjects:{maths:today,science:'',sst:'',english:''},streak:days,weak:w})}).then(r=>{if(r&&r.ok!==false){lastSig=s.sig;localStorage.setItem('adhyayan_prepsig',s.sig);}}).catch(()=>{});}catch(e){}}
 window.prepSync=pushPrep;
 setInterval(()=>pushPrep(false),15000);setTimeout(()=>pushPrep(false),5000);
@@ -7637,16 +7638,21 @@ let ROWS=[];
 async function injectPrep(){const v=$('ownerView');if(!v||$('mpOwn'))return;if(!ok()||!pinOf())return;
  let d;try{d=await (await fetch(TU()+'?pin='+encodeURIComponent(pinOf())+'&prep=1')).json();}catch(e){return;}if(!Array.isArray(d))return;
  const main=d.filter(x=>String(x.name).indexOf('[PREP]')!==0),total=NC().length;
- ROWS=d.filter(x=>String(x.name).indexOf('[PREP]')===0).map(x=>({name:String(x.name).replace(/^\[PREP\]\s*/,''),sec:x.section,last:x.last,ms:x.last?Date.now()-new Date(x.last):null,acc:+x.overall||0,a:+x.att||0,k:+x.cor||0,today:isToday(x.last)?(+x.maths||0):0,days:+x.streak||0,ex:parseEx(x.weak)})).sort((a,b)=>b.a-a.a||b.acc-a.acc);
- if(!ROWS.length&&!window.MTACTIVE())return;
- const started=new Set(ROWS.map(r=>r.name.toLowerCase())),notYet=main.filter(x=>!started.has(String(x.name).toLowerCase())),act=ROWS.filter(r=>r.today>0).length,tot=ROWS.reduce((s,r)=>s+r.a,0),avg=ROWS.length?Math.round(ROWS.reduce((s,r)=>s+r.acc,0)/ROWS.length):0,med=['🥇','🥈','🥉'];
+ const all=d.filter(x=>String(x.name).indexOf('[PREP]')===0).map(x=>{const parts=String(x.weak||'').split('|'),o=(parts.find(z=>z.indexOf('O:')===0)||'O:0,0').slice(2).split(','),ver=(parts.find(z=>z.indexOf('V:')===0)||'').slice(2);return{name:String(x.name).replace(/^\[PREP\]\s*/,''),sec:x.section,last:x.last,ms:x.last?Date.now()-new Date(x.last):null,acc:+x.overall||0,a:+x.att||0,k:+x.cor||0,today:isToday(x.last)?(+x.maths||0):0,days:+x.streak||0,ex:parseEx(parts[0]),oa:+o[0]||0,ok:+o[1]||0,ver:ver};});
+ ROWS=all.filter(r=>r.a>0).sort((a,b)=>b.a-a.a||b.acc-a.acc);
+ const oldOnly=all.filter(r=>!r.a&&r.oa>0).sort((a,b)=>b.oa-a.oa),zero=all.filter(r=>!r.a&&!r.oa),seen=new Set(all.map(r=>r.name.toLowerCase())),noApp=main.filter(x=>!seen.has(String(x.name).toLowerCase()));
+ if(!all.length&&!window.MTACTIVE())return;
+ const act=ROWS.filter(r=>r.today>0).length,tot=ROWS.reduce((s,r)=>s+r.a,0),avg=ROWS.length?Math.round(ROWS.reduce((s,r)=>s+r.acc,0)/ROWS.length):0,med=['🥇','🥈','🥉'];
+ const names=a=>a.map(x=>esc(x.name)).join(' · ');
  const sec=document.createElement('div');sec.className='st-sec';sec.id='mpOwn';
- sec.innerHTML='<div class="nu-label">📐 MATHS TEST PREP · SAB BACCHON KA RESULT</div><div class="pf-tiles"><div><b>'+ROWS.length+'/'+main.length+'</b><span>SHURU KIYA</span></div><div><b>'+act+'</b><span>AAJ ACTIVE</span></div><div><b>'+avg+'%</b><span>AVG ACCURACY</span></div><div><b>'+tot+'</b><span>KUL ATTEMPT</span></div></div>'+
- (ROWS.length?ROWS.map((r,i)=>'<div class="ow-st"><div class="ow-h" onclick="this.parentNode.classList.toggle(\'op\')"><span>'+(med[i]||(r.today?'🟢':'⚪'))+'</span><div><b>'+esc(r.name)+'</b><small>'+(r.sec?esc(r.sec)+' · ':'')+ago(r.ms)+'</small></div><div class="ow-r"><b>'+r.a+' / '+total+'</b><small>'+r.acc+'% · aaj '+r.today+'</small></div></div><div class="ow-d"><div class="small" style="margin:4px 0 8px">✅ Sahi <b>'+r.k+'</b> · 🟡 Aanshik <b>'+r.ex.reduce((s,e)=>s+e.p,0)+'</b> · ❌ Galat <b>'+r.ex.reduce((s,e)=>s+e.w,0)+'</b> · Practice ke din <b>'+r.days+'</b></div><table class="rp-tb"><thead><tr><th class="l">Exercise</th><th>✅</th><th>🟡</th><th>❌</th></tr></thead><tbody>'+r.ex.map(e=>'<tr><td class="l">Ex '+esc(e.ex)+'</td><td>'+e.k+'</td><td>'+e.p+'</td><td>'+e.w+'</td></tr>').join('')+'</tbody></table></div></div>').join(''):'<div class="small">Abhi kisi bacche ne session shuru nahi kiya.</div>')+
- (notYet.length?'<div class="small" style="margin-top:10px">⏳ <b>Abhi shuru nahi kiya ('+notYet.length+'):</b> '+notYet.map(x=>esc(x.name)).join(' · ')+'</div>':'')+
+ sec.innerHTML='<div class="nu-label">📐 MATHS TEST PREP · SAB BACCHON KA RESULT</div><div class="pf-tiles"><div><b>'+ROWS.length+'/'+main.length+'</b><span>NCERT SHURU KIYA</span></div><div><b>'+act+'</b><span>AAJ ACTIVE</span></div><div><b>'+avg+'%</b><span>AVG ACCURACY</span></div><div><b>'+tot+'</b><span>KUL ATTEMPT</span></div></div>'+
+ (ROWS.length?ROWS.map((r,i)=>'<div class="ow-st"><div class="ow-h" onclick="this.parentNode.classList.toggle(\'op\')"><span>'+(med[i]||(r.today?'🟢':'⚪'))+'</span><div><b>'+esc(r.name)+'</b><small>'+(r.sec?esc(r.sec)+' · ':'')+ago(r.ms)+(r.oa?' · purane session: '+r.oa+' Q':'')+'</small></div><div class="ow-r"><b>'+r.a+' / '+total+'</b><small>'+r.acc+'% · aaj '+r.today+'</small></div></div><div class="ow-d"><div class="small" style="margin:4px 0 8px">✅ Sahi <b>'+r.k+'</b> · 🟡 Aanshik <b>'+r.ex.reduce((s,e)=>s+e.p,0)+'</b> · ❌ Galat <b>'+r.ex.reduce((s,e)=>s+e.w,0)+'</b> · Practice ke din <b>'+r.days+'</b>'+(r.ver?' · App v'+esc(r.ver):'')+'</div><table class="rp-tb"><thead><tr><th class="l">Exercise</th><th>✅</th><th>🟡</th><th>❌</th></tr></thead><tbody>'+r.ex.map(e=>'<tr><td class="l">Ex '+esc(e.ex)+'</td><td>'+e.k+'</td><td>'+e.p+'</td><td>'+e.w+'</td></tr>').join('')+'</tbody></table></div></div>').join(''):'<div class="small">Abhi kisi bacche ne NCERT session shuru nahi kiya.</div>')+
+ (oldOnly.length?'<div class="small" style="margin-top:10px">🕘 <b>Purane session mein practice ki, NCERT abhi nahi ('+oldOnly.length+'):</b> '+oldOnly.map(x=>esc(x.name)+' ('+x.oa+' Q)').join(' · ')+'<br><small style="opacity:.7">Ye sawal purani bank ke the, NCERT ke hisaab mein nahi ginte.</small></div>':'')+
+ (zero.length?'<div class="small" style="margin-top:10px">✅ <b>App update ho gaya, abhi practice nahi ki ('+zero.length+'):</b> '+names(zero)+'</div>':'')+
+ (noApp.length?'<div class="small" style="margin-top:10px">📵 <b>Naya app abhi khola hi nahi ('+noApp.length+'):</b> '+names(noApp)+'<br><small style="opacity:.7">Inhe bolo ki app ek baar kholein, apne aap update ho jayega.</small></div>':'')+
  '<button class="primary" id="mpCopy" style="margin-top:12px">📋 Report copy karo (WhatsApp ke liye)</button>';
  const anchor=[...v.querySelectorAll('.st-sec')].find(x=>x.textContent.indexOf('SUBJECT-WISE')>=0)||$('cmBox');if(anchor)anchor.parentNode.insertBefore(sec,anchor);else v.appendChild(sec);
- $('mpCopy').onclick=()=>{const t='📐 Maths Test Prep (NCERT Ch 1-7) · 1 Nov Test\nShuru kiya: '+ROWS.length+'/'+main.length+'\n\n'+ROWS.map((r,i)=>(i+1)+'. '+r.name+' — '+r.a+'/'+total+' sawal · '+r.acc+'% · aaj '+r.today).join('\n')+(notYet.length?'\n\n⏳ Abhi shuru nahi kiya:\n'+notYet.map(x=>x.name).join(', '):'');
+ $('mpCopy').onclick=()=>{const t='📐 Maths Test Prep (NCERT Ch 1-7) · 1 Nov Test\nNCERT shuru kiya: '+ROWS.length+'/'+main.length+'\n\n'+ROWS.map((r,i)=>(i+1)+'. '+r.name+' — '+r.a+'/'+total+' sawal · '+r.acc+'% · aaj '+r.today).join('\n')+(oldOnly.length?'\n\n🕘 Purane session mein practice ki:\n'+oldOnly.map(x=>x.name+' ('+x.oa+' Q)').join(', '):'')+((zero.length+noApp.length)?'\n\n⏳ NCERT abhi shuru nahi kiya:\n'+zero.concat(noApp).map(x=>x.name).join(', '):'');
   (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{const e=document.createElement('div');e.className='ptoast';e.textContent='Report copy ho gayi';document.body.appendChild(e);setTimeout(()=>e.remove(),2500);}).catch(()=>prompt('Copy karo:',t));};}
 const _O=window.OWNER;if(_O)window.OWNER=async function(){const r=await _O.apply(this,arguments);try{injectPrep();}catch(e){}return r;};
 })();
