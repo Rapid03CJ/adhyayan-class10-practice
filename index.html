@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-31-v43"><meta name="app-semver" content="2.6.1">
+<meta name="app-version" content="2026-10-31-v44"><meta name="app-semver" content="2.6.2">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7455,7 +7455,9 @@ window.NTEST=async function(){await _n.apply(this,arguments);
  try{const sh=document.querySelector('#psheet .psh');if(!sh||$('nlogBlock'))return;
   const i=await info(),d=document.createElement('div');d.id='nlogBlock';
   const L=_osLog.slice(-6).map(x=>'<div>'+escHtml(x)+'</div>').join('')||'<div>Koi error log nahi mila</div>';
-  d.innerHTML='<div class="nt-r"><span>🆔</span><span>Subscription id: <b>'+(i&&i.id?'mil gayi':'nahi')+'</b> · opted in: <b>'+(i?String(i.opt):'?')+'</b></span></div>'+
+  const pl=await (window.caches?caches.open('adhyayan-pushlog').then(c=>c.match('log')).then(r=>r?r.json():[]).catch(()=>[]):Promise.resolve([])),lastP=pl.length?pl[pl.length-1]:0,n24=pl.filter(t=>Date.now()-t<864e5).length,agoT=ms=>{const m=Math.floor(ms/6e4);return m<1?'abhi':m<60?m+' min pehle':m<1440?Math.floor(m/60)+' ghante pehle':Math.floor(m/1440)+' din pehle';};
+  const pushLine='<div class="nt-r"><span>📨</span><span>Tablet/phone tak push pahunchi: <b>'+(lastP?agoT(Date.now()-lastP):'abhi tak koi nahi')+'</b> · pichhle 24 ghante: <b>'+n24+'</b></span></div><div class="small" style="margin:2px 0 6px">'+(lastP?'Push is device tak pahunch rahi hai. Agar screen par dikhti nahi, to Android ne use roka hai: <b>Settings → Apps → Adhyayan → Notifications</b> (aur Chrome → Notifications → Sites) mein ON rakho, "Silent" mat rakho.':'Push abhi is device tak pahunchi hi nahi (ya ye record naya hai: ek notification ke baad yahan dikhega). Pahunchi nahi to Battery "No restrictions" aur Autostart ON karo.')+'</div>';
+  d.innerHTML=pushLine+'<div class="nt-r"><span>🆔</span><span>Subscription id: <b>'+(i&&i.id?'mil gayi':'nahi')+'</b> · opted in: <b>'+(i?String(i.opt):'?')+'</b></span></div>'+
    (okSub(i)?'':'<button class="primary" style="margin-top:10px" onclick="NSUB()">🔔 Dobara connect karo</button>')+
    '<div class="nlog"><b>OneSignal ka log:</b>'+L+'</div>';sh.appendChild(d);}catch(e){}};
 /* --- app khulte hi popup: permission Allow ho par subscription na ho tab bhi --- */
