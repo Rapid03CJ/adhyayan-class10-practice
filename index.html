@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-10-31-v45"><meta name="app-semver" content="2.6.3">
+<meta name="app-version" content="2026-11-01-v46"><meta name="app-semver" content="2.6.4">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7660,6 +7660,38 @@ async function injectPrep(){const v=$('ownerView');if(!v||$('mpOwn'))return;if(!
  $('mpCopy').onclick=()=>{const t='📐 Maths Test Prep (NCERT Ch 1-7) · 1 Nov Test\nNCERT shuru kiya: '+ROWS.length+'/'+main.length+'\n\n'+ROWS.map((r,i)=>(i+1)+'. '+r.name+' — '+r.a+'/'+total+' sawal · '+r.acc+'% · aaj '+r.today).join('\n')+(oldOnly.length?'\n\n🕘 Purane session mein practice ki:\n'+oldOnly.map(x=>x.name+' ('+x.oa+' Q)').join(', '):'')+((zero.length+noApp.length)?'\n\n⏳ NCERT abhi shuru nahi kiya:\n'+zero.concat(noApp).map(x=>x.name).join(', '):'');
   (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{const e=document.createElement('div');e.className='ptoast';e.textContent='Report copy ho gayi';document.body.appendChild(e);setTimeout(()=>e.remove(),2500);}).catch(()=>prompt('Copy karo:',t));};}
 const _O=window.OWNER;if(_O)window.OWNER=async function(){const r=await _O.apply(this,arguments);try{injectPrep();}catch(e){}return r;};
+})();
+</script>
+<script>
+/* ===== V28: OneSignal ne device ko 'Unsubscribed' mark kar diya ho to naya push connection banana ===== */
+(function(){
+const $=id=>document.getElementById(id),TU=()=>window._TU||'',FLAG='adhyayan_pushreset_v2';
+const perm=()=>('Notification' in window)?Notification.permission:'unsupported';
+const toast=(t,ms)=>{const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),ms||4500);};
+function info(){return new Promise(res=>{if(!window.OneSignalDeferred){res(null);return;}const t=setTimeout(()=>res(null),3500);OneSignalDeferred.push(async OS=>{try{const s=OS.User.PushSubscription;clearTimeout(t);res({id:s.id,opt:s.optedIn});}catch(e){res(null);}});});}
+/* purana push endpoint hatao + OneSignal ka local record saaf karo -> reload par bilkul naya subscription banta hai */
+async function presetRun(){try{const regs=await navigator.serviceWorker.getRegistrations();for(const r of regs){try{const s=await r.pushManager.getSubscription();if(s)await s.unsubscribe();}catch(e){}}}catch(e){}
+ try{['ONE_SIGNAL_SDK_DB','OneSignal','onesignal'].forEach(n=>indexedDB.deleteDatabase(n));}catch(e){}
+ try{localStorage.setItem(FLAG,String(Date.now()));}catch(e){}setTimeout(()=>location.reload(),800);}
+window.PRESET=function(){const b=$('nrstBtn');if(b){b.disabled=true;b.textContent='Naya connection ban raha hai…';}toast('Naya notification connection ban raha hai. App dobara khulegi…');presetRun();};
+/* server se jaanch: kya OneSignal is device ko bhej payega? */
+window.PCHK=async function(){const out=$('pchkOut');if(out)out.textContent='Server se pooch raha hoon… (10-15 second)';const i=await info();if(!i||!i.id){if(out)out.innerHTML='❌ Is device ki subscription id nahi mili. Neeche "Naya connection banao" dabao.';return;}
+ try{const r=await fetch(TU(),{method:'POST',body:JSON.stringify({type:'testpush',sid:i.id,delay:0})});const j=await r.json();
+  if(j&&j.error==='wait'){if(out)out.textContent='30 second baad dobara dabao.';return;}
+  const p=j&&j.push,bad=p&&((p.errors&&p.errors.length)||p.skipped);
+  if(out)out.innerHTML=bad?'❌ <b>Server is device ko "band" (Unsubscribed) maanta hai</b> ('+String(p.errors||p.skipped).slice(0,60)+'). Neeche <b>"Naya connection banao"</b> dabao, wahi pakka ilaaj hai.':'✅ Server ne notification bhej di. Agar abhi 20 second mein screen par na dikhe to Android ki taraf rukawat hai (Settings → Apps → Adhyayan → Notifications ON).';
+ }catch(e){if(out)out.textContent='Server se baat nahi ho payi. Internet check karo.';}};
+/* Notification check sheet mein buttons (hamesha) */
+const _n=window.NTEST;window.NTEST=async function(){await _n.apply(this,arguments);try{const sh=document.querySelector('#psheet .psh');if(!sh||$('nrstBlock'))return;const d=document.createElement('div');d.id='nrstBlock';
+ d.innerHTML='<div class="nlog" style="margin-top:12px"><b>🩺 Pakki jaanch</b><div id="pchkOut" style="margin:6px 0;font:13px/1.5 inherit">OneSignal server aur app kabhi-kabhi alag baat batate hain. Neeche wala button server se seedha poochta hai.</div></div><button class="primary" style="margin-top:8px" onclick="PCHK()">⚡ Server se jaanch karo (app khula rakho)</button><button class="primary" id="nrstBtn" style="margin-top:8px" onclick="PRESET()">🔁 Naya connection banao (pakka ilaaj)</button><p class="small">Progress, naam aur streak safe rehte hain. App ek baar dobara khulegi.</p>';sh.appendChild(d);}catch(e){}};
+/* ek baar sab devices ka connection naya banao (Home par, quiz ke beech nahi) */
+let tries=0;function auto(){try{if(localStorage.getItem(FLAG))return;if(!window.PUSH_ON||perm()!=='granted')return;
+ const busy=['practice','result','nameScreen'].some(i=>{const e=$(i);return e&&!e.classList.contains('hidden');})||$('psheet')||$('campPop');
+ if(busy||document.visibilityState!=='visible'){if(++tries<40)setTimeout(auto,3000);return;}
+ toast('🔁 Notification connection naya ban raha hai…',3500);setTimeout(presetRun,1200);}catch(e){}}
+setTimeout(auto,9000);
+/* reset ke baad: ban gaya ya nahi */
+try{const t=+localStorage.getItem(FLAG);if(t&&Date.now()-t<120000&&!sessionStorage.getItem('rs_chk')){sessionStorage.setItem('rs_chk','1');setTimeout(async()=>{const i=await info();toast(i&&i.id&&i.opt?'✅ Naya notification connection ban gaya':'⚠️ Connection abhi nahi bana. Settings → Notification check mein "Naya connection banao" dabao.',6000);},9000);}}catch(e){}
 })();
 </script>
 </body>
