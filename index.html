@@ -8158,7 +8158,7 @@ setInterval(()=>{
  const tb=document.querySelector('.ow-tabs button[data-p=n]');if(tb&&tb.textContent.indexOf('Announce')<0)tb.textContent='📢 Announce';
  const f=$('owT');if(f&&!$('ann38')){const T=[['📝 Kal test','Kal test hai','Kal test hai. Taiyari karo aur time par app kholo!'],['🔥 Daily 10','Aaj ka Daily 10 baaki hai','Aaj ka Daily 10 abhi baaki hai. Sirf 10 minute lagenge, streak mat todo!'],['🗓️ Weekly','Sunday ko Weekly Test','Is Sunday Weekly Test hai (15 sawal, 1:30 ghanta). Achhe se taiyari karo.'],['🏆 Leaderboard','Leaderboard update','Leaderboard update ho gaya! Dekho aap kis rank par ho aur upar chadho.'],['🎉 Shabash','Shabash bacchon!','Is hafte sabne mehnat ki. Aise hi lage raho, board mein result zaroor aayega!']];
   const a=document.createElement('div');a.id='ann38';a.className='ann38';a.innerHTML=T.map((x,k)=>'<button data-k="'+k+'">'+x[0]+'</button>').join('')+'<button data-k="wa">💬 WhatsApp group</button>';
-  a.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.k==='wa'){const t=$('owT').value.trim(),m=$('owM').value.trim();if(!t||!m){toast('Pehle title aur message likho');return;}window.open('https://wa.me/?text='+encodeURIComponent('📢 *'+t+'*\n'+m+'\n\n— Adhyayan Tuition Centre'),'_blank','noopener');return;}const x=T[b.dataset.k];$('owT').value=x[1];$('owM').value=x[2];};
+  a.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.k==='wa'){const t=($('mgT')||$('owT')).value.trim(),m=($('mgM')||$('owM')).value.trim();if(!t||!m){toast('Pehle title aur message likho');return;}window.open('https://wa.me/?text='+encodeURIComponent('📢 *'+t+'*\n'+m+'\n\n— Adhyayan Tuition Centre'),'_blank','noopener');return;}const x=T[b.dataset.k];const tt=$('mgT')||$('owT'),mm=$('mgM')||$('owM');tt.value=x[1];mm.value=x[2];try{$('mgM')&&$('mgM').dispatchEvent(new Event('input'));}catch(e){}};
   f.before(a);}
 },600);
 })();
@@ -8204,6 +8204,53 @@ setInterval(()=>{try{tests();}catch(e){}
  const f=$('owT');if(f&&!$('msg38')){const s=f.closest('.st-sec')||f.parentNode,d=document.createElement('div');d.className='st-sec';d.id='msg38';
   d.innerHTML='<div class="nu-label">💬 MESSAGE BHEJO · NOTIFICATION KE SAATH</div><input class="ow-in" id="mgT" maxlength="80" placeholder="Title (jaise: Aaj ki zaroori suchna)"><textarea class="ow-in" id="mgM" rows="9" maxlength="2000" placeholder="Poora message yahan likho (1000 se 2000 akshar tak). Link ki zaroorat nahi."></textarea><div class="mgc"><span id="mgC">0 / 2000</span><span class="small">Sab students ko app + phone notification</span></div><button class="primary" id="mgB">📲 Notification ke saath bhejo</button>';
   s.before(d);$('mgM').oninput=cnt;$('mgB').onclick=send;}},600);
+})();
+</script>
+
+<style id="v40css">
+#testsView>.tc,#testsView>.th38{display:none!important}
+.t40{display:grid;gap:16px;font-family:inherit}
+.t4-hero{display:flex;align-items:center;gap:16px;padding:16px;border-radius:26px;background:radial-gradient(300px 160px at 100% 0,rgba(255,130,190,.18),transparent 60%),linear-gradient(160deg,rgba(30,42,70,.9),rgba(8,12,22,.95));border:1px solid rgba(243,213,138,.5);box-shadow:0 14px 36px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
+.t4-ring{flex:none;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;text-align:center;background:conic-gradient(#f3d58a var(--p),rgba(255,255,255,.1) 0);position:relative}.t4-ring::before{content:"";position:absolute;inset:7px;border-radius:50%;background:#0a1020}.t4-ring span{position:relative;line-height:1.1;font-size:12px}.t4-ring b{display:block;font-size:24px;color:#f3d58a}
+.t4-hero small{font-size:10.5px;letter-spacing:2px;font-weight:800;color:#f3d58a}.t4-hero h3{margin:4px 0 8px;font-size:17px;line-height:1.3;font-family:"Playfair Display",Georgia,serif}
+.t4-chips{display:flex;gap:6px;flex-wrap:wrap}.t4-chips span{padding:5px 10px;border-radius:99px;font-size:11.5px;font-weight:700;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}.t4-chips .ok{border-color:#5fbf8c;color:#9ff0c4}
+.t4-h{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:2.2px;font-weight:800;color:#f3d58a;margin-bottom:4px}.t4-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(243,213,138,.6),transparent)}
+.t4-s{font-size:12.5px;opacity:.75;margin-bottom:12px}
+.t4-dg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.t4-d{padding:16px 6px;border-radius:22px;text-align:center;cursor:pointer;background:linear-gradient(160deg,rgba(205,164,73,.28),rgba(20,28,48,.95));border:1px solid rgba(243,213,138,.6);box-shadow:0 10px 26px rgba(205,164,73,.18);color:#f3efe4;transition:transform .15s}.t4-d:active{transform:scale(.95)}
+.t4-d b{display:block;font-size:38px;line-height:1;font-family:"Playfair Display",Georgia,serif;color:#f3d58a}.t4-d span{display:block;font-size:12px;font-weight:700;margin-top:6px}.t4-d small{display:block;font-size:11px;opacity:.75;margin-top:2px}
+.t4-st{margin-top:12px;font-size:13px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px dashed rgba(243,213,138,.4)}
+.t4-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.t4-t{display:flex;align-items:center;gap:10px;padding:12px;border-radius:20px;cursor:pointer;text-align:left;color:#f3efe4;background:linear-gradient(160deg,rgba(32,44,74,.85),rgba(12,18,32,.92));border:1px solid rgba(205,164,73,.35);transition:transform .15s}.t4-t:active{transform:scale(.96)}
+.t4-t i{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:21px;background:radial-gradient(circle at 30% 25%,rgba(243,213,138,.4),rgba(243,213,138,.08));border:1px solid rgba(243,213,138,.5)}.t4-t span{font-size:12.5px;font-weight:700;line-height:1.25}
+.t4-w,.t4-m{padding:16px;border-radius:22px;background:linear-gradient(160deg,rgba(30,42,70,.8),rgba(10,16,30,.92));border:1px solid rgba(205,164,73,.35)}.t4-w.lock{border-style:dashed;opacity:.92}
+.t4-w .row,.t4-m .row{display:flex;gap:12px;align-items:center}.t4-w .ic,.t4-m .ic{font-size:30px}.t4-w b,.t4-m b{display:block;font-size:15px}.t4-w p,.t4-m p{margin:3px 0 0;font-size:12.5px;opacity:.82;line-height:1.45}
+.t4-m{border-color:rgba(255,156,207,.45);background:linear-gradient(135deg,rgba(255,130,190,.14),rgba(10,16,30,.92));cursor:pointer}.t4-m em{display:block;margin-top:8px;font-style:normal;font-size:12.5px;font-weight:700;color:#f3d58a}
+.t4-go{margin-top:12px;width:100%}
+.old38{margin:10px 0}.old38>summary{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(205,164,73,.35);font-weight:700;font-size:13px;cursor:pointer;list-style:none}.old38[open]>summary{margin-bottom:10px}
+#bv40{display:block;opacity:.5;font-size:10px;margin-top:4px}
+</style>
+<script>
+/* ===== V40: Tests hub rebuilt (premium layout) + announce cleanup + build stamp ===== */
+(function(){
+const $=id=>document.getElementById(id),E=s=>escHtml(String(s==null?'':s));
+function tests(){const v=$('testsView');if(!v||v.classList.contains('hidden')||v.querySelector('.t40'))return;
+ const cards=[...v.querySelectorAll(':scope>.tc')];if(!cards.length)return;
+ const dC=cards.find(c=>c.querySelector('.tc-r')),sC=cards.find(c=>c.querySelector('.tc-g')),wC=cards.find(c=>c.classList.contains('tcw')),mC=cards.find(c=>c.classList.contains('mn'));
+ const T=el=>el?el.textContent.replace(/\s+/g,' ').trim():'',dt=T(dC&&dC.querySelector('.tc-t')),wt=T(wC&&wC.querySelector('.tc-t')),st=+((dt.match(/(\d+)\s*din/)||[])[1]||0),dd=/✅/.test(dt),wk=/✅/.test(wt),lock=/🔒/.test(wt),wd=(wt.match(/(\d+)\s*din baad/)||[])[1];
+ const t=document.createElement('div');t.className='t40';let h='';
+ h+='<div class="t4-hero"><div class="t4-ring" style="--p:'+Math.min(100,st/7*100)+'%"><span>🔥<b>'+st+'</b>din</span></div><div><small>AAJ KA PLAN</small><h3>'+(dd?'Shabash! Aaj ka Daily ho gaya':'Daily Test dekar streak bachao')+'</h3><div class="t4-chips"><span class="'+(dd?'ok':'')+'">'+(dd?'✅ Daily done':'⏳ Daily baaki')+'</span><span class="'+(wk?'ok':'')+'">🗓️ '+(wk?'Weekly done':lock?'Weekly '+(wd||'-')+' din baad':'Weekly khula')+'</span></div></div></div>';
+ if(dC){const bs=[...dC.querySelectorAll('.tc-r button')];h+='<section><div class="t4-h">DAILY TEST</div><div class="t4-s">'+E(T(dC.querySelector('.tc-h small')))+'</div><div class="t4-dg">'+bs.map((b,i)=>{const p=T(b).match(/(\d+)\s*sawal\s*(.*)/)||[];return '<button class="t4-d" data-d="'+i+'"><b>'+(p[1]||'?')+'</b><span>sawal</span><small>'+E(p[2]||'')+'</small></button>';}).join('')+'</div><div class="t4-st">'+E(dt)+'</div></section>';}
+ if(sC){const bs=[...sC.querySelectorAll('.tc-g button')];h+='<section><div class="t4-h">SECTIONAL TEST</div><div class="t4-s">'+E(T(sC.querySelector('.tc-h small')))+' · section chuno</div><div class="t4-g">'+bs.map((b,i)=>{const m=T(b).match(/^(\p{Extended_Pictographic}\uFE0F?)\s*(.*)$/u)||['',' 📘',T(b)];return '<button class="t4-t" data-s="'+i+'"><i>'+m[1]+'</i><span>'+E(m[2])+'</span></button>';}).join('')+'</div></section>';}
+ if(wC){const wb=wC.querySelector('button');h+='<section><div class="t4-h">WEEKLY TEST</div><div class="t4-w'+(lock?' lock':'')+'"><div class="row"><span class="ic">'+(lock?'🔒':'🗓️')+'</span><div><b>'+E(T(wC.querySelector('.tc-h small'))||'Har Sunday')+'</b><p>'+E(wt)+'</p></div></div>'+(wb?'<button class="primary t4-go" data-w="1">▶ Weekly Test shuru karo</button>':'')+'</div></section>';}
+ if(mC){h+='<section><div class="t4-m" data-m="1"><div class="row"><span class="ic">🧠</span><div><b>Mentor</b><p>'+E(T(mC.querySelector('.tc-t')))+'</p></div></div><em>Poori report dekho →</em></div></section>';}
+ t.innerHTML=h;
+ t.onclick=e=>{const x=e.target.closest('[data-d],[data-s],[data-w],[data-m]');if(!x)return;let b;if(x.dataset.d!=null)b=dC.querySelectorAll('.tc-r button')[+x.dataset.d];else if(x.dataset.s!=null)b=sC.querySelectorAll('.tc-g button')[+x.dataset.s];else if(x.dataset.w)b=wC.querySelector('button');else{b=mC.querySelector('[onclick]')||mC;}if(b)b.click();};
+ const a=v.querySelector('h2');(a||v.firstChild).after(t);}
+setInterval(()=>{try{tests();}catch(e){}
+ const b=document.querySelector('.brand34');if(b&&!$('bv40')){const s=document.createElement('small');s.id='bv40';s.textContent='Build v40';b.appendChild(s);}
+ const m=$('msg38'),f=$('owT');if(m&&f&&!document.querySelector('.old38')){const old=f.closest('.st-sec');if(old&&old!==m){const d=document.createElement('details');d.className='old38';d.innerHTML='<summary>📌 Chhota Notice (link ke saath, 300 akshar) ▾</summary>';old.before(d);d.appendChild(old);const an=$('ann38');if(an)m.querySelector('.nu-label').after(an);}}
+},600);
 })();
 </script>
 
