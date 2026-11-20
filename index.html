@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-11-03-v47"><meta name="app-semver" content="2.7.0">
+<meta name="app-version" content="2026-11-03-v48"><meta name="app-semver" content="2.8.0">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -7323,7 +7323,7 @@ window.PUSHASK=function(){if($('pAsk'))return;const o=document.createElement('di
 (function(){
 const $=id=>document.getElementById(id);
 /* ---- is quiz run ki yaad (Prev par purana answer wapas dikhane ke liye) ---- */
-let SA=null,LAST=null;function S(){if(!SA||SA.arr!==currentQuestions)SA={arr:currentQuestions,ch:{},ans:{},ev:{}};return SA;}
+let SA=null,LAST=null;function S(){if(!SA||SA.arr!==currentQuestions)SA={arr:currentQuestions,ch:{},ans:{},ev:{}};return SA;}window._EVS=()=>SA;
 const cq=()=>currentQuestions[qi];
 const isW=q=>q&&q.type!=='mcq'&&q.type!=='ar';
 /* ---- marks aur shabd-limit ---- */
@@ -7622,7 +7622,7 @@ const $=id=>document.getElementById(id),esc=s=>escHtml(String(s==null?'':s)),TU=
 const ok=()=>TU()&&TU().indexOf('PASTE_YOUR')<0;
 /* --- baaki sab jagah (leaderboard, teacher view, class summary) [PREP] rows chhupao --- */
 const _f=window.fetch;window.fetch=function(u){const p=_f.apply(this,arguments);try{const url=typeof u==='string'?u:(u&&u.url)||'',o=arguments[1];
- if(TU()&&url.indexOf(TU())===0&&url.indexOf('pin=')>=0&&url.indexOf('prep=1')<0&&(!o||!o.method||o.method==='GET'))return p.then(r=>r.clone().json().then(a=>{if(Array.isArray(a))a=a.filter(x=>String(x&&x.name).indexOf('[PREP]')!==0);return new Response(JSON.stringify(a),{status:200,headers:{'Content-Type':'application/json'}});}).catch(()=>r));}catch(e){}return p;};
+ if(TU()&&url.indexOf(TU())===0&&url.indexOf('pin=')>=0&&url.indexOf('prep=1')<0&&(!o||!o.method||o.method==='GET'))return p.then(r=>r.clone().json().then(a=>{if(Array.isArray(a))a=a.filter(x=>!/^\[(PREP|TEST)\]/.test(String(x&&x.name)));return new Response(JSON.stringify(a),{status:200,headers:{'Content-Type':'application/json'}});}).catch(()=>r));}catch(e){}return p;};
 /* --- student taraf: prep result bhejna --- */
 const NC=()=>window.NCQ||[],ST=()=>{try{return loadStudent()||{};}catch(e){return{};}};
 const lgPrep=()=>{try{return JSON.parse(localStorage.getItem('adhyayan_prep_v1'))||{};}catch(e){return{};}};
@@ -7645,7 +7645,7 @@ const parseEx=w=>String(w||'').split(';').filter(Boolean).map(x=>{const a=x.spli
 let ROWS=[];
 async function injectPrep(){const v=$('ownerView');if(!v||$('mpOwn'))return;if(!ok()||!pinOf())return;
  let d;try{d=await (await fetch(TU()+'?pin='+encodeURIComponent(pinOf())+'&prep=1')).json();}catch(e){return;}if(!Array.isArray(d))return;
- const main=d.filter(x=>String(x.name).indexOf('[PREP]')!==0),total=NC().length;
+ const main=d.filter(x=>!/^\[(PREP|TEST)\]/.test(String(x.name))),total=NC().length;
  const all=d.filter(x=>String(x.name).indexOf('[PREP]')===0).map(x=>{const parts=String(x.weak||'').split('|'),o=(parts.find(z=>z.indexOf('O:')===0)||'O:0,0').slice(2).split(','),ver=(parts.find(z=>z.indexOf('V:')===0)||'').slice(2);return{name:String(x.name).replace(/^\[PREP\]\s*/,''),sec:x.section,last:x.last,ms:x.last?Date.now()-new Date(x.last):null,acc:+x.overall||0,a:+x.att||0,k:+x.cor||0,today:isToday(x.last)?(+x.maths||0):0,days:+x.streak||0,ex:parseEx(parts[0]),oa:+o[0]||0,ok:+o[1]||0,ver:ver};});
  ROWS=all.filter(r=>r.a>0).sort((a,b)=>b.a-a.a||b.acc-a.acc);
  const oldOnly=all.filter(r=>!r.a&&r.oa>0).sort((a,b)=>b.oa-a.oa),zero=all.filter(r=>!r.a&&!r.oa),seen=new Set(all.map(r=>r.name.toLowerCase())),noApp=main.filter(x=>!seen.has(String(x.name).toLowerCase()));
@@ -7703,6 +7703,137 @@ try{const t=+localStorage.getItem(FLAG);if(t&&Date.now()-t<120000&&!sessionStora
 var el=null;function upd(){var off=!navigator.onLine;if(off&&!el){el=document.createElement('div');el.id='offPill';el.textContent='\ud83d\udcf4 Offline mode: quiz chalega, progress internet aane par sync hoga';document.body.appendChild(el);}else if(!off&&el){el.remove();el=null;}}
 addEventListener('online',upd);addEventListener('offline',upd);upd();
 var s=document.createElement('style');s.textContent='#offPill{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);z-index:118;padding:6px 14px;border-radius:14px;background:rgba(232,199,106,.96);color:#1a1206;font-size:12px;font-weight:600;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.4);max-width:92vw;text-align:center}';document.head.appendChild(s);})();
+</script>
+<script>
+/* ===== V30: Tests (Daily / Sectional / Weekly) + Mentor + record + owner sync ===== */
+(function(){
+const $=id=>document.getElementById(id),W=document.querySelector('.wrap'),esc=s=>escHtml(String(s==null?'':s)),TU=()=>window._TU||'';
+const NC=()=>window.NCQ||[],DAY=864e5,KEY='adhyayan_tests_v1';
+const toast=t=>{const d=document.createElement('div');d.className='ptoast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3500);};
+const pad=n=>String(n).padStart(2,'0'),dstr=d=>{d=d||new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());};
+const ST=()=>{try{return loadStudent()||{};}catch(e){return{};}};
+/* ---------- storage ---------- */
+let S={tests:[],log:[]};try{const o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&o.tests)S=o;if(!S.log)S.log=[];}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({tests:S.tests.slice(0,60),log:S.log.slice(-1200)}));}catch(e){}};
+const chName=c=>{try{return DB.maths.chapters[c-1].name;}catch(e){return'Chapter '+c;}};
+const chMap={};try{DB.maths.chapters.forEach((c,i)=>c.questions.forEach(q=>chMap[q.id]=i+1));}catch(e){}
+const rng=seed=>{let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};};
+const shuf=(a,r)=>{a=a.slice();r=r||Math.random;for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const bad=s=>s==='incorrect'||s==='partial';
+/* ---------- practice log (mentor ke liye) ---------- */
+function logAns(q){try{if(!q||isMockMode)return;const ch=chMap[q.id],st=progress[q.id];if(!ch||!st)return;S.log.push({id:q.id,ch:ch,st:st,ts:Date.now()});save();}catch(e){}}
+const _co=chooseOption;chooseOption=function(){const q=currentQuestions[qi],b=document.querySelector('#mcqArea .option'),was=b&&b.disabled,r=_co.apply(this,arguments);if(!was)logAns(q);return r;};
+const _wc=window.WCHECK;if(_wc)window.WCHECK=function(){const q=currentQuestions[qi],w=$('writeBox'),was=w&&w.disabled,r=_wc.apply(this,arguments);try{if(!was&&w.disabled)logAns(q);}catch(e){}return r;};
+/* ---------- week / units ---------- */
+function weekKey(d){d=d||new Date();const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);const y=t.getUTCFullYear(),w=Math.ceil(((t-new Date(Date.UTC(y,0,1)))/DAY+1)/7);return y+'-W'+pad(w);}
+const UNITS=[['🔢 Number System',[1]],['🧮 Algebra',[2,3,4,5]],['📍 Coordinate Geometry',[7]],['📐 Geometry',[6,10]],['📏 Trigonometry',[8,9]],['🧊 Mensuration',[11,12]],['📊 Statistics & Probability',[13,14]],['📚 Poori book (mixed)',[1,2,3,4,5,6,7,8,9,10,11,12,13,14]]];
+/* ---------- question chunav ---------- */
+function pickDaily(n){const pool=NC(),r=Math.random,mist=shuf(pool.filter(q=>bad(progress[q.id])),r),acc={};pool.forEach(q=>{const s=progress[q.id];if(!s)return;const a=acc[q.ch]||(acc[q.ch]={a:0,k:0});a.a++;if(s==='correct')a.k++;});
+ const wk=[...Array(14).keys()].map(i=>i+1).sort((a,b)=>((acc[a]?acc[a].k/acc[a].a:.5)-(acc[b]?acc[b].k/acc[b].a:.5)));const out=[],use=new Set(),cnt={};
+ const add=q=>{if(!q||use.has(q.id)||(cnt[q.ch]||0)>=2)return false;use.add(q.id);cnt[q.ch]=(cnt[q.ch]||0)+1;out.push(q);return true;};
+ mist.forEach(q=>{if(out.length<Math.round(n*.4))add(q);});
+ wk.slice(0,6).forEach(c=>{shuf(pool.filter(q=>q.ch===c&&!progress[q.id]),r).forEach(q=>{if(out.length<Math.round(n*.7)&&(cnt[c]||0)<1)add(q);});});
+ shuf(pool.filter(q=>!progress[q.id]),r).forEach(q=>{if(out.length<n)add(q);});shuf(pool,r).forEach(q=>{if(out.length<n)add(q);});
+ return out.sort((a,b)=>a.m-b.m||a.ch-b.ch);}
+function pickSectional(chs,n){const pool=NC().filter(q=>chs.indexOf(q.ch)>=0),mist=shuf(pool.filter(q=>bad(progress[q.id]))),un=shuf(pool.filter(q=>!progress[q.id])),rest=shuf(pool),out=[],use=new Set();
+ [mist.slice(0,Math.ceil(n*.4)),un,rest].forEach(g=>g.forEach(q=>{if(out.length<n&&!use.has(q.id)){use.add(q.id);out.push(q);}}));return out.sort((a,b)=>a.ch-b.ch||a.m-b.m);}
+function pickWeekly(){const r=rng(parseInt(weekKey().replace(/\D/g,''),10)*7919),out=[],use=new Set();
+ for(let c=1;c<=14;c++){const g=NC().filter(q=>q.ch===c&&q.m<=4);const q=g.length?g[Math.floor(r()*g.length)]:null;if(q){use.add(q.id);out.push(q);}}
+ const ex=NC().filter(q=>!use.has(q.id)&&q.m<=4&&[5,6,7,8].indexOf(q.ch)>=0);if(ex.length)out.push(ex[Math.floor(r()*ex.length)]);return out.sort((a,b)=>a.ch-b.ch);}
+/* ---------- test engine (mock engine par) ---------- */
+const _mt=mockTick;
+mockTick=function(){const T=window._tctx;if(!T||T.done||!isMockMode){return _mt.apply(this,arguments);}const left=Math.max(0,Math.round((mockEnd-Date.now())/1000)),h=Math.floor(left/3600),m=Math.floor(left%3600/60),s=left%60,t=$('pTitle');if(t)t.textContent=T.title+' \u00b7 \u23f1 '+(h?h+':'+pad(m):m)+':'+pad(s);if(left<=0)finishChapter();};
+function startTest(cfg){if(!cfg.list.length){toast('Sawal nahi mile, thodi der baad try karo');return;}
+ hideAllScreens();currentSubject='maths';currentChapterIdx=0;currentQuestions=cfg.list;mockMarks=cfg.list.map(q=>q.m||2);mockRes={};qi=0;isMockMode=true;isRevisionMode=true;isSavedMode=false;qTimesLog=[];window._prep=false;
+ $('practice').classList.remove('hidden');$('practiceBackLink').textContent='\u2190 Exit Test';mockEnd=Date.now()+cfg.mins*60000;
+ window._tctx={id:'T'+Date.now(),type:cfg.type,title:cfg.title,mins:cfg.mins,start:Date.now(),wk:weekKey(),done:false};
+ mockTimerId=setInterval(mockTick,1000);renderQuestion();mockTick();window.scrollTo(0,0);}
+function startPractice(list,title){if(!list.length){toast('Is mein abhi koi sawal nahi');return;}hideAllScreens();currentSubject='maths';currentChapterIdx=0;currentQuestions=list;qi=0;isMockMode=false;isRevisionMode=true;isSavedMode=false;qTimesLog=[];$('practice').classList.remove('hidden');$('practiceBackLink').textContent='\u2190 Exit';$('pTitle').textContent=title;renderQuestion();window.scrollTo(0,0);}
+/* ---------- record save ---------- */
+function build(T,snap,partial){let total=0,got=0;const items=snap.paper.map((q,i)=>{const m=snap.marks[i];total+=m;const st=snap.res[q.id],e=snap.ev&&snap.ev[q.id],tl=snap.times.find(x=>x.id===q.id);let g=0;if(st==='correct')g=m;else if(st==='partial')g=m/2;if(e&&e.m&&st)g=Math.round(Math.min(1,e.mk/e.m)*m*2)/2;got+=g;
+ return{id:q.id,ch:q.ch,ex:q.ex,n:q.n,m:m,st:st||'skip',g:g,t:tl?Math.round(tl.sec||0):0,miss:(e&&e.g&&e.g.miss?e.g.miss.slice(0,6):[]),a:(e&&e.text?String(e.text).slice(0,240):'')};});
+ return{id:T.id,type:T.type,title:T.title,date:dstr(),ts:Date.now(),wk:T.wk,mins:T.mins,used:Math.round((Date.now()-T.start)/1000),total:total,got:got,partial:!!partial,items:items};}
+function snapNow(){let ev={};try{const s=window._EVS&&_EVS();if(s&&s.ev)ev=Object.assign({},s.ev);}catch(e){}return{paper:currentQuestions.slice(),marks:mockMarks.slice(),res:Object.assign({},mockRes),times:qTimesLog.slice(),ev:ev};}
+const _fc=finishChapter;finishChapter=function(){const T=window._tctx,was=isMockMode&&T&&!T.done,snap=was?snapNow():null;if(was)T.finishing=true;const r=_fc.apply(this,arguments);
+ if(was){try{T.done=true;const rec=build(T,snap,false);S.tests.unshift(rec);save();window._tctx=null;setTimeout(()=>{report(rec.id);},50);setTimeout(()=>{window.testSync&&testSync();},800);}catch(e){}}return r;};
+const _ha=hideAllScreens;hideAllScreens=function(){const T=window._tctx;if(T&&!T.done&&!T.finishing&&isMockMode){try{const snap=snapNow();if(Object.keys(snap.res).length){T.done=true;S.tests.unshift(build(T,snap,true));save();setTimeout(()=>{window.testSync&&testSync();},800);}else T.done=true;}catch(e){}window._tctx=null;}
+ _ha.apply(this,arguments);['testsView','tReport','mentorView'].forEach(i=>{const v=$(i);if(v)v.classList.add('hidden');});};
+/* ---------- mentor ---------- */
+function events(){const ev=[];S.log.forEach(x=>ev.push({ch:x.ch,st:x.st,ts:x.ts}));S.tests.forEach(t=>t.items.forEach(i=>{if(i.st!=='skip')ev.push({ch:i.ch,st:i.st,ts:t.ts});}));return ev.sort((a,b)=>a.ts-b.ts);}
+function mentor(){const now=Date.now(),ev=events(),cur={};NC().forEach(q=>{const s=progress[q.id];if(!s)return;const c=cur[q.ch]||(cur[q.ch]={a:0,k:0,p:0,w:0});c.a++;if(s==='correct')c.k++;else if(s==='partial')c.p++;else c.w++;});
+ const rows=[];for(let ch=1;ch<=14;ch++){const c=cur[ch]||{a:0,k:0,p:0,w:0},mist=c.p+c.w,e=ev.filter(x=>x.ch===ch),acc=c.a?Math.round((c.k+c.p*.5)/c.a*100):null;let lastBad=0;e.forEach(x=>{if(x.st!=='correct')lastBad=x.ts;});const after=e.filter(x=>x.ts>lastBad),aCnt=after.length,aAcc=aCnt?after.filter(x=>x.st==='correct').length/aCnt:0;
+  let s='n',txt='Abhi shuru nahi';
+  if(c.a){if(!mist){s='g';txt='Theek hai, koi galti nahi';}else if(!e.length){s='y';txt='Galtiyan hain (purana record, dobara karo)';}else if(aCnt>=3&&aAcc>=.7){s='g';txt='Sudhar ho raha hai';}else if(aCnt>=3){s='y';txt='Practice chal rahi hai, galtiyan abhi baaki';}else if(now-lastBad>2*DAY){s='r';txt='Galti ke baad is chapter par kaam nahi kiya';}else{s='y';txt='Nayi galti, ab dobara karo';}}
+  let tr=null;if(e.length>=6){const h=Math.floor(e.length/2),a1=e.slice(0,h).filter(x=>x.st==='correct').length/h,a2=e.slice(h).filter(x=>x.st==='correct').length/(e.length-h);tr=a2-a1>=.15?'up':(a1-a2>=.15?'down':null);}
+  rows.push({ch:ch,name:chName(ch),a:c.a,mist:mist,acc:acc,s:s,txt:txt,tr:tr,aCnt:aCnt});}
+ const msgs=[],red=rows.filter(r=>r.s==='r'),yel=rows.filter(r=>r.s==='y'&&r.mist),grn=rows.filter(r=>r.s==='g'&&r.mist===0&&r.a>=3),totM=rows.reduce((s,r)=>s+r.mist,0),last3=S.tests.filter(t=>!t.partial).slice(0,3);
+ if(!S.tests.length&&!S.log.length)msgs.push({t:'Abhi tak koi test ya practice record nahi. Pehla Daily Test dekar shuru karo, phir main aapki galtiyan pakadna shuru karunga.'});
+ if(totM)msgs.push({t:'\u274c Abhi <b>'+totM+'</b> sawal galat ya adhoore hain ('+rows.filter(r=>r.mist).sort((a,b)=>b.mist-a.mist).slice(0,3).map(r=>esc(r.name)+' '+r.mist).join(', ')+').',act:['\ud83d\udd01 Galat sawal dobara karo','all']});
+ if(red.length)msgs.push({t:'\ud83d\udd34 Galti ke baad in chapters par kaam nahi hua: <b>'+red.slice(0,3).map(r=>esc(r.name)).join(', ')+'</b>. Roz 5 sawal kar lo.',act:['\ud83d\udcaa '+esc(red[0].name)+' sudharo',String(red[0].ch)]});
+ const imp=rows.filter(r=>r.tr==='up'||(r.s==='g'&&r.mist===0&&r.a>=3&&r.aCnt>=3));if(imp.length)msgs.push({t:'\ud83d\udfe2 Sudhar dikh raha hai: <b>'+imp.slice(0,3).map(r=>esc(r.name)).join(', ')+'</b>. Aise hi lage raho!'});
+ const dn=rows.filter(r=>r.tr==='down');if(dn.length)msgs.push({t:'\ud83d\udcc9 Pichhle record mein in chapters mein girawat: <b>'+dn.slice(0,2).map(r=>esc(r.name)).join(', ')+'</b>.'});
+ if(last3.length){const items=last3.flatMap(t=>t.items),sk=items.filter(i=>i.st==='skip').length/items.length;if(sk>=.25)msgs.push({t:'\u23ed Pichhle tests mein <b>'+Math.round(sk*100)+'%</b> sawal skip hue. Pehle aasaan sawal karo, phir mushkil par jao, par koshish zaroor karo.'});
+  const tp=last3.filter(t=>t.used>=t.mins*60*.95).length;if(tp>=2)msgs.push({t:'\u23f1 Pichhle tests mein time kam pada. Likhne ki speed badhane ke liye roz 1 sawal timer lagakar karo.'});
+  const mc={};items.forEach(i=>i.miss.forEach(w=>{{const x=String(w);if(!/^\d+$/.test(x)&&(x.length>=4||['sas','sss','aaa','bpt','hcf','lcm','cpct'].indexOf(x.toLowerCase())>=0))mc[w]=(mc[w]||0)+1;}}));const tm=Object.entries(mc).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>x[0]);if(tm.length)msgs.push({t:'\u270d\ufe0f Likhte waqt ye important words/steps baar-baar chhoot rahe hain: <b>'+tm.map(esc).join(', ')+'</b>.'});}
+ return{rows:rows,msgs:msgs,totM:totM,red:red,streak:streak()};}
+function streak(){const d=new Set(S.tests.filter(t=>t.type==='daily'&&!t.partial).map(t=>t.date));let n=0,c=new Date();if(!d.has(dstr(c)))c=new Date(Date.now()-DAY);while(d.has(dstr(c))){n++;c=new Date(c.getTime()-DAY);}return n;}
+/* ---------- screens ---------- */
+function view(id){let v=$(id);if(!v){v=document.createElement('div');v.id=id;v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');document.querySelectorAll('#pnav button').forEach(b=>b.classList.toggle('on',b.dataset.t==='d'));window.scrollTo(0,0);return v;}
+const typeIc={daily:'\ud83d\udcc5',sectional:'\ud83e\udde9',weekly:'\ud83d\uddd3\ufe0f'};
+function hub(){const v=view('testsView'),M=mentor(),today=S.tests.find(t=>t.type==='daily'&&t.date===dstr()&&!t.partial),wk=weekKey(),wdone=S.tests.find(t=>t.type==='weekly'&&t.wk===wk&&(!t.partial||t.items.filter(i=>i.st!=='skip').length>=3)),sun=new Date().getDay()===0,toSun=(7-new Date().getDay())%7||7;
+ const pct=t=>t.total?Math.round(t.got/t.total*100):0;
+ v.innerHTML='<div class="nu-label">TESTS</div><h2 style="margin:2px 0 10px">\ud83d\udcdd '+esc(ST().name||'Student')+'</h2>'+
+ '<div class="tc mn" onclick="TS.mentor()"><div class="tc-h">\ud83e\udde0 Mentor</div><div class="tc-t">'+(M.msgs[0]?M.msgs[0].t:'Test do, main galtiyan pakdunga.')+'</div><small>Poori report dekho \u2192</small></div>'+
+ '<div class="tc"><div class="tc-h">\ud83d\udcc5 Daily Test <small>5\u20137 sawal \u00b7 45\u201360 min</small></div><div class="tc-t">'+(today?'\u2705 Aaj ka test ho gaya: <b>'+today.got+'/'+today.total+'</b> marks':'\u23f3 Aaj ka test baaki hai')+' \u00b7 \ud83d\udd25 '+M.streak+' din</div><div class="tc-r"><button onclick="TS.daily(5)">5 sawal<br><small>45 min</small></button><button onclick="TS.daily(6)">6 sawal<br><small>50 min</small></button><button onclick="TS.daily(7)">7 sawal<br><small>60 min</small></button></div></div>'+
+ '<div class="tc"><div class="tc-h">\ud83e\udde9 Sectional Test <small>10 sawal \u00b7 60 min</small></div><div class="tc-t">Book ke ek section ke mixed sawal. Section chuno:</div><div class="tc-g">'+UNITS.map((u,i)=>'<button onclick="TS.sect('+i+')">'+u[0]+'</button>').join('')+'</div></div>'+
+ '<div class="tc tcw"><div class="tc-h">\ud83d\uddd3\ufe0f Weekly Test <small>Har Sunday \u00b7 15 sawal \u00b7 1:30 ghanta</small></div><div class="tc-t">'+(wdone?'\u2705 Is hafte ka test ho gaya: <b>'+wdone.got+'/'+wdone.total+'</b> marks':(sun?'\ud83d\udfe2 <b>Aaj Sunday hai</b>, test khula hai. Sabka paper ek jaisa hai.':'\ud83d\udd12 Agla test <b>Sunday</b> ko, '+toSun+' din baad.'))+'</div>'+(!wdone&&sun?'<button class="primary" onclick="TS.weekly()">\ud83d\ude80 Weekly Test shuru karo</button>':'')+'</div>'+
+ '<div class="mp-h">\ud83d\udcda Test history</div>'+(S.tests.length?'<table class="rp-tb"><thead><tr><th class="l">Test</th><th>Marks</th><th>%</th></tr></thead><tbody>'+S.tests.slice(0,10).map(t=>'<tr onclick="TS.rep(\''+t.id+'\')" style="cursor:pointer"><td class="l">'+typeIc[t.type]+' '+esc(t.title)+'<small>'+t.date+(t.partial?' \u00b7 adhura':'')+'</small></td><td>'+t.got+'/'+t.total+'</td><td>'+pct(t)+'%</td></tr>').join('')+'</tbody></table>':'<div class="small">Abhi koi test nahi diya. Upar se shuru karo.</div>');}
+function report(id){const t=S.tests.find(x=>x.id===id);if(!t){hub();return;}const v=view('tReport'),pc=t.total?Math.round(t.got/t.total*100):0,att=t.items.filter(i=>i.st!=='skip').length,ic={correct:'\u2705',partial:'\ud83d\udfe1',incorrect:'\u274c',skip:'\u23ed'};
+ const cm={};t.items.forEach(i=>{const c=cm[i.ch]||(cm[i.ch]={g:0,m:0});c.g+=i.g;c.m+=i.m;});
+ v.innerHTML='<button class="back" onclick="TS.hub()">\u2190 Tests</button><div class="nu-label" style="margin-top:8px">'+typeIc[t.type]+' '+esc(t.title)+'</div><div class="mp-top"><div class="mp-cd"><b>'+t.got+'</b><span>/ '+t.total+' marks</span></div><div><h2 style="margin:0">'+pc+'%</h2><small>'+att+'/'+t.items.length+' attempt \u00b7 '+Math.floor(t.used/60)+' min lage ('+t.mins+' min the)'+(t.partial?' \u00b7 test adhura chhoda':'')+'</small></div></div>'+
+ '<div class="mp-h">\ud83e\udde0 Mentor ka sandesh</div>'+mentorHtml(mentor(),3)+
+ '<div class="mp-h">Sawal-wise result (tap karke apna jawab aur model answer dekho)</div>'+t.items.map(i=>{const q=NC().find(x=>x.id===i.id)||{};return'<details class="tr-d"><summary><span>'+ic[i.st]+'</span> <b>Ex '+esc(i.ex)+' \u00b7 Q'+i.n+'</b> <em>'+i.g+'/'+i.m+'</em><small>'+esc(chName(i.ch))+(i.t?' \u00b7 '+i.t+'s':'')+'</small></summary><div class="tr-b"><div class="small"><b>Sawal:</b> '+esc(String(q.q||'').slice(0,260))+'</div><div class="small"><b>Aapka jawab:</b> '+(i.a?esc(i.a):'\u2014 (skip)')+'</div>'+(i.miss.length?'<div class="small">\u2716 Chhoot gaye: '+i.miss.map(esc).join(', ')+'</div>':'')+'<div class="small"><b>Model answer:</b> '+esc(q.answer||'')+'</div></div></details>';}).join('')+
+ '<button class="primary" style="margin-top:12px" onclick="TS.fix(\'test:'+t.id+'\')">\ud83d\udd01 Is test ke galat sawal dobara karo</button>';}
+function mentorHtml(M,max){return M.msgs.slice(0,max).map(m=>'<div class="mt-m">'+m.t+(m.act?'<button class="mt-b" onclick="TS.fix(\''+m.act[1]+'\')">'+m.act[0]+'</button>':'')+'</div>').join('')||'<div class="small">Abhi data kam hai.</div>';}
+function mentorView(){const v=view('mentorView'),M=mentor(),col={g:'\ud83d\udfe2',y:'\ud83d\udfe1',r:'\ud83d\udd34',n:'\u26aa'};
+ v.innerHTML='<button class="back" onclick="TS.hub()">\u2190 Tests</button><div class="nu-label" style="margin-top:8px">MENTOR</div><h2 style="margin:2px 0 8px">\ud83e\udde0 Aapki galtiyan aur sudhar</h2>'+mentorHtml(M,8)+
+ '<div class="mp-h">\ud83d\udcda Chapter-wise haal</div><table class="rp-tb"><thead><tr><th class="l">Chapter</th><th>Sahi%</th><th>Galat</th><th></th></tr></thead><tbody>'+M.rows.map(r=>'<tr onclick="'+(r.mist?'TS.fix(\''+r.ch+'\')':'')+'" style="cursor:pointer"><td class="l"><b>'+r.ch+'. '+esc(r.name)+'</b><small>'+esc(r.txt)+(r.tr==='up'?' \u00b7 \ud83d\udcc8':(r.tr==='down'?' \u00b7 \ud83d\udcc9':''))+'</small></td><td>'+(r.acc==null?'\u2014':r.acc+'%')+'</td><td>'+r.mist+'</td><td>'+col[r.s]+'</td></tr>').join('')+'</tbody></table><small class="mp-n">\ud83d\udfe2 sudhar/theek \u00b7 \ud83d\udfe1 koshish chal rahi \u00b7 \ud83d\udd34 galti ke baad kaam nahi hua. Galat wale chapter par tap karke seedha practice karo.</small>';}
+window.TS={hub:hub,rep:report,mentor:mentorView,
+ daily:n=>startTest({type:'daily',title:'Daily Test',list:pickDaily(n),mins:{5:45,6:50,7:60}[n]}),
+ sect:i=>{const u=UNITS[i];startTest({type:'sectional',title:'Sectional \u00b7 '+u[0].replace(/^\S+\s/,''),list:pickSectional(u[1],10),mins:60});},
+ weekly:()=>{if(new Date().getDay()!==0){toast('Weekly Test sirf Sunday ko hota hai');return;}if(!confirm('Weekly Test: 15 sawal, 1 ghanta 30 minute. Ek hi baar de sakte ho. Shuru karein?'))return;startTest({type:'weekly',title:'Weekly Test',list:pickWeekly(),mins:90});},
+ fix:k=>{let l;if(k==='all')l=NC().filter(q=>bad(progress[q.id]));else if(k.indexOf('test:')===0){const t=S.tests.find(x=>x.id===k.slice(5));const ids=new Set((t?t.items:[]).filter(i=>i.st!=='correct').map(i=>i.id));l=NC().filter(q=>ids.has(q.id));}else l=NC().filter(q=>q.ch===+k&&bad(progress[q.id]));startPractice(shuf(l).slice(0,15),'\ud83e\udde0 Galti sudhaar');},
+ data:()=>S,mentorData:mentor,pickWeekly:pickWeekly,pickDaily:pickDaily};
+window.showTests=function(){hub();};
+/* ---------- bottom bar: beech ka button ab Tests ---------- */
+(function(){const b=document.querySelector('#pnav button[data-t="d"]');if(b){b.setAttribute('onclick','closeSheet();showTests()');b.setAttribute('aria-label','Tests');const i=b.querySelector('i'),s=b.querySelector('span');if(i)i.textContent='\ud83d\udcdd';if(s)s.textContent='Tests';}})();
+/* ---------- owner ko record ([TEST] row, script badle bina) ---------- */
+let lastSig=localStorage.getItem('adhyayan_testsig')||'',lastAt=0;
+window.testSync=function(force){try{if(!TU()||TU().indexOf('PASTE_YOUR')>=0)return;const real=S.tests.filter(t=>!t.partial);const M=mentor(),sig=S.tests.length+'|'+(S.tests[0]?S.tests[0].id:'')+'|'+M.rows.map(r=>r.s).join('');if(!force&&(sig===lastSig||Date.now()-lastAt<8000))return;if(!S.tests.length&&!S.log.length)return;lastAt=Date.now();
+ const last=S.tests.slice(0,6).map(t=>t.type[0].toUpperCase()+':'+t.date.slice(5)+':'+t.got+'/'+t.total+(t.partial?'p':'')).join(';'),flags=M.rows.filter(r=>r.s==='r'||r.s==='y'&&r.mist).map(r=>r.ch+(r.s==='r'?'r':'y')).join(','),tot=real.reduce((s,t)=>s+t.total,0),got=real.reduce((s,t)=>s+t.got,0),wk=real.find(t=>t.type==='weekly'),dd=S.tests.find(t=>t.type==='daily'&&t.date===dstr());
+ fetch(TU(),{method:'POST',keepalive:true,body:JSON.stringify({type:'progress',name:'[TEST] '+(ST().name||'Student'),section:ST().section||'',overall:tot?Math.round(got/tot*100):0,attempted:real.length,correct:real.filter(t=>t.type==='weekly').length,subjects:{maths:wk&&wk.total?Math.round(wk.got/wk.total*100):'',science:M.streak,sst:M.red.length,english:dd?1:0},streak:M.streak,weak:(last+'|M:'+flags).slice(0,290)})}).then(r=>{if(r&&r.ok!==false){lastSig=sig;try{localStorage.setItem('adhyayan_testsig',sig);}catch(e){}}}).catch(()=>{});}catch(e){}};
+setInterval(()=>testSync(false),20000);setTimeout(()=>testSync(false),6000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')testSync(false);});
+/* ---------- CSS ---------- */
+const css=document.createElement('style');css.textContent='.tc{margin:0 0 12px;padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12)}.tc.mn{border-color:rgba(205,164,73,.6);background:linear-gradient(135deg,rgba(205,164,73,.16),rgba(255,255,255,.03));cursor:pointer}.tc.tcw{border-color:rgba(61,220,132,.45)}.tc-h{font-weight:700;font-size:16px}.tc-h small{font-weight:400;opacity:.65;font-size:11.5px;margin-left:4px}.tc-t{margin:6px 0 8px;font-size:13.5px;line-height:1.5;opacity:.92}.tc-r{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tc-r button,.tc-g button{padding:11px 6px;border-radius:12px;background:rgba(255,255,255,.07);color:inherit;border:1px solid rgba(205,164,73,.4);font-weight:600;font-size:13px}.tc-r small{opacity:.7;font-weight:400}.tc-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tc-g button{text-align:left;padding:11px 10px}.tc.mn small{opacity:.7}.mt-m{margin:8px 0;padding:11px 12px;border-radius:14px;background:rgba(255,255,255,.05);font-size:13.5px;line-height:1.5}.mt-b{display:block;margin-top:8px;padding:9px 12px;border-radius:12px;background:linear-gradient(180deg,#f3d58a,#cda449);color:#1a1206;font-weight:700;font-size:13px}.tr-d{margin:6px 0;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(255,255,255,.04)}.tr-d summary{cursor:pointer;padding:10px 12px;list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px}.tr-d summary small{width:100%;opacity:.65;font-size:11.5px}.tr-d summary em{margin-left:auto;font-style:normal;color:var(--gold-soft,#e8c76a);font-weight:700}.tr-b{padding:4px 12px 12px;display:grid;gap:6px}';document.head.appendChild(css);
+})();
+</script>
+<script>
+/* ===== V31: Owner Panel mein Tests ka record ===== */
+(function(){const $=id=>document.getElementById(id),esc=s=>escHtml(String(s==null?'':s)),TU=()=>window._TU||'',pinOf=()=>sessionStorage.getItem('adhyayan_pin');
+const isToday=s=>{try{return new Date(s).toDateString()===new Date().toDateString();}catch(e){return false;}};
+const ago=ms=>{if(ms==null||isNaN(ms))return'\u2014';const m=Math.floor(ms/6e4);if(m<2)return'abhi';if(m<60)return m+' min pehle';const h=Math.floor(m/60);if(h<24)return h+' ghante pehle';return Math.floor(h/24)+' din pehle';};
+const cn=c=>{const q=(window.NCQ||[]).find(x=>x.ch===+c);return q?q.cn:'Ch '+c;};
+async function inject(){const v=$('ownerView');if(!v||$('tsOwn'))return;if(!TU()||TU().indexOf('PASTE_YOUR')>=0||!pinOf())return;let d;try{d=await (await fetch(TU()+'?pin='+encodeURIComponent(pinOf())+'&prep=1')).json();}catch(e){return;}if(!Array.isArray(d))return;
+ const main=d.filter(x=>!/^\[(PREP|TEST)\]/.test(String(x.name))),R=d.filter(x=>String(x.name).indexOf('[TEST]')===0).map(x=>{const p=String(x.weak||'').split('|M:');return{name:String(x.name).replace(/^\[TEST\]\s*/,''),sec:x.section,ms:x.last?Date.now()-new Date(x.last):null,avg:+x.overall||0,n:+x.att||0,wn:+x.cor||0,wp:(x.maths===''||x.maths==null)?null:+x.maths,streak:+x.streak||0,today:+x.english===1&&isToday(x.last),last:p[0].split(';').filter(Boolean),flags:(p[1]||'').split(',').filter(Boolean)};}).sort((a,b)=>b.n-a.n||b.avg-a.avg);
+ if(!R.length)return;const seen=new Set(R.map(r=>r.name.toLowerCase())),none=main.filter(x=>!seen.has(String(x.name).toLowerCase())),act=R.filter(r=>r.today).length,avg=Math.round(R.reduce((s,r)=>s+r.avg,0)/R.length),wk=R.filter(r=>r.wn>0).length;
+ const fl=r=>{const rd=r.flags.filter(f=>/r$/.test(f)).map(f=>cn(parseInt(f))),yl=r.flags.filter(f=>/y$/.test(f)).map(f=>cn(parseInt(f)));return(rd.length?'\ud83d\udd34 '+rd.map(esc).join(', '):'')+(rd.length&&yl.length?'<br>':'')+(yl.length?'\ud83d\udfe1 '+yl.map(esc).join(', '):'')||'\ud83d\udfe2 koi badi dikkat nahi';};
+ const sec=document.createElement('div');sec.className='st-sec';sec.id='tsOwn';
+ sec.innerHTML='<div class="nu-label">\ud83d\udcdd TESTS \u00b7 SAB BACCHON KA RECORD</div><div class="pf-tiles"><div><b>'+R.length+'/'+main.length+'</b><span>TEST DIYA</span></div><div><b>'+act+'</b><span>AAJ DAILY KIYA</span></div><div><b>'+avg+'%</b><span>AVG SCORE</span></div><div><b>'+wk+'</b><span>WEEKLY DIYA</span></div></div>'+
+ R.map(r=>'<div class="ow-st"><div class="ow-h" onclick="this.parentNode.classList.toggle(\'op\')"><span>'+(r.today?'\ud83d\udfe2':'\u26aa')+'</span><div><b>'+esc(r.name)+'</b><small>'+(r.sec?esc(r.sec)+' \u00b7 ':'')+ago(r.ms)+' \u00b7 \ud83d\udd25 '+r.streak+' din</small></div><div class="ow-r"><b>'+r.n+' test</b><small>avg '+r.avg+'%'+(r.wp!=null?' \u00b7 weekly '+r.wp+'%':'')+'</small></div></div><div class="ow-d"><div class="small" style="margin:4px 0 8px"><b>Mentor ke hisaab se:</b><br>'+fl(r)+'</div><div class="small"><b>Pichhle tests:</b><br>'+(r.last.map(x=>{const a=x.split(':');return({D:'Daily',S:'Sectional',W:'Weekly'}[a[0]]||a[0])+' \u00b7 '+a[1]+' \u00b7 <b>'+a[2]+'</b>';}).join('<br>')||'\u2014')+'</div></div></div>').join('')+
+ (none.length?'<div class="small" style="margin-top:10px">\u23f3 <b>Abhi tak test nahi diya ('+none.length+'):</b> '+none.map(x=>esc(x.name)).join(' \u00b7 ')+'</div>':'');
+ const anchor=$('mpOwn')||[...v.querySelectorAll('.st-sec')].find(x=>x.textContent.indexOf('SUBJECT-WISE')>=0)||$('cmBox');if(anchor)anchor.parentNode.insertBefore(sec,anchor);else v.appendChild(sec);}
+const _O=window.OWNER;if(_O)window.OWNER=async function(){const r=await _O.apply(this,arguments);try{inject();}catch(e){}return r;};
+})();
 </script>
 </body>
 </html>
