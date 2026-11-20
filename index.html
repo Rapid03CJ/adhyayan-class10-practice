@@ -8164,5 +8164,48 @@ setInterval(()=>{
 })();
 </script>
 
+<style id="v39css">
+html:not([data-theme=light]) h2{background:none!important;-webkit-text-fill-color:currentColor!important;color:#f3d58a!important}
+html:not([data-theme=light]) .back{width:auto!important;display:inline-flex;align-items:center;gap:6px;padding:9px 16px!important;border-radius:99px!important;background:rgba(255,255,255,.06)!important;color:#f3d58a!important;border:1px solid rgba(205,164,73,.5)!important;font-weight:700;font-size:13px}
+#testsView.card{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;padding:6px 2px!important}
+#testsView .nu-label{margin-top:12px;letter-spacing:2px}#testsView h2{margin:2px 0 12px!important;font-size:28px;font-weight:800}
+.th38{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.th38 span{padding:8px 13px;border-radius:99px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(205,164,73,.35)}.th38 .ok{border-color:#5fbf8c;color:#9ff0c4;background:rgba(95,191,140,.1)}
+#testsView .tc{margin:0 0 14px;padding:16px!important}.tc-h{font-size:17px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.tc-h small{font-size:11.5px;font-weight:600;opacity:.7}.tc-t{font-size:13.5px;opacity:.9;margin-top:6px;line-height:1.5}
+.tc.daily38{background:linear-gradient(135deg,rgba(205,164,73,.26),rgba(30,42,70,.9) 58%)!important;border:1px solid rgba(243,213,138,.65)!important;box-shadow:0 0 36px rgba(243,213,138,.2),0 14px 36px rgba(0,0,0,.5)!important}
+.tc-r{display:grid!important;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.tc-r button{padding:14px 6px!important;font-weight:800;font-size:16px;line-height:1.35;color:#f3d58a!important}.tc-r button small{display:block;font-weight:600;font-size:11.5px;color:#cfe3ff;opacity:.85}
+.tc-g{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.tc-g button{display:flex!important;flex-direction:column;align-items:center;gap:6px;padding:14px 8px!important;text-align:center;font-size:12.5px;font-weight:700;line-height:1.25}.tc-g button i{font-style:normal;font-size:28px}
+.tc.mn{background:linear-gradient(135deg,rgba(255,130,190,.14),rgba(12,18,32,.9))!important;border:1px solid rgba(255,156,207,.45)!important}
+.tc.mn .tc-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.tc.mn small{display:block;margin-top:8px;color:#f3d58a;font-weight:700}
+.tc.tcw{padding:14px 16px!important}
+#testsView .mp-h{font-size:12px;letter-spacing:1.6px;font-weight:800;color:#f3d58a;margin:22px 0 8px}
+#testsView .rp-tb{width:100%;border-collapse:separate;border-spacing:0 6px}#testsView .rp-tb th{font-size:11px;opacity:.6;padding:4px 10px;font-weight:700}#testsView .rp-tb td{padding:11px 10px;background:rgba(255,255,255,.05)}#testsView .rp-tb td:first-child{border-radius:14px 0 0 14px}#testsView .rp-tb td:last-child{border-radius:0 14px 14px 0;font-weight:800;color:#f3d58a}
+#msg38 .mgc{display:flex;justify-content:space-between;align-items:center;margin:2px 0 10px;font-size:12px}#msg38 #mgC{font-weight:800;color:#8fc8ff}#msg38 #mgC.g{color:#f3d58a}#msg38 #mgC.r{color:#ff7b7b}#msg38 textarea{min-height:190px;line-height:1.55}
+.nv-t,#notifView .nv-m{white-space:pre-wrap;word-break:break-word}
+</style>
+<script>
+/* ===== V39: premium Tests hub + long message composer ===== */
+(function(){
+const $=id=>document.getElementById(id);
+function tests(){const v=$('testsView');if(!v||v.classList.contains('hidden')||v.querySelector('.th38'))return;
+ v.querySelectorAll('.tc').forEach(c=>{if(c.querySelector('.tc-r'))c.classList.add('daily38');});
+ v.querySelectorAll('.tc-g button').forEach(b=>{const m=b.textContent.trim().match(/^(\p{Extended_Pictographic}\uFE0F?)\s*(.*)$/u);if(m)b.innerHTML='<i>'+m[1]+'</i><span>'+m[2]+'</span>';});
+ const d=v.querySelector('.daily38 .tc-t'),w=v.querySelector('.tcw .tc-t'),dt=d?d.textContent:'',wt=w?w.textContent:'',st=(dt.match(/(\d+)\s*din/)||[])[1]||0,dd=/✅/.test(dt),wd=(wt.match(/(\d+)\s*din baad/)||[])[1],wk=/✅/.test(wt);
+ const c=document.createElement('div');c.className='th38';c.innerHTML='<span>🔥 '+st+' din streak</span><span class="'+(dd?'ok':'')+'">'+(dd?'✅ Daily ho gaya':'⏳ Daily baaki')+'</span><span class="'+(wk?'ok':'')+'">🗓️ '+(wk?'Weekly ho gaya':/Aaj Sunday/.test(wt)?'Weekly aaj khula':'Weekly '+(wd||'-')+' din baad')+'</span>';
+ const h=v.querySelector('h2');if(h)h.after(c);}
+async function send(){const t=$('mgT').value.trim(),m=$('mgM').value.trim();if(!t||m.length<20){toast('Title aur kam se kam 20 akshar ka message likho');return;}if(!confirm('Yeh message sab students ko notification ke saath jayega. Bhejein?'))return;
+ const b=$('mgB');b.disabled=true;b.textContent='Bhej raha hoon...';
+ try{const r=await fetch(window._TU,{method:'POST',body:JSON.stringify({type:'notice',pin:sessionStorage.getItem('adhyayan_pin'),title:t,text:m,link:'',push:true})});let j={ok:1};try{j=await r.json();}catch(e){}
+  if(j.ok===0)toast('PIN ya server problem');else{toast(j.push&&j.push.code===200?'✅ Message + phone notification bheji!':(j.push&&j.push.skipped?'⚠️ Message gaya, par OneSignal key khali hai':'✅ Message bhej diya (app ke andar)'));$('mgT').value=$('mgM').value='';cnt();try{sfx('win');}catch(e){}}}
+ catch(e){toast('Bhej nahi paya, internet check karo');}b.disabled=false;b.textContent='📲 Notification ke saath bhejo';}
+function cnt(){const n=$('mgM').value.length,c=$('mgC');c.textContent=n+' / 2000';c.className=n>=1900?'r':n>=1000?'g':'';}
+setInterval(()=>{try{tests();}catch(e){}
+ const f=$('owT');if(f&&!$('msg38')){const s=f.closest('.st-sec')||f.parentNode,d=document.createElement('div');d.className='st-sec';d.id='msg38';
+  d.innerHTML='<div class="nu-label">💬 MESSAGE BHEJO · NOTIFICATION KE SAATH</div><input class="ow-in" id="mgT" maxlength="80" placeholder="Title (jaise: Aaj ki zaroori suchna)"><textarea class="ow-in" id="mgM" rows="9" maxlength="2000" placeholder="Poora message yahan likho (1000 se 2000 akshar tak). Link ki zaroorat nahi."></textarea><div class="mgc"><span id="mgC">0 / 2000</span><span class="small">Sab students ko app + phone notification</span></div><button class="primary" id="mgB">📲 Notification ke saath bhejo</button>';
+  s.before(d);$('mgM').oninput=cnt;$('mgB').onclick=send;}},600);
+})();
+</script>
+
 </body>
 </html>
