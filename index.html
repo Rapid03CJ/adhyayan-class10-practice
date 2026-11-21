@@ -6729,7 +6729,7 @@ function summ(d,top){const wk=d.filter(x=>x.days<=7),ina=d.filter(x=>x.days>=4),
  window._wk='📊 *Is hafte ki Class Report — अध्ययन Tuition Centre*\n\n✅ Active (7 din): '+wk.length+'/'+d.length+'\n📈 Class average: '+avg+'%\n🏆 Top 3: '+best.map(x=>x.name+' ('+x.overall+'%)').join(', ')+'\n⚠️ 4+ din se gayab: '+(ina.length?ina.map(x=>x.name).join(', '):'koi nahi')+'\n📚 Kamzor chapter: '+(top.length?top.slice(0,3).map(t=>t[0]).join(', '):'-')+'\n\nSab padhte raho! 💪';
  return'<div class="weakbox" style="background:rgba(90,170,255,.08);border-color:rgba(90,170,255,.3)"><div class="nu-label">📊 CLASS SUMMARY</div><div class="small">Active (7 din): <b>'+wk.length+'/'+d.length+'</b> · Average: <b>'+avg+'%</b></div><div class="small">🏆 '+best.map(x=>escHtml(x.name)).join(', ')+'</div><button class="secondary wa-btn" style="margin-top:8px" onclick="window.open(\'https://wa.me/?text=\'+encodeURIComponent(_wk),\'_blank\')">📲 Weekly Report share karo</button></div>';}
 window.TVshow=async()=>{if(!tConf()){alert('Teacher Dashboard abhi setup nahi hua. teacher_dashboard.gs wala setup karke URL paste karo.');return;}
- let pin=sessionStorage.getItem('adhyayan_pin')||prompt('Teacher PIN daalo:');if(!pin)return;sh('👨‍🏫 Teacher View','<p class="small">Loading...</p>');
+ let pin=sessionStorage.getItem('adhyayan_pin')||(await window.askPin('Teacher PIN daalo'));if(!pin)return;sh('👨‍🏫 Teacher View','<p class="small">Loading...</p>');
  try{const r=await fetch(TEACHER_URL+'?pin='+encodeURIComponent(pin)),d=await r.json();if(d.error){sessionStorage.removeItem('adhyayan_pin');sh('👨‍🏫 Teacher View','<p class="small">PIN galat hai.</p>');return;}sessionStorage.setItem('adhyayan_pin',pin);
   const now=Date.now();d.forEach(x=>x.days=x.last?Math.floor((now-new Date(x.last))/864e5):99);d.sort((a,b)=>b.days-a.days);
   const wk={};d.forEach(x=>String(x.weak||'').split('), ').forEach(w=>{const k=w.replace(/\s*\(\d+%\)?$/,'').trim();if(k)wk[k]=(wk[k]||0)+1;}));const top=Object.entries(wk).sort((a,b)=>b[1]-a[1]).slice(0,5);
@@ -7012,7 +7012,7 @@ function toast(t){const d=document.createElement('div');d.className='ptoast';d.t
 const _ha=hideAllScreens;hideAllScreens=function(){_ha.apply(this,arguments);const v=$('ownerView');if(v)v.classList.add('hidden');};
 const pin=()=>sessionStorage.getItem('adhyayan_pin');
 window.OWNER=async function(){if(!ok()){alert('Teacher script URL set nahi hai.');return;}
- let p=pin()||prompt('Owner PIN daalo:');if(!p)return;
+ let p=pin()||(await window.askPin('Owner PIN daalo'));if(!p)return;
  try{const r=await fetch(TU+'?pin='+encodeURIComponent(p)),d=await r.json();if(d.error){sessionStorage.removeItem('adhyayan_pin');alert('PIN galat hai.');return;}sessionStorage.setItem('adhyayan_pin',p);show(d);}catch(e){alert('Load nahi ho paya. Internet check karo.');}};
 function show(d){let v=$('ownerView');if(!v){v=document.createElement('div');v.id='ownerView';v.className='card hidden';W.appendChild(v);}hideAllScreens();v.classList.remove('hidden');
  d.forEach(x=>x.days=x.last?Math.floor((Date.now()-new Date(x.last))/864e5):99);const td=new Date().toDateString(),act=d.filter(x=>x.last&&new Date(x.last).toDateString()===td).length,avg=d.length?Math.round(d.reduce((s,x)=>s+(+x.overall||0),0)/d.length):0;
@@ -7256,7 +7256,7 @@ const pin=()=>sessionStorage.getItem('adhyayan_pin');
 function ago(ms){if(ms==null||isNaN(ms))return 'kabhi nahi';const m=Math.floor(ms/6e4);if(m<2)return 'abhi';if(m<60)return m+' min pehle';const h=Math.floor(m/60);if(h<24)return h+' ghante pehle';return Math.floor(h/24)+' din pehle';}
 let DATA=[];
 window.OWNER=async function(){window._ownT=Date.now();if(!ok()){alert('Teacher script URL set nahi hai.');return;}
- const p=pin()||prompt('Owner PIN daalo:');if(!p)return;
+ const p=pin()||(await window.askPin('Owner PIN daalo'));if(!p)return;
  try{const d=await (await fetch(TU+'?pin='+encodeURIComponent(p))).json();if(d.error){sessionStorage.removeItem('adhyayan_pin');alert('PIN galat hai.');return;}sessionStorage.setItem('adhyayan_pin',p);DATA=d;draw();}catch(x){alert('Load nahi ho paya. Internet check karo.');}};
 function prep(){DATA.forEach(x=>{x.ms=x.last?Date.now()-new Date(x.last):null;x.days=x.ms==null?99:Math.floor(x.ms/864e5);x.today=x.last&&new Date(x.last).toDateString()===new Date().toDateString();});}
 function dot(x){return x.today?'🟢':x.days<=3?'🟡':'🔴';}
@@ -8248,7 +8248,7 @@ function tests(){const v=$('testsView');if(!v||v.classList.contains('hidden')||v
  t.onclick=e=>{const x=e.target.closest('[data-d],[data-s],[data-w],[data-m]');if(!x)return;let b;if(x.dataset.d!=null)b=dC.querySelectorAll('.tc-r button')[+x.dataset.d];else if(x.dataset.s!=null)b=sC.querySelectorAll('.tc-g button')[+x.dataset.s];else if(x.dataset.w)b=wC.querySelector('button');else{b=mC.querySelector('[onclick]')||mC;}if(b)b.click();};
  const a=v.querySelector('h2');(a||v.firstChild).after(t);}
 setInterval(()=>{try{tests();}catch(e){}
- const b=document.querySelector('.brand34');if(b&&!$('bv40')){const s=document.createElement('small');s.id='bv40';s.textContent='Build v53';b.appendChild(s);}
+ const b=document.querySelector('.brand34');if(b&&!$('bv40')){const s=document.createElement('small');s.id='bv40';s.textContent='Build v55';b.appendChild(s);}
  const m=$('msg38'),f=$('owT');if(m&&f&&!document.querySelector('.old38')){const old=f.closest('.st-sec');if(old&&old!==m){const d=document.createElement('details');d.className='old38';d.innerHTML='<summary>📌 Chhota Notice (link ke saath, 300 akshar) ▾</summary>';old.before(d);d.appendChild(old);const an=$('ann38');if(an)m.querySelector('.nu-label').after(an);}}
 },600);
 })();
@@ -8443,7 +8443,7 @@ const $=id=>document.getElementById(id);
 const MAP={'Certificate':['Report card certificate','STUDY'],'Mistake Notebook':['Galat sawal ek jagah','STUDY'],'Parent Report':['Parents ko WhatsApp par bhejo','STUDY'],'Dost Challenge':['Dost ko challenge do','FUN'],'Joke / Story':['Thoda break lo','FUN'],'Notification':['Phone alerts chalu karo','APP'],'Reminder':['Roz ka reminder lagao','APP'],'Feedback':['Galat sawal ya sujhav bhejo','APP'],'Settings':['Text size, sound, backup','APP']};
 function prof(){const v=$('profileView');if(!v||v.classList.contains('hidden')||v.querySelector('.pf-list'))return;
  const L=[...v.querySelectorAll('.nu-label')],lab=L.find(e=>/NOTIFICATIONS/.test(e.textContent)),tl=L.find(e=>/TOOLS/.test(e.textContent)),un=v.querySelectorAll('.pf-n.un').length,all=v.querySelectorAll('.pf-n').length;
- if(lab&&tl){const w=lab.parentElement,hide=[w];let n=w.nextElementSibling;while(n&&n!==tl){hide.push(n);n=n.nextElementSibling;}hide.forEach(e=>e.style.display='none');
+ if(lab&&tl){const w=lab.parentElement,hide=[w];let n=w.nextElementSibling;while(n&&n!==tl){hide.push(n);n=n.nextElementSibling;}hide.forEach(e=>e.style.setProperty('display','none','important'));
   }
  const g=v.querySelector('.pf-grid');if(!g)return;const grp={STUDY:[],FUN:[],APP:[]};
  g.querySelectorAll('button').forEach(b=>{const t=(b.querySelector('span')||b).textContent.trim(),ic=(b.querySelector('i')||{}).textContent||'•',m=MAP[t]||['',' APP'];grp[m[1].trim()].push([ic,t,m[0],b]);});
@@ -8557,5 +8557,135 @@ html[data-theme=light] body :is(.t4-ring){background:conic-gradient(#2f80ff var(
 html[data-theme=light] body :is(.hello h2,#subjectList::before,.nu-label,.t4-h,#practice #pTitle,#pCount,.pf-hero .sig-l,.t4-hero small,.brand34 b){color:#2f4fd8!important}
 html[data-theme=light] body h1,html[data-theme=light] body h2,html[data-theme=light] body h3{color:#0b1b3a}
 </style>
+<style id="v54css">
+/* Profile: saaf, compact */
+#profileView .pf-list{grid-template-columns:1fr 1fr!important;gap:10px!important}
+#profileView .pf-row{flex-direction:column;text-align:center;gap:6px;padding:16px 8px!important}
+#profileView .pf-row small,#profileView .pf-row>u{display:none}
+#profileView .pf-row span b{font-size:13.5px}
+.pf-hero .pf-xp{width:100%;margin:14px 0 0!important}
+/* Announce rebuild */
+.an53>*:not(#an53){display:none!important}
+.an53.showold>*:not(#an53){display:revert!important}
+.an53 .ow-sub,.an53 #msg38,.an53 #ann38,.an53.showold #an53 .an-p{display:none!important}
+.an-p textarea{min-height:200px;line-height:1.55}.an-p .primary,.an-p .secondary{margin-top:10px}
+.an-p label{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0}
+/* Progress */
+.sj54{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.sj54>div{padding:14px;border-radius:20px;background:linear-gradient(160deg,rgba(32,44,74,.8),rgba(12,18,32,.93));border:1px solid rgba(205,164,73,.3)}
+.sj54 b{display:block;font-size:14px}.sj54 small{opacity:.7;font-size:11.5px}.sj54 .bar{margin:8px 0 6px!important;height:6px!important}.sj54 em{font-style:normal;font-weight:800;color:#f3d58a;font-size:18px}
+.ch54{margin:12px 0}.ch54>summary{padding:13px 15px;border-radius:16px;font-weight:700;cursor:pointer;list-style:none;background:rgba(255,255,255,.05);border:1px solid rgba(205,164,73,.35)}.ch54[open]>summary{margin-bottom:8px}
+/* WOW update screen */
+#wow54{position:fixed;inset:0;z-index:100003;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;background:radial-gradient(700px 500px at 50% 22%,rgba(90,170,255,.38),transparent 60%),radial-gradient(500px 400px at 85% 90%,rgba(255,130,190,.25),transparent 60%),#04060d;color:#f3efe4;overflow:auto}
+#wow54 .w1{font-size:13px;letter-spacing:6px;font-weight:800;color:#f3d58a;animation:w54a .7s both}
+#wow54 h1{font-size:46px;margin:6px 0 4px;font-weight:900;background:linear-gradient(180deg,#fff3c4,#f3d58a,#b8861f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 26px rgba(243,213,138,.6));animation:w54b 1s cubic-bezier(.2,1.4,.3,1) both}
+#wow54 .bv{display:inline-block;padding:6px 16px;border-radius:99px;font-weight:800;color:#1a1206;background:linear-gradient(135deg,#f6dc95,#cda449);margin-bottom:18px;animation:w54a 1s .3s both}
+#wow54 ul{list-style:none;margin:0 0 20px;padding:0;max-width:380px;text-align:left}
+#wow54 li{padding:11px 14px;margin:8px 0;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:14.5px;opacity:0;animation:w54a .6s both}
+@keyframes w54a{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}@keyframes w54b{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+html[data-theme=light] #wow54{background:radial-gradient(700px 500px at 50% 22%,rgba(255,255,255,.7),transparent 60%),linear-gradient(170deg,#9cc3ff,#c4d9ff 45%,#aebfff)!important;color:#0b1b3a}
+html[data-theme=light] #wow54 li{background:rgba(255,255,255,.8);border-color:#fff}
+html[data-theme=light] #wow54 h1{background:linear-gradient(180deg,#38bdf8,#4f46e5);-webkit-background-clip:text;background-clip:text}
+html[data-theme=light] #wow54 .bv{background:linear-gradient(135deg,#2f80ff,#4f46e5);color:#fff}
+</style>
+<script>
+/* ===== V54: Wow update screen, count-up, Announce rebuild, Progress saaf, Profile fix ===== */
+(function(){
+const $=id=>document.getElementById(id),E=s=>escHtml(String(s==null?'':s)),BUILD='v54';
+const LOG=['🎨 Dark + Blue-Mix light theme (☀️ button se badlo)','👤 Profile saaf: signature, anime title, compact tools','📖 Test ke baad Book jaisa Review + 542 MCQ explanation','📊 Progress screen: subject cards, chapter list band','📢 Owner: Message + Notice naya, seedha'];
+function wow(){if(localStorage.getItem('v54seen')===BUILD||$('wow54')||$('splash34'))return;const d=$('dashboard');if(!d||d.classList.contains('hidden'))return;
+ const o=document.createElement('div');o.id='wow54';o.innerHTML='<div class="w1">✦ UPDATE ✦</div><h1>Naya Adhyayan</h1><div class="bv">Build '+BUILD+'</div><ul>'+LOG.map((t,i)=>'<li style="animation-delay:'+(.6+i*.35)+'s">'+t+'</li>').join('')+'</ul><button class="primary" style="max-width:320px;width:100%">🚀 Dekho kya naya hai</button>';
+ document.body.appendChild(o);try{sfx('win');setTimeout(cfx,500);setTimeout(cfx,1400);}catch(e){}
+ o.querySelector('button').onclick=()=>{localStorage.setItem('v54seen',BUILD);o.style.transition='opacity .5s';o.style.opacity=0;setTimeout(()=>o.remove(),500);try{sfx('nav');}catch(e){}};}
+function cu(el){if(el.dataset.c54)return;const t=el.textContent.trim(),m=t.match(/^(\D*)(\d+)(.*)$/);if(!m||t.length>9)return;el.dataset.c54=1;const n=+m[2];if(n<2)return;const s=performance.now();(function f(now){const p=Math.min(1,(now-s)/800),v=Math.round(n*(1-Math.pow(1-p,3)));el.textContent=m[1]+v+m[3];if(p<1)requestAnimationFrame(f);})(s);}
+function an(){const pn=[...document.querySelectorAll('.ow-pane')][3];if(!pn||pn.querySelector('#an53'))return;pn.classList.add('an53');
+ const T=[['📝 Kal test','Kal test hai','Kal test hai. Taiyari karo aur time par app kholo!'],['🔥 Daily 10','Aaj ka Daily 10 baaki hai','Aaj ka Daily 10 abhi baaki hai. Sirf 10 minute lagenge, streak mat todo!'],['🗓️ Weekly','Sunday ko Weekly Test','Is Sunday Weekly Test hai (15 sawal, 1:30 ghanta). Achhe se taiyari karo.'],['🏆 Leaderboard','Leaderboard update','Leaderboard update ho gaya! Dekho aap kis rank par ho aur upar chadho.'],['🎉 Shabash','Shabash bacchon!','Is hafte sabne mehnat ki. Aise hi lage raho, board mein result zaroor aayega!']];
+ const d=document.createElement('div');d.id='an53';d.innerHTML='<div class="ow-tabs"><button data-k="m" class="on">💬 Message</button><button data-k="n">📌 Notice + Link</button><button data-k="o">🗂️ Purane / Banner</button></div><div class="an-p" data-p="m"><div class="ann38" id="aTp"></div><input id="aT" class="ow-in" maxlength="80" placeholder="Title (jaise: Aaj ki zaroori suchna)"><textarea id="aM" class="ow-in" rows="9" maxlength="2000" placeholder="Poora message (1000-2000 akshar). Link ki zaroorat nahi."></textarea><div class="mgc"><span id="aC">0 / 2000</span><span class="small">App + phone notification</span></div><button class="primary" id="aS">📲 Notification ke saath bhejo</button><button class="secondary" id="aW">💬 WhatsApp group par bhejo</button></div><div class="an-p" data-p="n" style="display:none"><input id="nT" class="ow-in" maxlength="80" placeholder="Notice title"><textarea id="nM" class="ow-in" rows="4" maxlength="300" placeholder="Chhota notice (300 akshar tak)"></textarea><input id="nL" class="ow-in" placeholder="Link (optional) https://..."><label><input type="checkbox" id="nP" checked> Phone notification bhi bhejo</label><button class="primary" id="nS">📌 Notice bhejo</button></div>';
+ pn.prepend(d);
+ $('aTp').innerHTML=T.map((x,i)=>'<button data-i="'+i+'">'+x[0]+'</button>').join('');
+ $('aTp').onclick=e=>{const b=e.target.closest('button');if(!b)return;const x=T[b.dataset.i];$('aT').value=x[1];$('aM').value=x[2];$('aM').dispatchEvent(new Event('input'));};
+ $('aM').oninput=()=>{const n=$('aM').value.length,c=$('aC');c.textContent=n+' / 2000';c.style.color=n>=1900?'#ff7b7b':n>=1000?'#f3d58a':'';};
+ const tabs=d.querySelector('.ow-tabs');tabs.onclick=e=>{const b=e.target.closest('button');if(!b)return;tabs.querySelectorAll('button').forEach(z=>z.classList.toggle('on',z===b));d.querySelectorAll('.an-p').forEach(p=>p.style.display=p.dataset.p===b.dataset.k?'':'none');pn.classList.toggle('showold',b.dataset.k==='o');};
+ const post=async(b,body,ok)=>{b.disabled=true;const t=b.textContent;b.textContent='Bhej raha hoon...';try{const r=await fetch(window._TU,{method:'POST',body:JSON.stringify(Object.assign({type:'notice',pin:sessionStorage.getItem('adhyayan_pin')},body))});let j={ok:1};try{j=await r.json();}catch(e){}if(j.ok===0)toast('PIN ya server problem');else{toast(j.push&&j.push.code===200?'✅ Message + phone notification bheji!':'✅ Bhej diya (app ke andar)');ok();try{sfx('win');}catch(e){}}}catch(e){toast('Bhej nahi paya, internet check karo');}b.disabled=false;b.textContent=t;};
+ $('aS').onclick=()=>{const t=$('aT').value.trim(),m=$('aM').value.trim();if(!t||m.length<20){toast('Title aur kam se kam 20 akshar ka message likho');return;}if(!confirm('Sab students ko notification ke saath jayega. Bhejein?'))return;post($('aS'),{title:t,text:m,link:'',push:true},()=>{$('aT').value=$('aM').value='';$('aM').dispatchEvent(new Event('input'));});};
+ $('aW').onclick=()=>{const t=$('aT').value.trim(),m=$('aM').value.trim();if(!t||!m){toast('Pehle title aur message likho');return;}window.open('https://wa.me/?text='+encodeURIComponent('📢 *'+t+'*\n'+m+'\n\n— Adhyayan Tuition Centre'),'_blank','noopener');};
+ $('nS').onclick=()=>{const t=$('nT').value.trim(),m=$('nM').value.trim();if(!t||!m){toast('Title aur notice likho');return;}post($('nS'),{title:t,text:m,link:$('nL').value.trim(),push:$('nP').checked},()=>{$('nT').value=$('nM').value=$('nL').value='';});};}
+function prog(){const v=$('reportView');if(!v||v.classList.contains('hidden')||v.querySelector('#sj54'))return;
+ [...v.querySelectorAll('div')].forEach(x=>{if(x.children.length<=3&&/WRITING QUESTIONS|AUTO-CHECKED/.test(x.textContent)&&x.textContent.length<40)x.style.setProperty('display','none','important');});
+ [...v.querySelectorAll('.small,p,div')].forEach(x=>{if(!x.children.length&&/^Score = Accuracy/.test(x.textContent.trim()))x.style.setProperty('display','none','important');});
+ const tb=[...v.querySelectorAll('table')].find(t=>/Subject/.test(t.textContent)&&/Attempted/.test(t.textContent));
+ if(tb){const g=document.createElement('div');g.id='sj54';g.className='sj54';[...tb.querySelectorAll('tbody tr')].forEach(r=>{const c=[...r.children].map(z=>z.textContent.trim());if(c.length<3)return;const a=parseInt(c[2])||0;g.innerHTML+='<div><b>'+E(c[0])+'</b><small>'+E(c[1])+' sawal</small><div class="bar"><div class="fill" style="width:'+a+'%"></div></div><em>'+E(c[2])+'</em> <small>'+E(c[3]||'')+'</small></div>';});tb.style.setProperty('display','none','important');tb.after(g);}
+ else{const m=document.createElement('i');m.id='sj54';v.appendChild(m);}
+ const rows=[...v.querySelectorAll('.chapter-analysis-row')];if(rows.length>3){const d=document.createElement('details');d.className='ch54';d.innerHTML='<summary>📚 Chapter-wise report ('+rows.length+') ▾</summary>';rows[0].before(d);rows.forEach(r=>d.appendChild(r));}}
+setInterval(()=>{try{wow();an();prog();document.querySelectorAll('#profileView .pf-tiles b,.trk-tile b,.ow-sb b,#ownerView .pf-tiles b').forEach(cu);
+ const h=document.querySelector('.pf-hero'),x=document.querySelector('#profileView .pf-xp');if(h&&x&&x.parentNode!==h)h.appendChild(x);}catch(e){}},700);
+})();
+</script>
+<style id="v55css">
+#pin55{position:fixed;inset:0;z-index:100005;display:grid;place-items:center;padding:20px;background:rgba(3,5,12,.94);backdrop-filter:blur(10px)}
+#pin55 .pc{width:100%;max-width:340px;padding:24px 20px;border-radius:28px;text-align:center;background:linear-gradient(160deg,rgba(30,42,70,.95),rgba(8,12,22,.98));border:1px solid rgba(243,213,138,.5);box-shadow:0 0 50px rgba(243,213,138,.15)}
+#pin55 .pk{font-size:38px}#pin55 h3{margin:6px 0 14px;font-size:18px;color:#f3d58a}
+#pin55 .pd{display:flex;justify-content:center;gap:10px;min-height:26px;margin-bottom:16px;align-items:center}#pin55 .pd i{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#f6dc95,#cda449);box-shadow:0 0 12px rgba(243,213,138,.6)}#pin55 .pd span{opacity:.5;font-size:13px}
+#pin55 .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}#pin55 .pg button{padding:16px 0;border-radius:18px;font-size:22px;font-weight:800;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#f3efe4}#pin55 .pg button:last-child{background:linear-gradient(135deg,#f6dc95,#cda449);color:#1a1206}
+#pin55 .pcx,#pin55 .pkb{margin-top:12px;padding:8px 16px;border-radius:99px;background:transparent;border:1px solid rgba(255,255,255,.2);color:inherit;font-size:12.5px}#pin55 input{width:100%;margin-top:12px;padding:14px;border-radius:14px;text-align:center;font-size:20px;letter-spacing:6px}
+html[data-theme=light] #pin55{background:rgba(156,195,255,.85)}html[data-theme=light] #pin55 .pc{background:rgba(255,255,255,.95);border-color:#fff;color:#0b1b3a}html[data-theme=light] #pin55 h3{color:#1d4ed8}html[data-theme=light] #pin55 .pg button{background:#eef4ff;color:#0b1b3a;border-color:rgba(29,78,216,.2)}html[data-theme=light] #pin55 .pg button:last-child,html[data-theme=light] #pin55 .pd i{background:linear-gradient(135deg,#2f80ff,#4f46e5);color:#fff}
+/* cinematic */
+#cin55{position:fixed;inset:0;z-index:100004;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;color:#fff;background:radial-gradient(circle at 50% 42%,#1b2a66,#04060d 70%);animation:c55in .4s both}
+@keyframes c55in{from{opacity:0}}
+#cin55 .ray{position:absolute;width:160vmax;height:160vmax;left:50%;top:42%;margin:-80vmax;background:repeating-conic-gradient(from 0deg,rgba(243,213,138,.22) 0 8deg,transparent 8deg 20deg);animation:c55r 14s linear infinite;mask:radial-gradient(circle,#000 0,transparent 55%);-webkit-mask:radial-gradient(circle,#000 0,transparent 55%)}
+@keyframes c55r{to{transform:rotate(360deg)}}
+#cin55 .ring{position:absolute;left:50%;top:42%;width:80px;height:80px;margin:-40px;border-radius:50%;border:3px solid #f3d58a;opacity:0;animation:c55w 2.4s ease-out infinite}#cin55 .ring:nth-child(3){animation-delay:.8s}#cin55 .ring:nth-child(4){animation-delay:1.6s}
+@keyframes c55w{0%{transform:scale(.3);opacity:.9}100%{transform:scale(9);opacity:0}}
+#cin55 .em{position:relative;font-size:110px;animation:c55p 1s cubic-bezier(.2,1.5,.3,1) both;filter:drop-shadow(0 0 40px rgba(243,213,138,.8))}
+#cin55 .t1{position:relative;font-size:14px;letter-spacing:8px;font-weight:800;color:#f3d58a;margin-top:10px;animation:c55u .6s .5s both}
+#cin55 h1{position:relative;font-size:52px;margin:6px 0;font-weight:900;background:linear-gradient(180deg,#fff3c4,#f3d58a,#b8861f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 24px rgba(243,213,138,.7));animation:c55p .9s .6s cubic-bezier(.2,1.5,.3,1) both}
+#cin55 .tt{position:relative;display:inline-block;padding:9px 20px;border-radius:99px;font-weight:800;font-size:15px;color:#1a1206;background:linear-gradient(135deg,#f6dc95,#cda449);animation:c55u .6s 1.2s both;box-shadow:0 8px 26px rgba(205,164,73,.5)}
+#cin55 p{position:relative;max-width:300px;opacity:.85;margin:16px 0 0;animation:c55u .6s 1.6s both}#cin55 button{position:relative;margin-top:24px;width:260px;animation:c55u .6s 2s both}
+@keyframes c55p{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}@keyframes c55u{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+#cin55.fire{background:radial-gradient(circle at 50% 42%,#5a1a06,#0a0302 70%)}#cin55.fire .ray{background:repeating-conic-gradient(from 0deg,rgba(255,120,40,.25) 0 8deg,transparent 8deg 20deg)}#cin55.fire .ring{border-color:#ff8a3c}
+/* Topper wall */
+#top55{padding:14px;border-radius:22px;background:linear-gradient(160deg,rgba(32,44,74,.85),rgba(12,18,32,.95));border:1px solid rgba(243,213,138,.45);box-shadow:0 0 30px rgba(243,213,138,.12);position:relative;overflow:hidden;cursor:pointer}
+#top55::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.14),transparent);transform:skewX(-20deg);animation:v32s 5s infinite;pointer-events:none}
+#top55 .th{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;letter-spacing:2px;font-weight:800;color:#f3d58a;margin-bottom:10px}#top55 .th small{letter-spacing:0;opacity:.7;font-weight:600}
+#top55 .tr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+#top55 .tc{padding:10px 4px;border-radius:16px;background:rgba(255,255,255,.05);position:relative}#top55 .tc:first-child{order:2;border:1px solid #f3d58a;box-shadow:0 0 22px rgba(243,213,138,.35)}#top55 .tc:nth-child(2){order:1}#top55 .tc:nth-child(3){order:3}
+#top55 .tc .cr{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:18px}#top55 .av{width:44px;height:44px;border-radius:50%;margin:4px auto 6px;display:grid;place-items:center;font-weight:800;font-size:18px;color:#0b1220}
+#top55 b{display:block;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#top55 small{font-size:11px;opacity:.8}
+html[data-theme=light] body #top55{background:rgba(255,255,255,.82)!important;border-color:#fff!important;color:#0b1b3a}html[data-theme=light] #top55 .th{color:#1d4ed8}html[data-theme=light] #top55 .tc{background:#eef4ff}
+</style>
+<script>
+/* ===== V55: Masked PIN keypad, Level-up cinematic, Streak fire, Topper wall ===== */
+(function(){
+const $=id=>document.getElementById(id),E=s=>escHtml(String(s==null?'':s));
+/* 1) PIN: ●●● dots, prompt nahi */
+window.askPin=t=>new Promise(res=>{const o=document.createElement('div');o.id='pin55';let v='',kb=false;
+ const dr=()=>{const d=o.querySelector('.pd');d.innerHTML=v?[...v].map(()=>'<i></i>').join(''):'<span>PIN daalo</span>';};
+ o.innerHTML='<div class="pc"><div class="pk">🔐</div><h3>'+E(t)+'</h3><div class="pd"></div><div class="pg">'+[1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].map(k=>'<button data-k="'+k+'">'+k+'</button>').join('')+'</div><div><button class="pkb">⌨️ Keyboard</button> <button class="pcx">Cancel</button></div></div>';
+ const fin=x=>{document.removeEventListener('keydown',kd);o.remove();res(x);},kd=e=>{if(kb)return;if(/^\d$/.test(e.key)&&v.length<12){v+=e.key;dr();}else if(e.key==='Backspace'){v=v.slice(0,-1);dr();}else if(e.key==='Enter'&&v)fin(v);};
+ o.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.classList.contains('pcx'))return fin(null);if(b.classList.contains('pkb')){kb=true;o.querySelector('.pg').style.display='none';const i=document.createElement('input');i.type='password';i.placeholder='PIN';i.autocomplete='off';i.onkeydown=ev=>{if(ev.key==='Enter'&&i.value)fin(i.value);};o.querySelector('.pc').insertBefore(i,o.querySelector('.pc>div:last-child'));i.focus();b.style.display='none';return;}
+  const k=b.dataset.k;try{sfx('click');}catch(x){}if(k==='⌫')v=v.slice(0,-1);else if(k==='✓'){if(v)fin(v);return;}else if(v.length<12)v+=k;dr();};
+ document.addEventListener('keydown',kd);document.body.appendChild(o);dr();});
+/* overlay queue */
+const Q=[];let busy=false;
+function next(){if(busy||!Q.length)return;busy=true;const c=Q.shift(),o=document.createElement('div');o.id='cin55';o.className=c.fire?'fire':'';
+ o.innerHTML='<div class="ray"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="em">'+c.em+'</div><div class="t1">'+c.t1+'</div><h1>'+c.h+'</h1><div class="tt">'+c.tt+'</div><p>'+c.p+'</p><button class="primary">'+(c.btn||'🚀 Aage badho')+'</button>';
+ document.body.appendChild(o);try{sfx('win');setTimeout(()=>sfx('ok'),450);setTimeout(()=>sfx('win'),900);cfx();setTimeout(cfx,900);setTimeout(cfx,1800);}catch(e){}
+ const cl=()=>{o.style.transition='opacity .4s';o.style.opacity=0;setTimeout(()=>{o.remove();busy=false;next();},400);};o.querySelector('button').onclick=cl;setTimeout(()=>{if($('cin55')===o)cl();},12000);}
+/* 2) Level-up */
+const TT={1:['🌱','Rookie Scholar'],2:['⚔️','Genin Scholar'],3:['🔥','Chunin Scholar'],4:['⚡','Jonin Scholar'],5:['🎓','Sensei in Making'],6:['🗡️','Board Samurai'],7:['🐉','Board Dragon'],8:['👑','Legend Sensei']};
+function lv(){try{const x=xpInfo(),n=x.lv,p=+localStorage.getItem('v55lv')||0;if(!p){localStorage.setItem('v55lv',n);return;}if(n>p){localStorage.setItem('v55lv',n);const t=TT[Math.min(8,n)];Q.push({em:t[0],t1:'LEVEL UP',h:'Level '+n,tt:t[0]+' '+t[1],p:'Shabash! Aap ek aur kadam board ki taraf badh gaye. Ab '+x.xp+' XP ho gaye.'});next();}}catch(e){}}
+/* 3) Streak fire */
+const MS=[[3,'Chingari','🔥'],[7,'Agni Warrior','🔥'],[14,'Flame Master','🌋'],[30,'Phoenix Scholar','🐦‍🔥'],[60,'Inferno Sensei','☄️'],[100,'Legend of Fire','👑']];
+function sk(){try{const s=streakN(),l=+localStorage.getItem('v55sk')||0,m=MS.filter(a=>s>=a[0]).pop();if(!m)return;if(!localStorage.getItem('v55sk0')){localStorage.setItem('v55sk0',1);localStorage.setItem('v55sk',m[0]);return;}if(m[0]>l){localStorage.setItem('v55sk',m[0]);Q.push({fire:1,em:m[2],t1:'STREAK BADGE',h:m[0]+' din streak!',tt:m[2]+' '+m[1],p:'Roz practice karne se aag jalti rehti hai. Kal bhi aana, streak mat todna!'});next();}}catch(e){}}
+/* 4) Topper wall */
+const COL=['#8fc8ff,#5aaaff','#ffc2e0,#ff8fc0','#f3d58a,#cda449','#b9f6ca,#3ddc84','#d1c4ff,#9b8cff'];let last=0;
+const nk=s=>String(s||'').toLowerCase().replace(/\s+/g,' ').replace(/[^\p{L}\p{N} ]/gu,'').trim();
+async function top(){const q=$('qs38');if(!q||$('top55')&&Date.now()-last<6e5)return;if(typeof leaderboardConfigured!=='function'||!leaderboardConfigured())return;last=Date.now();
+ try{const d=await (await fetch(LEADERBOARD_URL)).json(),seen=[],rows=[];d.map(r=>({n:r.name,c:+r.correct||0,o:+r.overall||0})).sort((a,b)=>b.c-a.c||b.o-a.o).forEach(r=>{if(/^\[(prep|test)\]/i.test(r.n))return;const k=nk(r.n);if(!k||seen.some(z=>z===k||z.split(' ').every(t=>t.length>=3&&k.split(' ').includes(t))||k.split(' ').every(t=>t.length>=3&&z.split(' ').includes(t))))return;seen.push(k);rows.push(r);});
+  const t=rows.slice(0,3);if(t.length<3)return;let c=$('top55');if(!c){c=document.createElement('div');c.id='top55';c.onclick=()=>{try{showLeaderboard();}catch(e){}};q.after(c);}
+  c.innerHTML='<div class="th"><span>🏆 TOPPER WALL</span><small>Class ke Top 3 ›</small></div><div class="tr">'+t.map((r,i)=>{let h=0;for(const ch of r.n)h=(h*31+ch.charCodeAt(0))>>>0;return '<div class="tc">'+(i===0?'<span class="cr">👑</span>':'')+'<div class="av" style="background:linear-gradient(135deg,'+COL[h%5]+')">'+E((r.n.trim()[0]||'?').toUpperCase())+'</div><b>'+E(r.n)+'</b><small>'+r.c+' ✓ · '+r.o+'%</small></div>';}).join('')+'</div>';}catch(e){}}
+setInterval(()=>{lv();sk();top();},1500);
+})();
+</script>
 </body>
 </html>
