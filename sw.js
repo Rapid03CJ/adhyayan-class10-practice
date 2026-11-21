@@ -1,5 +1,5 @@
 let OSOK=false;try{importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');OSOK=true;}catch(e){}
-const C='adhyayan-v23',PL='adhyayan-pushlog';
+const C='adhyayan-v31',PL='adhyayan-pushlog';
 const PRE=['index.html','./','manifest.json','icon-192.png','icon-512.png','notes.json','notice.json'];
 self.addEventListener('install',e=>{
  /* OneSignal worker load na ho: agar pehle se chalta hua worker hai to naya install mat karo (purana bacha rahe). Pehli baar install ho raha ho to chalne do, taaki offline kaam kare. */
