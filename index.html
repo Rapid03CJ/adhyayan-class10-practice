@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-11-22-v49"><meta name="app-semver" content="2.8.0">
+<meta name="app-version" content="2026-11-22-v51"><meta name="app-semver" content="2.8.0">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -8745,12 +8745,15 @@ const $=id=>document.getElementById(id),D=$('dashboard');if(!D)return;
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
 function wk(d){d=d||new Date();const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);const y=t.getUTCFullYear(),w=Math.ceil(((t-new Date(Date.UTC(y,0,1)))/DAY+1)/7);return y+'-W'+pad(w);}
 function done(){try{const S=window.TS&&TS.data&&TS.data(),k=wk();return (S&&S.tests||[]).find(t=>t.type==='weekly'&&t.wk===k&&(!t.partial||t.items.filter(i=>i.st!=='skip').length>=3))||null;}catch(e){return null;}}
+const SKEY=()=>'adhyayan_wk_started_'+wk();
+function started(){try{return !!localStorage.getItem(SKEY());}catch(e){return false;}}
 function card(){
  const sun=new Date().getDay()===0,dn=done(),toSun=(7-new Date().getDay())%7||7;let c=$('wkHome');
  const cta=$('homeCta');if(!cta||D.classList.contains('hidden'))return;
  if(!c){c=document.createElement('div');c.id='wkHome';}
  let h;
  if(dn){h='<div class="nu-label">🗓️ WEEKLY TEST</div><div class="nu-title">✅ Is hafte ka test ho gaya</div><div class="nu-why">Aapke marks: <b>'+dn.got+'/'+dn.total+'</b>. Agla test agle Sunday ko.</div>';}
+ else if(started()){h='<div class="nu-label">🗓️ WEEKLY TEST</div><div class="nu-title">🔒 Attempt ho chuka hai</div><div class="nu-why">Is hafte ka test ek hi baar de sakte hain.</div>';}
  else if(sun){h='<div class="nu-label">🗓️ AAJ SUNDAY · WEEKLY TEST</div><div class="nu-title">15 sawal · 1 ghanta 30 minute</div><div class="nu-why">Sirf ek baar de sakte ho. Shaanti se baith kar, bina dekhe likhna.</div><button class="primary" id="wkGo">🚀 Weekly Test shuru karo</button>';}
  else{h='<div class="nu-label">🗓️ WEEKLY TEST</div><div class="nu-title">🔒 Agla test Sunday ko</div><div class="nu-why">'+toSun+' din baad khulega.</div>';}
  c.className='next-up';c.style.marginTop='14px';c.innerHTML=h;
@@ -8762,7 +8765,7 @@ try{card();}catch(e){}
 setInterval(()=>{try{card();}catch(e){}},1500);
 /* popup: Sunday ko app khulte hi upar aaye, jab tak test na ho jaye */
 function popup(){
- if(new Date().getDay()!==0||done()||D.classList.contains('hidden')||$('wkPop'))return;
+ if(new Date().getDay()!==0||done()||started()||D.classList.contains('hidden')||$('wkPop'))return;
  try{if(sessionStorage.getItem('wkPopSeen_'+wk()))return;}catch(e){}
  if(document.querySelector('#sheet.show,#sheetBg.show,.sheet-open'))return;
  const o=document.createElement('div');o.id='wkPop';
@@ -8777,6 +8780,35 @@ function popup(){
  $('wkPopLater').onclick=()=>{seen();o.remove();};
  $('wkPopGo').onclick=()=>{seen();o.remove();try{TS.weekly();}catch(e){alert('Neeche Tests tab se Weekly Test chuno.');}};
 }
+
+/* ---- one-attempt lock + copy/paste block (Weekly Test) ---- */
+(function(){
+ const _w=TS.weekly;
+ TS.weekly=function(){
+  if(done()||started()){alert('Is hafte ka Weekly Test aap de chuke ho (ya shuru kar chuke ho). Ye sirf ek hi baar hota hai.');return;}
+  _w.apply(this,arguments);
+  try{if(window._tctx&&_tctx.type==='weekly'&&!_tctx.done)localStorage.setItem(SKEY(),String(Date.now()));}catch(e){}
+ };
+ const on=()=>{try{return !!(window._tctx&&_tctx.type==='weekly'&&!_tctx.done);}catch(e){return false;}};
+ const st=document.createElement('style');st.textContent='body.wk-lock #practice,body.wk-lock #practice *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}body.wk-lock #practice textarea,body.wk-lock #practice input{-webkit-user-select:text;user-select:text}';document.head.appendChild(st);
+ setInterval(()=>document.body.classList.toggle('wk-lock',on()),400);
+ const inBox=e=>e.target&&e.target.closest&&e.target.closest('textarea,input');
+ ['copy','cut','dragstart','contextmenu','selectstart'].forEach(ev=>document.addEventListener(ev,e=>{if(on()&&!(inBox(e)&&ev!=='contextmenu'&&ev!=='dragstart'))e.preventDefault();},true));
+ document.addEventListener('paste',e=>{if(on()){e.preventDefault();try{const t=document.createElement('div');t.textContent='📵 Test mein paste allowed nahi hai';t.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1b2540;color:#fff;border:1px solid var(--gold);padding:10px 16px;border-radius:14px;z-index:100000;font-size:14px';document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}catch(x){}}},true);
+})();
+
+/* ---- top ribbon banner ---- */
+(function(){
+ const st=document.createElement('style');st.textContent='#wkRibbon{position:sticky;top:max(6px,env(safe-area-inset-top));z-index:900;margin:0 0 12px;padding:11px 14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;background:linear-gradient(90deg,#e0716a,#cda449,#e8cf9a);color:#1a1206;font-weight:800;font-size:14px;box-shadow:0 6px 16px rgba(0,0,0,.45);animation:wkPulse 1.8s ease-in-out infinite}#wkRibbon small{display:block;font-weight:600;font-size:11.5px;opacity:.85}#wkRibbon b{background:#1a1206;color:#e8cf9a;border-radius:20px;padding:7px 13px;font-size:13px;white-space:nowrap}@keyframes wkPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}';document.head.appendChild(st);
+ function rib(){
+  let r=$('wkRibbon');
+  const show=new Date().getDay()===0&&!done()&&!started()&&!D.classList.contains('hidden');
+  if(!show){if(r)r.remove();return;}
+  if(!r){r=document.createElement('div');r.id='wkRibbon';r.innerHTML='<span>🗓️ AAJ WEEKLY TEST HAI<small>15 sawal · 1:30 ghanta · sirf ek baar</small></span><b>Shuru karo ▶</b>';r.onclick=function(){try{TS.weekly();}catch(e){alert('Neeche Tests tab se Weekly Test chuno.');}};}
+  if(D.firstElementChild!==r)D.prepend(r);
+ }
+ setInterval(()=>{try{rib();}catch(e){}},1000);try{rib();}catch(e){}
+})();
 setTimeout(()=>{try{popup();}catch(e){}},1500);
 setInterval(()=>{try{popup();}catch(e){}},2500);
 
