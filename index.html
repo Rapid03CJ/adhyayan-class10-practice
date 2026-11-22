@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="app-version" content="2026-11-03-v48"><meta name="app-semver" content="2.8.0">
+<meta name="app-version" content="2026-11-22-v49"><meta name="app-semver" content="2.8.0">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c17">
@@ -8736,6 +8736,50 @@ window.ALB56=()=>{const c=col();let o=$('alb56');if(!o){o=document.createElement
 setInterval(()=>{try{welcome();}catch(e){}
  const L=document.querySelectorAll('#profileView .pf-list'),l=L[L.length-1];if(l&&!$('albRow')){const b=document.createElement('button');b.id='albRow';b.className='pf-row';b.innerHTML='<i>🇮🇳</i><span><b>Sticker Album</b><small>'+col().length+'/'+N+' unlocked</small></span><u>›</u>';b.onclick=ALB56;l.prepend(b);}
  const a=$('albRow');if(a){const sm=a.querySelector('small');if(sm)sm.textContent=col().length+'/'+N+' unlocked';}},900);
+})();
+</script>
+<script>
+/* ===== V49: Home par Weekly Test card (Sunday) ===== */
+(function(){
+const $=id=>document.getElementById(id),D=$('dashboard');if(!D)return;
+const DAY=864e5,pad=n=>String(n).padStart(2,'0');
+function wk(d){d=d||new Date();const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);const y=t.getUTCFullYear(),w=Math.ceil(((t-new Date(Date.UTC(y,0,1)))/DAY+1)/7);return y+'-W'+pad(w);}
+function done(){try{const S=window.TS&&TS.data&&TS.data(),k=wk();return (S&&S.tests||[]).find(t=>t.type==='weekly'&&t.wk===k&&(!t.partial||t.items.filter(i=>i.st!=='skip').length>=3))||null;}catch(e){return null;}}
+function card(){
+ const sun=new Date().getDay()===0,dn=done(),toSun=(7-new Date().getDay())%7||7;let c=$('wkHome');
+ const cta=$('homeCta');if(!cta||D.classList.contains('hidden'))return;
+ if(!c){c=document.createElement('div');c.id='wkHome';}
+ let h;
+ if(dn){h='<div class="nu-label">🗓️ WEEKLY TEST</div><div class="nu-title">✅ Is hafte ka test ho gaya</div><div class="nu-why">Aapke marks: <b>'+dn.got+'/'+dn.total+'</b>. Agla test agle Sunday ko.</div>';}
+ else if(sun){h='<div class="nu-label">🗓️ AAJ SUNDAY · WEEKLY TEST</div><div class="nu-title">15 sawal · 1 ghanta 30 minute</div><div class="nu-why">Sirf ek baar de sakte ho. Shaanti se baith kar, bina dekhe likhna.</div><button class="primary" id="wkGo">🚀 Weekly Test shuru karo</button>';}
+ else{h='<div class="nu-label">🗓️ WEEKLY TEST</div><div class="nu-title">🔒 Agla test Sunday ko</div><div class="nu-why">'+toSun+' din baad khulega.</div>';}
+ c.className='next-up';c.style.marginTop='14px';c.innerHTML=h;
+ if(c.nextElementSibling!==cta)cta.before(c);
+ const g=$('wkGo');if(g)g.onclick=function(){try{TS.weekly();}catch(e){alert('Weekly Test abhi nahi khul paaya. Neeche Tests tab se try karo.');}};
+}
+const _r=renderDashboard;renderDashboard=function(){const r=_r.apply(this,arguments);try{card();}catch(e){}return r;};
+try{card();}catch(e){}
+setInterval(()=>{try{card();}catch(e){}},1500);
+/* popup: Sunday ko app khulte hi upar aaye, jab tak test na ho jaye */
+function popup(){
+ if(new Date().getDay()!==0||done()||D.classList.contains('hidden')||$('wkPop'))return;
+ try{if(sessionStorage.getItem('wkPopSeen_'+wk()))return;}catch(e){}
+ if(document.querySelector('#sheet.show,#sheetBg.show,.sheet-open'))return;
+ const o=document.createElement('div');o.id='wkPop';
+ o.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(4,8,18,.82);display:flex;align-items:center;justify-content:center;padding:18px;animation:fadeUp .3s ease';
+ o.innerHTML='<div style="max-width:380px;width:100%;background:linear-gradient(180deg,#14203d,#0c1730);border:1px solid var(--gold);border-radius:22px;padding:24px 20px;text-align:center;box-shadow:0 16px 40px rgba(0,0,0,.6)">'
+  +'<div style="font-size:46px">🗓️</div><h2 style="margin:8px 0 4px;color:var(--gold-soft)">Aaj Weekly Test hai!</h2>'
+  +'<div class="small" style="margin-bottom:14px;line-height:1.6">15 sawal · 1 ghanta 30 minute<br>Sirf ek baar de sakte ho</div>'
+  +'<button class="primary" id="wkPopGo">🚀 Weekly Test shuru karo</button>'
+  +'<button class="secondary" id="wkPopLater" style="margin-top:10px">Baad mein</button></div>';
+ document.body.appendChild(o);
+ const seen=()=>{try{sessionStorage.setItem('wkPopSeen_'+wk(),'1');}catch(e){}};
+ $('wkPopLater').onclick=()=>{seen();o.remove();};
+ $('wkPopGo').onclick=()=>{seen();o.remove();try{TS.weekly();}catch(e){alert('Neeche Tests tab se Weekly Test chuno.');}};
+}
+setTimeout(()=>{try{popup();}catch(e){}},1500);
+setInterval(()=>{try{popup();}catch(e){}},2500);
+
 })();
 </script>
 </body>
