@@ -7,14 +7,14 @@ self.addEventListener('install',e=>{
  if(!OSOK&&self.registration.active){e.waitUntil(Promise.reject(new Error('OneSignal worker load nahi hua')));return;}
  e.waitUntil(caches.open(C).then(c=>Promise.all(PRE.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C&&x!==PL).map(x=>caches.delete(x)))).then(()=>self.clients.claim()).then(wInfo));});
-/* network pehle, par 5 second mein jawab na aaye (kamzor/atka hua net) to saved copy turant; peeche net se naya copy aata rehta hai */
+/* network pehle, par 2.5 second mein jawab na aaye (kamzor/atka hua net) to saved copy turant; peeche net se naya copy aata rehta hai */
 self.addEventListener('fetch',e=>{const q=e.request;if(q.method!=='GET'||new URL(q.url).origin!==location.origin)return;
  e.respondWith((async()=>{
   const cache=await caches.open(C),nav=q.mode==='navigate';
   const fromCache=async()=>(await cache.match(q,{ignoreSearch:nav}))||(nav?((await cache.match('index.html'))||(await cache.match('./'))):undefined);
   const net=fetch(q).then(r=>{if(r&&r.status===200){cache.put(q,r.clone());}return r;});
   e.waitUntil(net.catch(()=>{}));
-  let timer;const timeout=new Promise(res=>{timer=setTimeout(async()=>res(await fromCache()),5000);});
+  let timer;const timeout=new Promise(res=>{timer=setTimeout(async()=>res(await fromCache()),2500);});
   try{const r=await Promise.race([net.then(x=>{clearTimeout(timer);return x;}),timeout]);if(r)return r;return await net;}
   catch(err){clearTimeout(timer);const c=await fromCache();return c||new Response('Offline',{status:503,headers:{'Content-Type':'text/plain'}});}
  })());});
