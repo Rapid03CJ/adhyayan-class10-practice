@@ -7738,9 +7738,25 @@ function pickDaily(n){const pool=NCT(),r=Math.random,mist=shuf(pool.filter(q=>ba
  return out.sort((a,b)=>a.m-b.m||a.ch-b.ch);}
 function pickSectional(chs,n){const pool=NCT().filter(q=>chs.indexOf(q.ch)>=0),mist=shuf(pool.filter(q=>bad(progress[q.id]))),un=shuf(pool.filter(q=>!progress[q.id])),rest=shuf(pool),out=[],use=new Set();
  [mist.slice(0,Math.ceil(n*.4)),un,rest].forEach(g=>g.forEach(q=>{if(out.length<n&&!use.has(q.id)){use.add(q.id);out.push(q);}}));return out.sort((a,b)=>a.ch-b.ch||a.m-b.m);}
-function pickWeekly(){const r=rng(parseInt(weekKey().replace(/\D/g,''),10)*7919),out=[],use=new Set();
- for(let c=1;c<=14;c++){const g=NCT().filter(q=>q.ch===c&&q.m<=4);const q=g.length?g[Math.floor(r()*g.length)]:null;if(q){use.add(q.id);out.push(q);}}
- const ex=NCT().filter(q=>!use.has(q.id)&&q.m<=4&&[5,6,7,8].indexOf(q.ch)>=0);if(ex.length)out.push(ex[Math.floor(r()*ex.length)]);return out.sort((a,b)=>a.ch-b.ch);}
+function pickWeekly(){
+ /* Weekly Test special syllabus: Chapters 3-9 and 11-13 only. */
+ const r=rng(parseInt(weekKey().replace(/\D/g,''),10)*7919),allowed=[3,4,5,6,7,8,9,11,12,13],out=[],use=new Set();
+ /* Drawing/diagram/graph-construction questions ko hatao; conceptual graph questions reh sakte hain. */
+ const drawing=/\b(draw|plot|sketch|construct)\b.{0,55}\b(graph|diagram|figure|triangle|circle|line|curve|histogram|ogive|bar chart|pie chart)\b|\b(graph|diagram|figure|histogram|ogive)\b.{0,45}\b(draw|plot|sketch|construct)\b|\b(graphically|by drawing|using a ruler and compass|geometrical construction)\b/i;
+ const pool=NCT().filter(q=>allowed.includes(Number(q.ch))&&(Number(q.m)||0)<=4&&!drawing.test(String(q.q||'')));
+ const add=q=>{if(q&&!use.has(q.id)){use.add(q.id);out.push(q);return true;}return false;};
+ /* Pehle har eligible chapter se ek sawal. */
+ for(const c of allowed){const g=shuf(pool.filter(q=>Number(q.ch)===c),r);if(g.length)add(g[0]);}
+ /* Phir baaki 5 sawal eligible chapters se balanced distribution mein. */
+ const extras=shuf(pool.filter(q=>!use.has(q.id)),r);let guard=0;
+ while(out.length<15&&extras.length&&guard++<extras.length*2){
+   const counts={};out.forEach(q=>counts[q.ch]=(counts[q.ch]||0)+1);
+   const min=Math.min(...allowed.map(c=>counts[c]||0));
+   const idx=extras.findIndex(q=>(counts[q.ch]||0)===min);
+   if(idx<0)break;add(extras.splice(idx,1)[0]);
+ }
+ return shuf(out,r);
+}
 /* ---------- test engine (mock engine par) ---------- */
 const _mt=mockTick;
 mockTick=function(){const T=window._tctx;if(!T||T.done||!isMockMode){return _mt.apply(this,arguments);}const left=Math.max(0,Math.round((mockEnd-Date.now())/1000)),h=Math.floor(left/3600),m=Math.floor(left%3600/60),s=left%60,t=$('pTitle');if(t)t.textContent=T.title+' \u00b7 \u23f1 '+(h?h+':'+pad(m):m)+':'+pad(s);if(left<=0)finishChapter();};
